@@ -1,0 +1,103 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  // Use SQLite for development, PostgreSQL for production
+  // For PostgreSQL: change provider to "postgresql"
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// Program Model - Stores all NUST programs
+// ============================================
+model Program {
+  id              String   @id @default(cuid())
+  name            String   // e.g., "BS Computer Science"
+  code            String   @unique // e.g., "SEECS-CS"
+  campus          String   // e.g., "H-12 Islamabad", "Rawalpindi", "Karachi"
+  school          String   // e.g., "SEECS", "SMME", "NBS", "S3H"
+  disciplineGroup String   // e.g., "Engineering/CS", "Business/Social", "Natural Sciences"
+  degreeType      String   // e.g., "BS", "BE", "BBA"
+  seats           Int?     // Number of seats (optional)
+  description     String?  // Program description for SEO
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  meritHistory    MeritHistory[]
+  userCrowdData   UserCrowdData[]
+
+  @@index([campus])
+  @@index([school])
+  @@index([disciplineGroup])
+}
+
+// ============================================
+// MeritHistory Model - Historical merit data
+// ============================================
+model MeritHistory {
+  id                   String   @id @default(cuid())
+  programId            String
+  year                 Int      // e.g., 2023, 2024
+  meritListNumber      Int?     // 1 = 1st list, 2 = 2nd list, etc.; NULL = final/overall
+  closingMeritPosition Int?     // Last position to get admission
+  closingAggregate     Float?   // Closing aggregate percentage
+  sourceName           String   // e.g., "Official NUST", "EduVision", "Community"
+  sourceUrl            String?  // URL reference
+  notes                String?  // Additional notes
+  
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  // Relations
+  program              Program  @relation(fields: [programId], references: [id], onDelete: Cascade)
+
+  @@unique([programId, year, meritListNumber])
+  @@index([year])
+  @@index([programId])
+}
+
+// ============================================
+// UserCrowdData Model - Crowdsourced data (future)
+// ============================================
+model UserCrowdData {
+  id                String   @id @default(cuid())
+  programId         String
+  year              Int
+  meritListNumber   Int?
+  userAggregate     Float?
+  userMeritPosition Int?
+  gotAdmission      Boolean?
+  sourceUrl         String?  // For verification
+  isVerified        Boolean  @default(false)
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Relations
+  program           Program  @relation(fields: [programId], references: [id], onDelete: Cascade)
+
+  @@index([programId])
+  @@index([year])
+}
+
+// ============================================
+// Contact Form Submissions (for later)
+// ============================================
+model ContactSubmission {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String?
+  message   String
+  isRead    Boolean  @default(false)
+  
+  createdAt DateTime @default(now())
+}
+

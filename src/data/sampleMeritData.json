@@ -1,0 +1,322 @@
+{
+  "programs": [
+    {
+      "id": "seecs-cs",
+      "name": "BS Computer Science",
+      "code": "SEECS-CS",
+      "campus": "H-12 Islamabad",
+      "school": "SEECS",
+      "disciplineGroup": "Engineering/CS",
+      "degreeType": "BS",
+      "seats": 150,
+      "description": "Bachelor of Science in Computer Science at SEECS, NUST's premier engineering school"
+    },
+    {
+      "id": "seecs-se",
+      "name": "BS Software Engineering",
+      "code": "SEECS-SE",
+      "campus": "H-12 Islamabad",
+      "school": "SEECS",
+      "disciplineGroup": "Engineering/CS",
+      "degreeType": "BS",
+      "seats": 120,
+      "description": "Bachelor of Science in Software Engineering at SEECS"
+    },
+    {
+      "id": "seecs-ee",
+      "name": "BE Electrical Engineering",
+      "code": "SEECS-EE",
+      "campus": "H-12 Islamabad",
+      "school": "SEECS",
+      "disciplineGroup": "Engineering/CS",
+      "degreeType": "BE",
+      "seats": 200,
+      "description": "Bachelor of Electrical Engineering at SEECS"
+    },
+    {
+      "id": "smme-me",
+      "name": "BE Mechanical Engineering",
+      "code": "SMME-ME",
+      "campus": "H-12 Islamabad",
+      "school": "SMME",
+      "disciplineGroup": "Engineering/CS",
+      "degreeType": "BE",
+      "seats": 180,
+      "description": "Bachelor of Mechanical Engineering at SMME"
+    },
+    {
+      "id": "nbs-bba",
+      "name": "BBA",
+      "code": "NBS-BBA",
+      "campus": "H-12 Islamabad",
+      "school": "NBS",
+      "disciplineGroup": "Business/Social",
+      "degreeType": "BBA",
+      "seats": 100,
+      "description": "Bachelor of Business Administration at NUST Business School"
+    },
+    {
+      "id": "nbs-bsaf",
+      "name": "BS Accounting & Finance",
+      "code": "NBS-BSAF",
+      "campus": "H-12 Islamabad",
+      "school": "NBS",
+      "disciplineGroup": "Business/Social",
+      "degreeType": "BS",
+      "seats": 80,
+      "description": "Bachelor of Science in Accounting and Finance at NBS"
+    },
+    {
+      "id": "s3h-bsms",
+      "name": "BS Mass Communication",
+      "code": "S3H-MC",
+      "campus": "H-12 Islamabad",
+      "school": "S3H",
+      "disciplineGroup": "Business/Social",
+      "degreeType": "BS",
+      "seats": 60,
+      "description": "Bachelor of Science in Mass Communication at S3H"
+    },
+    {
+      "id": "sns-bs-math",
+      "name": "BS Mathematics",
+      "code": "SNS-MATH",
+      "campus": "H-12 Islamabad",
+      "school": "SNS",
+      "disciplineGroup": "Natural Sciences",
+      "degreeType": "BS",
+      "seats": 50,
+      "description": "Bachelor of Science in Mathematics at School of Natural Sciences"
+    },
+    {
+      "id": "ceme-ce",
+      "name": "BE Civil Engineering",
+      "code": "NICE-CE",
+      "campus": "Rawalpindi",
+      "school": "NICE",
+      "disciplineGroup": "Engineering/CS",
+      "degreeType": "BE",
+      "seats": 100,
+      "description": "Bachelor of Civil Engineering at NICE, Rawalpindi Campus"
+    },
+    {
+      "id": "pn-cs",
+      "name": "BS Computer Science",
+      "code": "PN-CS",
+      "campus": "Karachi",
+      "school": "PNEC",
+      "disciplineGroup": "Engineering/CS",
+      "degreeType": "BS",
+      "seats": 80,
+      "description": "Bachelor of Science in Computer Science at Pakistan Navy Engineering College, Karachi"
+    }
+  ],
+  "meritHistory": [
+    {
+      "programId": "seecs-cs",
+      "year": 2024,
+      "meritListNumber": 1,
+      "closingMeritPosition": 380,
+      "closingAggregate": 82.5,
+      "sourceName": "Sample Data",
+      "notes": "Dummy data for demonstration"
+    },
+    {
+      "programId": "seecs-cs",
+      "year": 2024,
+      "meritListNumber": 2,
+      "closingMeritPosition": 520,
+      "closingAggregate": 79.8,
+      "sourceName": "Sample Data"
+    },
+    {
+      "programId": "seecs-cs",
+      "year": 2024,
+      "meritListNumber": 3,
+      "closingMeritPosition": 650,
+      "closingAggregate": 77.2,
+      "sourceName": "Sample Data"
+    },
+    {
+      "programId": "seecs-cs",
+      "year": 2023,
+      "meritListNumber": 1,
+      "closingMeritPosition": 350,
+      "closingAggregate": 83.1,
+      "sourceName": "Sample Data"
+    },
+    {
+      "programId": "seecs-cs",
+      "year": 2023,
+      "meritListNumber": 2,
+      "closingMeritPosition": 480,
+      "closingAggregate": 80.5,
+      "sourceName": "Sample Data"
+    },
+    {
+      "programId": "seecs-cs",
+      "year": 2022,
+      "meritListNumber": 1,
+      "closingMeritPosition": 320,
+      "closingAggregate": 84.2,
+      "sourceName": "Sample Data"
+    },
+    {
+      "programId": "seecs-se",
+      "year": 2024,
+      "meritListNumber": 1,
+      "closingMeritPosition": 420,
+      "closingAggregate": 80.3,
+      "sourceName": "Sample Data"
+    },
+    {
+      "programId": "seecs-se",
+      "year": 2024,
+      "meritListNumber": 2,
+      "closingMeritPosition": 580,
+      "closingAggregate": 77.5,
+      "sourceName": "Sample Data"
+    },
+    {
+      "programId": "seecs-se",
+      "year": 2023,
+      "meritListNumber": 1,
+      "closingMeritPosition": 400,
+      "closingAggregate": 81.0,
+      "sourceName": "Sample Data"
+    },
+    {
+      "programId": "seecs-ee",
+      "year": 2024,
+      "meritListNumber": 1,
+      "closingMeritPosition": 600,
+      "closingAggregate": 75.8,
+      "sourceName": "Sample Data"
+    },
+    {
+      "programId": "seecs-ee",
+      "year": 2024,
+      "meritListNumber": 2,
+      "closingMeritPosition": 850,
+      "closingAggregate": 72.3,
+      "sourceName": "Sample Data"
+    },
+    {
+      "programId": "seecs-ee",
+      "year": 2023,
+      "meritListNumber": 1,
+      "closingMeritPosition": 580,
+      "closingAggregate": 76.5,
+      "sourceName": "Sample Data"
+    },
+    {
+      "programId": "smme-me",
+      "year": 2024,
+      "meritListNumber": 1,
+      "closingMeritPosition": 700,
+      "closingAggregate": 73.5,
+      "sourceName": "Sample Data"
+    },
+    {
+      "programId": "smme-me",
+      "year": 2023,
+      "meritListNumber": 1,
+      "closingMeritPosition": 680,
+      "closingAggregate": 74.2,
+      "sourceName": "Sample Data"
+    },
+    {
+      "programId": "nbs-bba",
+      "year": 2024,
+      "meritListNumber": 1,
+      "closingMeritPosition": 300,
+      "closingAggregate": 78.5,
+      "sourceName": "Sample Data"
+    },
+    {
+      "programId": "nbs-bba",
+      "year": 2023,
+      "meritListNumber": 1,
+      "closingMeritPosition": 280,
+      "closingAggregate": 79.2,
+      "sourceName": "Sample Data"
+    },
+    {
+      "programId": "nbs-bsaf",
+      "year": 2024,
+      "meritListNumber": 1,
+      "closingMeritPosition": 350,
+      "closingAggregate": 76.8,
+      "sourceName": "Sample Data"
+    },
+    {
+      "programId": "s3h-bsms",
+      "year": 2024,
+      "meritListNumber": 1,
+      "closingMeritPosition": 250,
+      "closingAggregate": 72.0,
+      "sourceName": "Sample Data"
+    },
+    {
+      "programId": "sns-bs-math",
+      "year": 2024,
+      "meritListNumber": 1,
+      "closingMeritPosition": 180,
+      "closingAggregate": 70.5,
+      "sourceName": "Sample Data"
+    },
+    {
+      "programId": "ceme-ce",
+      "year": 2024,
+      "meritListNumber": 1,
+      "closingMeritPosition": 400,
+      "closingAggregate": 71.2,
+      "sourceName": "Sample Data"
+    },
+    {
+      "programId": "ceme-ce",
+      "year": 2023,
+      "meritListNumber": 1,
+      "closingMeritPosition": 380,
+      "closingAggregate": 72.0,
+      "sourceName": "Sample Data"
+    },
+    {
+      "programId": "pn-cs",
+      "year": 2024,
+      "meritListNumber": 1,
+      "closingMeritPosition": 300,
+      "closingAggregate": 74.5,
+      "sourceName": "Sample Data"
+    },
+    {
+      "programId": "pn-cs",
+      "year": 2023,
+      "meritListNumber": 1,
+      "closingMeritPosition": 280,
+      "closingAggregate": 75.2,
+      "sourceName": "Sample Data"
+    }
+  ],
+  "meritListThresholds": {
+    "seecs-cs": {
+      "2024": [
+        { "meritListNumber": 1, "closingAggregate": 82.5, "closingPosition": 380 },
+        { "meritListNumber": 2, "closingAggregate": 79.8, "closingPosition": 520 },
+        { "meritListNumber": 3, "closingAggregate": 77.2, "closingPosition": 650 },
+        { "meritListNumber": 4, "closingAggregate": 75.5, "closingPosition": 780 },
+        { "meritListNumber": 5, "closingAggregate": 74.0, "closingPosition": 900 },
+        { "meritListNumber": 6, "closingAggregate": 72.8, "closingPosition": 1020 }
+      ]
+    },
+    "seecs-se": {
+      "2024": [
+        { "meritListNumber": 1, "closingAggregate": 80.3, "closingPosition": 420 },
+        { "meritListNumber": 2, "closingAggregate": 77.5, "closingPosition": 580 },
+        { "meritListNumber": 3, "closingAggregate": 75.0, "closingPosition": 720 },
+        { "meritListNumber": 4, "closingAggregate": 73.2, "closingPosition": 850 }
+      ]
+    }
+  }
+}
+

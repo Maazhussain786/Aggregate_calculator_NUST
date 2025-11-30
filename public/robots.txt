@@ -1,0 +1,11 @@
+# Robots.txt for NUST Aggregate Calculator
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://nust-aggregate.vercel.app/sitemap.xml
+
+# Crawl-delay (optional, for polite crawlers)
+Crawl-delay: 1
+
