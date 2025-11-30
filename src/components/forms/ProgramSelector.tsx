@@ -82,7 +82,7 @@ export default function ProgramSelector({
           onChange={(e) => {
             setSelectedCampus(e.target.value);
             setSelectedSchool('');
-            setSelectedProgram(null);
+            onSelect(null);
           }}
           className="input"
           aria-label="Filter by campus"
