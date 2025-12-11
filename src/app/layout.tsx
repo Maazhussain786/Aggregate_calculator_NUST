@@ -98,9 +98,6 @@ export default function RootLayout({
   return (
     <html lang="en" className="light" suppressHydrationWarning>
       <head>
-        <link rel="icon" href="/nust-logo.png" type="image/png" />
-        <link rel="shortcut icon" href="/nust-logo.png" type="image/png" />
-        <link rel="apple-touch-icon" href="/nust-logo.png" />
         <link rel="manifest" href="/manifest.json" />
         <script
           dangerouslySetInnerHTML={{
