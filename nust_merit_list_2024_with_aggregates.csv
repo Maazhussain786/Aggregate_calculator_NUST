@@ -1,0 +1,345 @@
+Category,Discipline,School,List_Number,Merit_Position,Aggregate
+Applied,BS Agriculture,ASAB,1,275,
+Applied,BS Agriculture,ASAB,2,632,
+Applied,BS Agriculture,ASAB,3,1065,
+Applied,BS Agriculture,ASAB,4,1599,
+Applied,BS Agriculture,ASAB,5,2141,
+Applied,BS Agriculture,ASAB,6,2184,
+Applied,BS Agriculture,ASAB,7,2264,
+Applied,BS Agriculture,ASAB,Final,2779,
+Applied,BS Biotechnology,ASAB,1,63,
+Applied,BS Biotechnology,ASAB,2,212,
+Applied,BS Biotechnology,ASAB,3,370,
+Applied,BS Biotechnology,ASAB,4,417,
+Applied,BS Biotechnology,ASAB,5,432,
+Applied,BS Biotechnology,ASAB,6,433,
+Applied,BS Biotechnology,ASAB,7,462,
+Applied,BS Biotechnology,ASAB,Final,704,
+Applied,BS Chemistry,SNS,1,800,
+Applied,BS Chemistry,SNS,2,842,
+Applied,BS Chemistry,SNS,3,899,
+Applied,BS Chemistry,SNS,4,974,
+Applied,BS Chemistry,SNS,5,1172,
+Applied,BS Chemistry,SNS,6,1393,
+Applied,BS Chemistry,SNS,7,1652,
+Applied,BS Chemistry,SNS,Final,2240,
+Applied,BS Food Science and Technology,ASAB,1,60,
+Applied,BS Food Science and Technology,ASAB,2,259,
+Applied,BS Food Science and Technology,ASAB,3,503,
+Applied,BS Food Science and Technology,ASAB,4,797,
+Applied,BS Food Science and Technology,ASAB,5,1117,
+Applied,BS Food Science and Technology,ASAB,6,1128,
+Applied,BS Food Science and Technology,ASAB,7,1142,
+Applied,BS Food Science and Technology,ASAB,Final,1432,
+Applied,BS Mathematics,SNS,1,1000,
+Applied,BS Mathematics,SNS,2,1198,
+Applied,BS Mathematics,SNS,3,1238,
+Applied,BS Mathematics,SNS,4,1252,
+Applied,BS Mathematics,SNS,5,1283,
+Applied,BS Mathematics,SNS,6,1325,
+Applied,BS Mathematics,SNS,7,1384,
+Applied,BS Mathematics,SNS,Final,1814,
+Applied,BS Physics,SNS,1,1000,
+Applied,BS Physics,SNS,2,1006,
+Applied,BS Physics,SNS,3,1038,
+Applied,BS Physics,SNS,4,1067,
+Applied,BS Physics,SNS,5,1102,
+Applied,BS Physics,SNS,6,1188,
+Applied,BS Physics,SNS,7,1312,
+Applied,BS Physics,SNS,Final,1778,
+Architecture,BS Architecture,SADA,1,63,74.7
+Architecture,BS Architecture,SADA,2,117,70.09
+Architecture,BS Architecture,SADA,3,122,69.66
+Architecture,BS Architecture,SADA,4,125,69.41
+Architecture,BS Architecture,SADA,5,133,68.72
+Architecture,BS Architecture,SADA,6,133,68.72
+Architecture,BS Architecture,SADA,7,134,68.64
+Architecture,BS Architecture,SADA,Final,163,66.16
+Architecture,BS Industrial Design,SADA,1,124,69.49
+Architecture,BS Industrial Design,SADA,2,193,63.6
+Architecture,BS Industrial Design,SADA,3,239,61.84
+Architecture,BS Industrial Design,SADA,4,259,61.19
+Architecture,BS Industrial Design,SADA,5,275,60.66
+Architecture,BS Industrial Design,SADA,6,278,60.55
+Architecture,BS Industrial Design,SADA,7,285,60.31
+Architecture,BS Industrial Design,SADA,Final,333,58.64
+Business,BBA,NBS,1,362,77.45
+Business,BBA,NBS,2,676,75.77
+Business,BBA,NBS,3,676,75.77
+Business,BBA,NBS,4,677,75.76
+Business,BBA,NBS,5,698,75.64
+Business,BBA,NBS,6,699,75.63
+Business,BBA,NBS,7,719,75.51
+Business,BBA,NBS,Final,770,75.2
+Business,BS Accounting and Finance,NBS,1,409,77.2
+Business,BS Accounting and Finance,NBS,2,772,75.19
+Business,BS Accounting and Finance,NBS,3,818,74.91
+Business,BS Accounting and Finance,NBS,4,885,74.46
+Business,BS Accounting and Finance,NBS,5,960,73.77
+Business,BS Accounting and Finance,NBS,6,961,73.76
+Business,BS Accounting and Finance,NBS,7,977,73.62
+Business,BS Accounting and Finance,NBS,Final,1089,72.59
+Business,BS Economics,S3H,1,559,76.41
+Business,BS Economics,S3H,2,981,73.58
+Business,BS Economics,S3H,3,1091,72.57
+Business,BS Economics,S3H,4,1211,71.47
+Business,BS Economics,S3H,5,1256,71.05
+Business,BS Economics,S3H,6,1297,70.68
+Business,BS Economics,S3H,7,1320,70.46
+Business,BS Economics,S3H,Final,1469,69.1
+Business,BS Mass Communication,S3H,1,929,74.06
+Business,BS Mass Communication,S3H,2,1431,69.44
+Business,BS Mass Communication,S3H,3,1781,65.62
+Business,BS Mass Communication,S3H,4,2053,64.19
+Business,BS Mass Communication,S3H,5,2234,63.24
+Business,BS Mass Communication,S3H,6,2361,62.57
+Business,BS Mass Communication,S3H,7,2490,61.89
+Business,BS Mass Communication,S3H,Final,2775,60.39
+Business,BS Psychology,S3H,1,809,74.96
+Business,BS Psychology,S3H,2,1283,70.8
+Business,BS Psychology,S3H,3,1509,68.61
+Business,BS Psychology,S3H,4,1646,66.6
+Business,BS Psychology,S3H,5,1721,65.94
+Business,BS Psychology,S3H,6,1721,65.94
+Business,BS Psychology,S3H,7,1772,65.67
+Business,BS Psychology,S3H,Final,2071,64.09
+Business,BS Public Administration,S3H,1,856,74.68
+Business,BS Public Administration,S3H,2,1320,70.46
+Business,BS Public Administration,S3H,3,1662,66.37
+Business,BS Public Administration,S3H,4,1958,64.69
+Business,BS Public Administration,S3H,5,2091,63.99
+Business,BS Public Administration,S3H,6,2141,63.73
+Business,BS Public Administration,S3H,7,2308,62.85
+Business,BS Public Administration,S3H,Final,2645,61.07
+Business,BS Tourism and Hospitality,NBS,1,1000,73.4
+Business,BS Tourism and Hospitality,NBS,2,1474,69.05
+Business,BS Tourism and Hospitality,NBS,3,1737,65.85
+Business,BS Tourism and Hospitality,NBS,4,2010,64.42
+Business,BS Tourism and Hospitality,NBS,5,2140,63.73
+Business,BS Tourism and Hospitality,NBS,6,2241,63.2
+Business,BS Tourism and Hospitality,NBS,7,2313,62.82
+Business,BS Tourism and Hospitality,NBS,Final,2757,60.48
+Business,LLB,S3H,1,100,84.9
+Business,LLB,S3H,2,172,82.39
+Business,LLB,S3H,3,226,80.51
+Business,LLB,S3H,4,251,79.63
+Business,LLB,S3H,5,253,79.56
+Business,LLB,S3H,6,257,79.42
+Business,LLB,S3H,7,261,79.28
+Business,LLB,S3H,Final,282,78.55
+Computing,BS Bioinformatics,SINES,1,409,79.44
+Computing,BS Bioinformatics,SINES,2,622,77.85
+Computing,BS Bioinformatics,SINES,3,772,76.85
+Computing,BS Bioinformatics,SINES,4,914,75.81
+Computing,BS Bioinformatics,SINES,5,1063,75.08
+Computing,BS Bioinformatics,SINES,6,1183,74.65
+Computing,BS Bioinformatics,SINES,7,1321,74.15
+Computing,BS Bioinformatics,SINES,Final,1554,73.23
+Computing,BS Computer Engineering,EME,1,725,77.19
+Computing,BS Computer Engineering,EME,2,1803,72.39
+Computing,BS Computer Engineering,EME,3,2181,71.24
+Computing,BS Computer Engineering,EME,4,2327,70.79
+Computing,BS Computer Engineering,EME,5,2384,70.62
+Computing,BS Computer Engineering,EME,6,2440,70.45
+Computing,BS Computer Engineering,EME,7,2448,70.42
+Computing,BS Computer Engineering,EME,Final,2746,69.83
+Computing,BS Computer Science,NBC,1,486,78.86
+Computing,BS Computer Science,NBC,2,664,77.58
+Computing,BS Computer Science,NBC,3,841,76.35
+Computing,BS Computer Science,NBC,4,1044,75.15
+Computing,BS Computer Science,NBC,5,1253,74.4
+Computing,BS Computer Science,NBC,6,1620,73.0
+Computing,BS Computer Science,NBC,7,1991,71.82
+Computing,BS Computer Science,NBC,Final,5360,64.69
+Computing,BS Computer Science,SEECS,1,211,80.42
+Computing,BS Computer Science,SEECS,2,345,79.41
+Computing,BS Computer Science,SEECS,3,377,79.47
+Computing,BS Computer Science,SEECS,4,377,79.47
+Computing,BS Computer Science,SEECS,5,379,79.48
+Computing,BS Computer Science,SEECS,6,401,79.51
+Computing,BS Computer Science,SEECS,7,405,79.47
+Computing,BS Computer Science,SEECS,Final,447,79.12
+Computing,BS Data Science,SEECS,1,280,79.27
+Computing,BS Data Science,SEECS,2,450,79.1
+Computing,BS Data Science,SEECS,3,516,78.66
+Computing,BS Data Science,SEECS,4,531,78.55
+Computing,BS Data Science,SEECS,5,540,78.48
+Computing,BS Data Science,SEECS,6,567,78.26
+Computing,BS Data Science,SEECS,7,584,78.12
+Computing,BS Data Science,SEECS,Final,652,77.66
+Computing,BS Information Security,MCS,1,949,75.56
+Computing,BS Information Security,MCS,2,2014,71.75
+Computing,BS Information Security,MCS,3,2320,70.81
+Computing,BS Information Security,MCS,4,2418,70.51
+Computing,BS Information Security,MCS,5,2519,70.23
+Computing,BS Information Security,MCS,6,2607,70.07
+Computing,BS Information Security,MCS,7,2656,69.99
+Computing,BS Information Security,MCS,Final,2988,69.42
+Computing,BS Software Engineering,MCS,1,385,79.49
+Computing,BS Software Engineering,MCS,2,962,75.46
+Computing,BS Software Engineering,MCS,3,1095,74.96
+Computing,BS Software Engineering,MCS,4,1121,74.87
+Computing,BS Software Engineering,MCS,5,1169,74.7
+Computing,BS Software Engineering,MCS,6,1170,74.69
+Computing,BS Software Engineering,MCS,7,1192,74.62
+Computing,BS Software Engineering,MCS,Final,1262,74.36
+Computing,BS Software Engineering,SEECS,1,102,83.28
+Computing,BS Software Engineering,SEECS,2,287,79.29
+Computing,BS Software Engineering,SEECS,3,323,79.36
+Computing,BS Software Engineering,SEECS,4,342,79.4
+Computing,BS Software Engineering,SEECS,5,345,79.41
+Computing,BS Software Engineering,SEECS,6,353,79.42
+Computing,BS Software Engineering,SEECS,7,355,79.43
+Computing,BS Software Engineering,SEECS,Final,378,79.47
+Engineering,BE Aerospace Engineering,CAE,1,826,74.43
+Engineering,BE Aerospace Engineering,CAE,2,1563,70.67
+Engineering,BE Aerospace Engineering,CAE,3,1567,70.65
+Engineering,BE Aerospace Engineering,CAE,4,1567,70.65
+Engineering,BE Aerospace Engineering,CAE,5,1567,70.65
+Engineering,BE Aerospace Engineering,CAE,6,1567,70.65
+Engineering,BE Aerospace Engineering,CAE,7,1567,70.65
+Engineering,BE Aerospace Engineering,CAE,Final,1567,70.65
+Engineering,BE Aerospace Engineering,SMME,1,856,74.27
+Engineering,BE Aerospace Engineering,SMME,2,1782,69.85
+Engineering,BE Aerospace Engineering,SMME,3,2363,68.12
+Engineering,BE Aerospace Engineering,SMME,4,2530,67.73
+Engineering,BE Aerospace Engineering,SMME,5,2636,67.47
+Engineering,BE Aerospace Engineering,SMME,6,2832,66.68
+Engineering,BE Aerospace Engineering,SMME,7,2976,66.09
+Engineering,BE Aerospace Engineering,SMME,Final,3292,64.9
+Engineering,BE Avionics Engineering,CAE,1,895,74.04
+Engineering,BE Avionics Engineering,CAE,2,2266,68.34
+Engineering,BE Avionics Engineering,CAE,3,3196,65.26
+Engineering,BE Avionics Engineering,CAE,4,3209,65.21
+Engineering,BE Avionics Engineering,CAE,5,3352,64.68
+Engineering,BE Avionics Engineering,CAE,6,3503,64.11
+Engineering,BE Avionics Engineering,CAE,7,3844,63.57
+Engineering,BE Avionics Engineering,CAE,Final,4954,60.96
+Engineering,BE Chemical Engineering,SCME,1,2025,69.05
+Engineering,BE Chemical Engineering,SCME,2,3439,64.35
+Engineering,BE Chemical Engineering,SCME,3,4557,61.16
+Engineering,BE Chemical Engineering,SCME,4,4855,61.01
+Engineering,BE Chemical Engineering,SCME,5,5046,60.91
+Engineering,BE Chemical Engineering,SCME,6,5128,60.87
+Engineering,BE Chemical Engineering,SCME,7,5346,60.62
+Engineering,BE Chemical Engineering,SCME,Final,6155,59.53
+Engineering,BE Civil Engineering,MCE,1,4881,61.0
+Engineering,BE Civil Engineering,MCE,2,5798,59.87
+Engineering,BE Civil Engineering,MCE,3,6701,59.03
+Engineering,BE Civil Engineering,MCE,4,7039,58.34
+Engineering,BE Civil Engineering,MCE,5,7383,57.41
+Engineering,BE Civil Engineering,MCE,6,7418,57.32
+Engineering,BE Civil Engineering,MCE,7,7742,56.44
+Engineering,BE Civil Engineering,MCE,Final,9204,55.65
+Engineering,BE Civil Engineering,NICE,1,1832,69.69
+Engineering,BE Civil Engineering,NICE,2,3219,65.17
+Engineering,BE Civil Engineering,NICE,3,4050,63.27
+Engineering,BE Civil Engineering,NICE,4,4406,61.7
+Engineering,BE Civil Engineering,NICE,5,4716,61.08
+Engineering,BE Civil Engineering,NICE,6,4901,60.99
+Engineering,BE Civil Engineering,NICE,7,5174,60.85
+Engineering,BE Civil Engineering,NICE,Final,5637,60.02
+Engineering,BE Electrical Engineering,EME,1,2766,66.94
+Engineering,BE Electrical Engineering,EME,2,4081,63.13
+Engineering,BE Electrical Engineering,EME,3,4964,60.96
+Engineering,BE Electrical Engineering,EME,4,4956,60.96
+Engineering,BE Electrical Engineering,EME,5,4982,60.95
+Engineering,BE Electrical Engineering,EME,6,5035,60.92
+Engineering,BE Electrical Engineering,EME,7,5041,60.92
+Engineering,BE Electrical Engineering,EME,Final,6139,59.55
+Engineering,BE Electrical Engineering,MCS,1,3263,65.01
+Engineering,BE Electrical Engineering,MCS,2,4587,61.15
+Engineering,BE Electrical Engineering,MCS,3,5830,59.84
+Engineering,BE Electrical Engineering,MCS,4,6320,59.38
+Engineering,BE Electrical Engineering,MCS,5,6355,59.35
+Engineering,BE Electrical Engineering,MCS,6,6414,59.3
+Engineering,BE Electrical Engineering,MCS,7,6417,59.29
+Engineering,BE Electrical Engineering,MCS,Final,7703,56.55
+Engineering,BE Electrical Engineering,PNEC,1,3130,65.51
+Engineering,BE Electrical Engineering,PNEC,2,4806,61.04
+Engineering,BE Electrical Engineering,PNEC,3,6142,59.55
+Engineering,BE Electrical Engineering,PNEC,4,6630,59.1
+Engineering,BE Electrical Engineering,PNEC,5,6658,59.07
+Engineering,BE Electrical Engineering,PNEC,6,6734,59.0
+Engineering,BE Electrical Engineering,PNEC,7,6858,58.83
+Engineering,BE Electrical Engineering,PNEC,Final,7788,56.32
+Engineering,BE Electrical Engineering,SEECS,1,797,74.59
+Engineering,BE Electrical Engineering,SEECS,2,1592,70.56
+Engineering,BE Electrical Engineering,SEECS,3,1872,69.56
+Engineering,BE Electrical Engineering,SEECS,4,2003,69.12
+Engineering,BE Electrical Engineering,SEECS,5,2004,69.12
+Engineering,BE Electrical Engineering,SEECS,6,2084,68.86
+Engineering,BE Electrical Engineering,SEECS,7,2110,68.77
+Engineering,BE Electrical Engineering,SEECS,Final,2449,67.92
+Engineering,BE Environmental Engineering,IESE,1,2667,67.34
+Engineering,BE Environmental Engineering,IESE,2,4498,61.29
+Engineering,BE Environmental Engineering,IESE,3,5626,60.04
+Engineering,BE Environmental Engineering,IESE,4,6000,59.68
+Engineering,BE Environmental Engineering,IESE,5,6342,59.36
+Engineering,BE Environmental Engineering,IESE,6,6560,59.16
+Engineering,BE Environmental Engineering,IESE,7,6845,58.87
+Engineering,BE Environmental Engineering,IESE,Final,8199,56.06
+Engineering,BE Geoinformatics,IGIS,1,2649,67.42
+Engineering,BE Geoinformatics,IGIS,2,4189,62.65
+Engineering,BE Geoinformatics,IGIS,3,5286,60.74
+Engineering,BE Geoinformatics,IGIS,4,5716,59.94
+Engineering,BE Geoinformatics,IGIS,5,5698,59.96
+Engineering,BE Geoinformatics,IGIS,6,5712,59.95
+Engineering,BE Geoinformatics,IGIS,7,5712,59.95
+Engineering,BE Geoinformatics,IGIS,Final,5975,59.7
+Engineering,BE Material Engineering,SCME,1,2908,66.37
+Engineering,BE Material Engineering,SCME,2,4369,61.86
+Engineering,BE Material Engineering,SCME,3,5627,60.04
+Engineering,BE Material Engineering,SCME,4,6193,59.5
+Engineering,BE Material Engineering,SCME,5,6424,59.29
+Engineering,BE Material Engineering,SCME,6,6700,59.03
+Engineering,BE Material Engineering,SCME,7,6906,58.7
+Engineering,BE Material Engineering,SCME,Final,8419,55.97
+Engineering,BE Mechanical Engineering,EME,1,2631,67.49
+Engineering,BE Mechanical Engineering,EME,2,4129,62.92
+Engineering,BE Mechanical Engineering,EME,3,5156,60.86
+Engineering,BE Mechanical Engineering,EME,4,5186,60.84
+Engineering,BE Mechanical Engineering,EME,5,5233,60.82
+Engineering,BE Mechanical Engineering,EME,6,5233,60.82
+Engineering,BE Mechanical Engineering,EME,7,5319,60.67
+Engineering,BE Mechanical Engineering,EME,Final,6204,59.49
+Engineering,BE Mechanical Engineering,PNEC,1,3275,64.97
+Engineering,BE Mechanical Engineering,PNEC,2,4912,60.98
+Engineering,BE Mechanical Engineering,PNEC,3,5734,59.92
+Engineering,BE Mechanical Engineering,PNEC,4,5954,59.72
+Engineering,BE Mechanical Engineering,PNEC,5,6040,59.64
+Engineering,BE Mechanical Engineering,PNEC,6,6072,59.61
+Engineering,BE Mechanical Engineering,PNEC,7,6123,59.56
+Engineering,BE Mechanical Engineering,PNEC,Final,7416,57.32
+Engineering,BE Mechanical Engineering,SMME,1,997,73.43
+Engineering,BE Mechanical Engineering,SMME,2,2135,68.69
+Engineering,BE Mechanical Engineering,SMME,3,2407,68.02
+Engineering,BE Mechanical Engineering,SMME,4,2483,67.84
+Engineering,BE Mechanical Engineering,SMME,5,2594,67.58
+Engineering,BE Mechanical Engineering,SMME,6,2715,67.15
+Engineering,BE Mechanical Engineering,SMME,7,2780,66.89
+Engineering,BE Mechanical Engineering,SMME,Final,3083,65.68
+Engineering,BE Mechatronics Engineering,EME,1,1787,69.83
+Engineering,BE Mechatronics Engineering,EME,2,3158,65.4
+Engineering,BE Mechatronics Engineering,EME,3,4303,62.15
+Engineering,BE Mechatronics Engineering,EME,4,4364,61.88
+Engineering,BE Mechatronics Engineering,EME,5,4445,61.53
+Engineering,BE Mechatronics Engineering,EME,6,4447,61.52
+Engineering,BE Mechatronics Engineering,EME,7,4524,61.18
+Engineering,BE Mechatronics Engineering,EME,Final,4830,61.02
+Engineering,BS Artificial Intelligence,NBC,1,740,74.89
+Engineering,BS Artificial Intelligence,NBC,2,867,74.21
+Engineering,BS Artificial Intelligence,NBC,3,1039,73.2
+Engineering,BS Artificial Intelligence,NBC,4,1276,71.99
+Engineering,BS Artificial Intelligence,NBC,5,1592,70.56
+Engineering,BS Artificial Intelligence,NBC,6,2215,68.46
+Engineering,BS Artificial Intelligence,NBC,7,2936,66.26
+Engineering,BS Artificial Intelligence,NBC,Final,12369,54.37
+Engineering,BS Artificial Intelligence,SEECS,1,247,79.9
+Engineering,BS Artificial Intelligence,SEECS,2,421,77.89
+Engineering,BS Artificial Intelligence,SEECS,3,470,77.41
+Engineering,BS Artificial Intelligence,SEECS,4,495,77.16
+Engineering,BS Artificial Intelligence,SEECS,5,500,77.11
+Engineering,BS Artificial Intelligence,SEECS,6,522,76.86
+Engineering,BS Artificial Intelligence,SEECS,7,528,76.79
+Engineering,BS Artificial Intelligence,SEECS,Final,566,76.33

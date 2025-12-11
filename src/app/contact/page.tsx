@@ -46,10 +46,10 @@ export default function ContactPage() {
       {/* Header */}
       <section className="py-12 md:py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">
+          <h1 className="text-3xl md:text-5xl font-bold text-[var(--text-primary)] mb-4">
             Contact Us
           </h1>
-          <p className="text-lg text-slate-400">
+          <p className="text-lg text-[var(--text-secondary)]">
             Have questions, feedback, or data to contribute? We&apos;d love to hear from you.
           </p>
         </div>
@@ -61,38 +61,38 @@ export default function ContactPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Contact Info */}
             <div className="space-y-6">
-              <div className="bg-slate-800/50 rounded-2xl p-6 border border-slate-700/50">
-                <div className="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center mb-4">
-                  <svg className="w-6 h-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="card rounded-2xl p-6">
+                <div className="w-12 h-12 rounded-xl bg-[var(--success-light)] flex items-center justify-center mb-4">
+                  <svg className="w-6 h-6 text-[var(--success)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
                 </div>
-                <h3 className="text-lg font-semibold text-white mb-2">Email</h3>
-                <p className="text-slate-400 text-sm">
+                <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">Email</h3>
+                <p className="text-[var(--text-secondary)] text-sm">
                   Send us an email and we&apos;ll get back to you within 24-48 hours.
                 </p>
               </div>
 
-              <div className="bg-slate-800/50 rounded-2xl p-6 border border-slate-700/50">
-                <div className="w-12 h-12 rounded-xl bg-cyan-500/20 flex items-center justify-center mb-4">
-                  <svg className="w-6 h-6 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="card rounded-2xl p-6">
+                <div className="w-12 h-12 rounded-xl bg-[var(--accent-light)] flex items-center justify-center mb-4">
+                  <svg className="w-6 h-6 text-[var(--accent-primary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
                 </div>
-                <h3 className="text-lg font-semibold text-white mb-2">Contribute Data</h3>
-                <p className="text-slate-400 text-sm">
+                <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">Contribute Data</h3>
+                <p className="text-[var(--text-secondary)] text-sm">
                   Have verified merit data? Send it our way to help other students!
                 </p>
               </div>
 
-              <div className="bg-slate-800/50 rounded-2xl p-6 border border-slate-700/50">
-                <div className="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center mb-4">
-                  <svg className="w-6 h-6 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="card rounded-2xl p-6">
+                <div className="w-12 h-12 rounded-xl bg-[var(--warning-light)] flex items-center justify-center mb-4">
+                  <svg className="w-6 h-6 text-[var(--warning)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
-                <h3 className="text-lg font-semibold text-white mb-2">Report Issues</h3>
-                <p className="text-slate-400 text-sm">
+                <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">Report Issues</h3>
+                <p className="text-[var(--text-secondary)] text-sm">
                   Found a bug or incorrect data? Let us know so we can fix it.
                 </p>
               </div>
@@ -100,20 +100,20 @@ export default function ContactPage() {
 
             {/* Contact Form */}
             <div className="lg:col-span-2">
-              <div className="bg-slate-800/50 rounded-2xl p-6 md:p-8 border border-slate-700/50">
-                <h2 className="text-xl font-semibold text-white mb-6">Send a Message</h2>
+              <div className="card rounded-2xl p-6 md:p-8">
+                <h2 className="text-xl font-semibold text-[var(--text-primary)] mb-6">Send a Message</h2>
 
                 {status === 'success' && (
-                  <div className="mb-6 p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-xl">
-                    <p className="text-emerald-400">
+                  <div className="mb-6 p-4 bg-[var(--success-light)] border border-[var(--success)] rounded-xl">
+                    <p className="text-[var(--success)]">
                       Thank you for your message! We&apos;ll get back to you soon.
                     </p>
                   </div>
                 )}
 
                 {status === 'error' && (
-                  <div className="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-xl">
-                    <p className="text-red-400">
+                  <div className="mb-6 p-4 bg-[var(--error-light)] border border-[var(--error)] rounded-xl">
+                    <p className="text-[var(--error)]">
                       Something went wrong. Please try again later.
                     </p>
                   </div>
@@ -122,7 +122,7 @@ export default function ContactPage() {
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
-                      <label htmlFor="name" className="block text-sm font-medium text-slate-300 mb-2">
+                      <label htmlFor="name" className="block text-sm font-medium text-[var(--text-primary)] mb-2">
                         Name
                       </label>
                       <input
@@ -132,11 +132,11 @@ export default function ContactPage() {
                         value={formData.name}
                         onChange={(e) => handleChange('name', e.target.value)}
                         placeholder="Your name"
-                        className="w-full px-4 py-3 bg-slate-900/50 border border-slate-600 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        className="input"
                       />
                     </div>
                     <div>
-                      <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-2">
+                      <label htmlFor="email" className="block text-sm font-medium text-[var(--text-primary)] mb-2">
                         Email
                       </label>
                       <input
@@ -146,13 +146,13 @@ export default function ContactPage() {
                         value={formData.email}
                         onChange={(e) => handleChange('email', e.target.value)}
                         placeholder="your@email.com"
-                        className="w-full px-4 py-3 bg-slate-900/50 border border-slate-600 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        className="input"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label htmlFor="subject" className="block text-sm font-medium text-slate-300 mb-2">
+                    <label htmlFor="subject" className="block text-sm font-medium text-[var(--text-primary)] mb-2">
                       Subject
                     </label>
                     <select
@@ -160,7 +160,7 @@ export default function ContactPage() {
                       required
                       value={formData.subject}
                       onChange={(e) => handleChange('subject', e.target.value)}
-                      className="w-full px-4 py-3 bg-slate-900/50 border border-slate-600 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                      className="input"
                     >
                       <option value="">Select a subject</option>
                       <option value="general">General Inquiry</option>
@@ -172,7 +172,7 @@ export default function ContactPage() {
                   </div>
 
                   <div>
-                    <label htmlFor="message" className="block text-sm font-medium text-slate-300 mb-2">
+                    <label htmlFor="message" className="block text-sm font-medium text-[var(--text-primary)] mb-2">
                       Message
                     </label>
                     <textarea
@@ -182,14 +182,14 @@ export default function ContactPage() {
                       value={formData.message}
                       onChange={(e) => handleChange('message', e.target.value)}
                       placeholder="Your message..."
-                      className="w-full px-4 py-3 bg-slate-900/50 border border-slate-600 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
+                      className="input resize-none"
                     />
                   </div>
 
                   <button
                     type="submit"
                     disabled={status === 'submitting'}
-                    className="w-full px-6 py-4 bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-semibold rounded-xl hover:from-emerald-400 hover:to-cyan-400 transition-all disabled:opacity-50"
+                    className="w-full btn btn-primary py-4 disabled:opacity-50"
                   >
                     {status === 'submitting' ? 'Sending...' : 'Send Message'}
                   </button>

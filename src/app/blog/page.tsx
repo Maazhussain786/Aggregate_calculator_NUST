@@ -43,10 +43,10 @@ export default function BlogPage() {
       {/* Header */}
       <section className="py-12 md:py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">
+          <h1 className="text-3xl md:text-5xl font-bold text-[var(--text-primary)] mb-4">
             Blog
           </h1>
-          <p className="text-lg text-slate-400">
+          <p className="text-lg text-[var(--text-secondary)]">
             Tips, guides, and insights for NUST aspirants
           </p>
         </div>
@@ -59,25 +59,25 @@ export default function BlogPage() {
             {blogPosts.map((post) => (
               <article 
                 key={post.id}
-                className="bg-slate-800/50 rounded-2xl p-6 md:p-8 border border-slate-700/50 hover:border-slate-600 transition-colors"
+                className="card rounded-2xl p-6 md:p-8 hover:border-[var(--accent-primary)] transition-colors"
               >
                 <div className="flex items-center gap-4 mb-4">
-                  <span className="px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-medium rounded-full">
+                  <span className="px-3 py-1 bg-[var(--success-light)] text-[var(--success)] text-xs font-medium rounded-full">
                     {post.category}
                   </span>
-                  <span className="text-sm text-slate-500">{post.date}</span>
-                  <span className="text-sm text-slate-500">•</span>
-                  <span className="text-sm text-slate-500">{post.readTime}</span>
+                  <span className="text-sm text-[var(--text-muted)]">{post.date}</span>
+                  <span className="text-sm text-[var(--text-muted)]">•</span>
+                  <span className="text-sm text-[var(--text-muted)]">{post.readTime}</span>
                 </div>
-                <h2 className="text-xl font-semibold text-white mb-3 hover:text-emerald-400 transition-colors">
+                <h2 className="text-xl font-semibold text-[var(--text-primary)] mb-3 hover:text-[var(--accent-primary)] transition-colors">
                   <Link href={`/blog/${post.id}`}>
                     {post.title}
                   </Link>
                 </h2>
-                <p className="text-slate-400 mb-4">{post.excerpt}</p>
+                <p className="text-[var(--text-secondary)] mb-4">{post.excerpt}</p>
                 <Link 
                   href={`/blog/${post.id}`}
-                  className="text-emerald-400 text-sm font-medium hover:text-emerald-300 transition-colors"
+                  className="text-[var(--accent-primary)] text-sm font-medium hover:underline transition-colors"
                 >
                   Read more →
                 </Link>
@@ -86,8 +86,8 @@ export default function BlogPage() {
           </div>
 
           {/* Coming Soon Notice */}
-          <div className="mt-12 p-6 bg-slate-800/50 rounded-2xl border border-slate-700/50 text-center">
-            <p className="text-slate-400">
+          <div className="mt-12 p-6 card rounded-2xl text-center">
+            <p className="text-[var(--text-secondary)]">
               More articles coming soon! Check back regularly for updates.
             </p>
           </div>

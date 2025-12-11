@@ -3,9 +3,19 @@
 User-agent: *
 Allow: /
 
+# Disallow admin/private areas (if any)
+# Disallow: /admin/
+
 # Sitemap
 Sitemap: https://nust-aggregate.vercel.app/sitemap.xml
 
 # Crawl-delay (optional, for polite crawlers)
 Crawl-delay: 1
+
+# Allow all search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
 

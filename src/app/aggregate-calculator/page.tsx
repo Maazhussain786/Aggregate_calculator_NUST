@@ -2,15 +2,22 @@ import type { Metadata } from 'next';
 import AggregateForm from '@/components/forms/AggregateForm';
 
 export const metadata: Metadata = {
-  title: 'NUST Aggregate Calculator | Calculate Your Merit Score',
-  description: 'Free NUST aggregate calculator using the official formula. NET (75%) + FSc/HSSC (15%) + Matric (10%). Calculate your exact merit score for NUST admission 2025.',
+  title: 'NUST Aggregate Calculator 2025 | Free NUST Merit Calculator - Official Formula',
+  description: 'Free NUST aggregate calculator 2025. Calculate your NUST merit using official formula: NET (75%) + FSc/HSSC (15%) + Matric (10%). Supports marks and percentage input. Updated for 2025 admissions.',
   keywords: [
     'NUST aggregate calculator',
+    'NUST aggregate calculator 2025',
     'NUST merit calculator',
-    'NET score calculator',
     'NUST aggregate formula',
-    'calculate NUST merit',
+    'calculate NUST aggregate',
+    'NUST NET calculator',
+    'NUST merit score calculator',
+    'NUST admission calculator',
+    'NUST aggregate percentage',
     'NUST 2025 aggregate',
+    'NUST aggregate formula 2025',
+    'how to calculate NUST aggregate',
+    'NUST aggregate calculation',
   ],
   alternates: {
     canonical: '/aggregate-calculator',
@@ -124,7 +131,7 @@ export default function AggregateCalculatorPage() {
         </div>
       </section>
 
-      {/* Structured Data */}
+      {/* Structured Data - FAQPage */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -139,6 +146,66 @@ export default function AggregateCalculatorPage() {
                 text: faq.answer,
               },
             })),
+          }),
+        }}
+      />
+      
+      {/* Structured Data - HowTo */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'HowTo',
+            name: 'How to Calculate NUST Aggregate',
+            description: 'Step-by-step guide to calculate your NUST admission aggregate using the official formula',
+            step: [
+              {
+                '@type': 'HowToStep',
+                name: 'Enter Your NET Score',
+                text: 'Enter your NUST Entry Test (NET) score out of 200. This carries 75% weight in the aggregate calculation.',
+              },
+              {
+                '@type': 'HowToStep',
+                name: 'Enter Your FSc/HSSC Percentage',
+                text: 'Enter your FSc or HSSC percentage. This carries 15% weight in the aggregate calculation.',
+              },
+              {
+                '@type': 'HowToStep',
+                name: 'Enter Your Matric Percentage',
+                text: 'Enter your Matric or SSC percentage. This carries 10% weight in the aggregate calculation.',
+              },
+              {
+                '@type': 'HowToStep',
+                name: 'Calculate Aggregate',
+                text: 'Click calculate to get your NUST aggregate percentage. The formula is: (NET/200 × 100 × 0.75) + (FSc% × 0.15) + (Matric% × 0.10)',
+              },
+            ],
+          }),
+        }}
+      />
+      
+      {/* Structured Data - WebApplication */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'WebApplication',
+            name: 'NUST Aggregate Calculator',
+            applicationCategory: 'EducationalApplication',
+            operatingSystem: 'Any',
+            offers: {
+              '@type': 'Offer',
+              price: '0',
+              priceCurrency: 'PKR',
+            },
+            featureList: [
+              'Calculate NUST aggregate using official formula',
+              'Support for FSc and O/A Level students',
+              'Marks and percentage input support',
+              'Detailed breakdown of aggregate calculation',
+            ],
           }),
         }}
       />

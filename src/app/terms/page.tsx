@@ -13,23 +13,23 @@ export default function TermsPage() {
     <div className="animate-fade-in">
       <section className="py-12 md:py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl md:text-5xl font-bold text-white mb-8">
+          <h1 className="text-3xl md:text-5xl font-bold text-[var(--text-primary)] mb-8">
             Terms of Service
           </h1>
           
-          <div className="prose prose-invert max-w-none space-y-6 text-slate-400">
+          <div className="max-w-none space-y-6 text-[var(--text-secondary)]">
             <p className="text-lg">
               Last updated: November 2025
             </p>
 
-            <h2 className="text-xl font-semibold text-white">Acceptance of Terms</h2>
+            <h2 className="text-xl font-semibold text-[var(--text-primary)]">Acceptance of Terms</h2>
             <p>
               By accessing and using NUST Aggregate Calculator, you accept and agree to be 
               bound by these Terms of Service. If you do not agree to these terms, please 
               do not use our service.
             </p>
 
-            <h2 className="text-xl font-semibold text-white">Description of Service</h2>
+            <h2 className="text-xl font-semibold text-[var(--text-primary)]">Description of Service</h2>
             <p>
               NUST Aggregate Calculator provides free tools to:
             </p>
@@ -40,9 +40,9 @@ export default function TermsPage() {
               <li>Generate preference order recommendations</li>
             </ul>
 
-            <h2 className="text-xl font-semibold text-white">Disclaimer</h2>
-            <div className="p-4 bg-amber-500/10 border border-amber-500/30 rounded-xl">
-              <p className="text-amber-300">
+            <h2 className="text-xl font-semibold text-[var(--text-primary)]">Disclaimer</h2>
+            <div className="p-4 bg-[var(--warning-light)] border border-[var(--warning)] rounded-xl">
+              <p className="text-[var(--warning)]">
                 <strong>IMPORTANT:</strong> This is an unofficial tool. NUST Aggregate Calculator 
                 is NOT affiliated with, endorsed by, or officially connected to the National 
                 University of Sciences and Technology (NUST) in any way.
@@ -50,11 +50,11 @@ export default function TermsPage() {
             </div>
             <p className="mt-4">
               All calculations, predictions, and estimates provided by this tool are for 
-              <strong className="text-white"> informational purposes only</strong>. They should 
+              <strong className="text-[var(--text-primary)]"> informational purposes only</strong>. They should 
               not be relied upon as official or guaranteed outcomes.
             </p>
 
-            <h2 className="text-xl font-semibold text-white">Accuracy of Information</h2>
+            <h2 className="text-xl font-semibold text-[var(--text-primary)]">Accuracy of Information</h2>
             <p>
               While we strive to provide accurate information:
             </p>
@@ -68,7 +68,7 @@ export default function TermsPage() {
               Always verify information with official NUST sources before making important decisions.
             </p>
 
-            <h2 className="text-xl font-semibold text-white">Limitation of Liability</h2>
+            <h2 className="text-xl font-semibold text-[var(--text-primary)]">Limitation of Liability</h2>
             <p>
               NUST Aggregate Calculator and its operators shall not be liable for:
             </p>
@@ -79,7 +79,7 @@ export default function TermsPage() {
               <li>Loss of opportunity or any other losses</li>
             </ul>
 
-            <h2 className="text-xl font-semibold text-white">User Responsibilities</h2>
+            <h2 className="text-xl font-semibold text-[var(--text-primary)]">User Responsibilities</h2>
             <p>
               By using this service, you agree to:
             </p>
@@ -90,36 +90,36 @@ export default function TermsPage() {
               <li>Not attempt to manipulate or abuse the service</li>
             </ul>
 
-            <h2 className="text-xl font-semibold text-white">Intellectual Property</h2>
+            <h2 className="text-xl font-semibold text-[var(--text-primary)]">Intellectual Property</h2>
             <p>
               All content, design, and functionality of NUST Aggregate Calculator are 
               protected by intellectual property rights. You may not copy, modify, or 
               distribute our content without permission.
             </p>
 
-            <h2 className="text-xl font-semibold text-white">Service Availability</h2>
+            <h2 className="text-xl font-semibold text-[var(--text-primary)]">Service Availability</h2>
             <p>
               We strive to maintain service availability but do not guarantee uninterrupted 
               access. The service may be modified, suspended, or discontinued at any time 
               without notice.
             </p>
 
-            <h2 className="text-xl font-semibold text-white">Changes to Terms</h2>
+            <h2 className="text-xl font-semibold text-[var(--text-primary)]">Changes to Terms</h2>
             <p>
               We reserve the right to modify these terms at any time. Continued use of 
               the service after changes constitutes acceptance of the new terms.
             </p>
 
-            <h2 className="text-xl font-semibold text-white">Governing Law</h2>
+            <h2 className="text-xl font-semibold text-[var(--text-primary)]">Governing Law</h2>
             <p>
               These terms shall be governed by and construed in accordance with the laws 
               of Pakistan.
             </p>
 
-            <h2 className="text-xl font-semibold text-white">Contact</h2>
+            <h2 className="text-xl font-semibold text-[var(--text-primary)]">Contact</h2>
             <p>
               For questions about these terms, please{' '}
-              <a href="/contact" className="text-emerald-400 hover:text-emerald-300">
+              <a href="/contact" className="text-[var(--accent-primary)] hover:underline">
                 contact us
               </a>.
             </p>

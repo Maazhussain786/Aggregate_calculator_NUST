@@ -52,10 +52,10 @@ export default function MeritHistoryPage() {
       {/* Header */}
       <section className="py-12 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">
+          <h1 className="text-3xl md:text-5xl font-bold text-[var(--text-primary)] mb-4">
             NUST Merit History & Closing Merits
           </h1>
-          <p className="text-lg text-slate-400 max-w-2xl mx-auto">
+          <p className="text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
             Explore historical closing aggregates and merit positions for all NUST programs. 
             Track trends and make informed decisions.
           </p>
@@ -73,38 +73,38 @@ export default function MeritHistoryPage() {
       </section>
 
       {/* Info Section */}
-      <section className="py-16 bg-slate-900/50">
+      <section className="py-16 bg-[var(--bg-primary)] border-t border-[var(--border-color)]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-white mb-6">
+          <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-6">
             Understanding NUST Merit Lists
           </h2>
           
-          <div className="space-y-6 text-slate-400">
+          <div className="space-y-6 text-[var(--text-secondary)]">
             <p>
               NUST releases multiple merit lists during each admission cycle, typically 6-8 lists. 
-              The <strong className="text-white">1st merit list</strong> has the highest cutoffs, 
+              The <strong className="text-[var(--text-primary)]">1st merit list</strong> has the highest cutoffs, 
               with subsequent lists having progressively lower requirements as seats are filled.
             </p>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="p-6 bg-slate-800/50 rounded-xl border border-slate-700/50">
-                <h3 className="text-white font-semibold mb-2">Closing Aggregate</h3>
-                <p className="text-sm">
+              <div className="p-6 bg-[var(--bg-card)] rounded-xl border border-[var(--border-color)] shadow-sm">
+                <h3 className="text-[var(--text-primary)] font-semibold mb-2">Closing Aggregate</h3>
+                <p className="text-sm text-[var(--text-secondary)]">
                   The minimum aggregate percentage of the last candidate admitted in a merit list. 
                   Higher closing aggregates indicate more competitive programs.
                 </p>
               </div>
-              <div className="p-6 bg-slate-800/50 rounded-xl border border-slate-700/50">
-                <h3 className="text-white font-semibold mb-2">Closing Position</h3>
-                <p className="text-sm">
+              <div className="p-6 bg-[var(--bg-card)] rounded-xl border border-[var(--border-color)] shadow-sm">
+                <h3 className="text-[var(--text-primary)] font-semibold mb-2">Closing Position</h3>
+                <p className="text-sm text-[var(--text-secondary)]">
                   The merit position of the last admitted candidate. This helps understand 
                   how many students were ahead of the cutoff.
                 </p>
               </div>
             </div>
 
-            <div className="p-4 bg-amber-500/10 border border-amber-500/30 rounded-xl">
-              <p className="text-sm text-amber-300">
+            <div className="p-4 bg-[var(--warning-light)] border border-[var(--warning)] rounded-xl">
+              <p className="text-sm text-[var(--warning)]">
                 <strong>Note:</strong> Historical data is provided for reference only. 
                 Actual cutoffs vary each year based on applicant pool, seat availability, 
                 and other factors. Always verify with official NUST sources.
@@ -117,10 +117,10 @@ export default function MeritHistoryPage() {
       {/* SEO Content */}
       <section className="py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-xl font-semibold text-white mb-4">
+          <h2 className="text-xl font-semibold text-[var(--text-primary)] mb-4">
             NUST Programs and Campuses
           </h2>
-          <p className="text-slate-400 mb-6">
+          <p className="text-[var(--text-secondary)] mb-6">
             NUST offers undergraduate programs across multiple campuses including H-12 Islamabad, 
             Rawalpindi, and Karachi. Popular programs include Computer Science and Software Engineering 
             at SEECS, Mechanical Engineering at SMME, and Business programs at NBS.
@@ -130,7 +130,7 @@ export default function MeritHistoryPage() {
             {['SEECS', 'SMME', 'NBS', 'S3H', 'SNS', 'NICE', 'PNEC'].map((school) => (
               <span 
                 key={school}
-                className="px-3 py-1 bg-slate-800 text-slate-300 text-sm rounded-full"
+                className="px-3 py-1 bg-[var(--accent-light)] text-[var(--accent-primary)] text-sm rounded-full font-medium"
               >
                 {school}
               </span>
