@@ -77,6 +77,11 @@ export const metadata: Metadata = {
     canonical: '/',
   },
   category: 'Education',
+  icons: {
+    icon: '/nust-logo.png',
+    shortcut: '/nust-logo.png',
+    apple: '/nust-logo.png',
+  },
 };
 
 export const viewport: Viewport = {
@@ -93,8 +98,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="light" suppressHydrationWarning>
       <head>
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="icon" href="/nust-logo.png" type="image/png" />
+        <link rel="shortcut icon" href="/nust-logo.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/nust-logo.png" />
         <link rel="manifest" href="/manifest.json" />
         <script
           dangerouslySetInnerHTML={{

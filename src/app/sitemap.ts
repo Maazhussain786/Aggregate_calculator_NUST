@@ -1,7 +1,10 @@
 import { MetadataRoute } from 'next';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://nust-aggregate.vercel.app';
+  // Use the actual deployed URL - this should be set in Vercel environment variables
+  // For Vercel, we can also use VERCEL_URL if available
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://aggregate-calculator-nust-ojdhhv91s.vercel.app');
   
   // Main pages - ordered by importance for SEO
   const routes = [
