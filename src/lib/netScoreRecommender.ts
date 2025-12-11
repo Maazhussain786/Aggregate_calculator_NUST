@@ -202,7 +202,7 @@ function generateScenarios(
   recommendedScore: number
 ): NetScoreScenario[] {
   const scenarios: NetScoreScenario[] = [];
-  const { MAX_NET_SCORE, WEIGHTS } = AGGREGATE_CONFIG;
+  const { MAX_NET_SCORE, WEIGHTS_FSC } = AGGREGATE_CONFIG;
 
   // Generate scenarios at key NET score points
   const scorePoints = [
@@ -215,7 +215,7 @@ function generateScenarios(
 
   for (const netScore of scorePoints) {
     const netPercentage = (netScore / MAX_NET_SCORE) * 100;
-    const aggregate = (netPercentage * WEIGHTS.NET) + (hscPercentage * WEIGHTS.HSC) + (sscPercentage * WEIGHTS.SSC);
+    const aggregate = (netPercentage * WEIGHTS_FSC.NET) + (hscPercentage * WEIGHTS_FSC.HSC) + (sscPercentage * WEIGHTS_FSC.SSC);
     
     let chanceCategory: string;
     let description: string;
@@ -303,11 +303,11 @@ export function isProgramAchievable(
   hscPercentage: number,
   sscPercentage: number
 ): { achievable: boolean; maxPossibleAggregate: number; gap: number } {
-  const { MAX_NET_SCORE, WEIGHTS } = AGGREGATE_CONFIG;
+  const { MAX_NET_SCORE, WEIGHTS_FSC } = AGGREGATE_CONFIG;
   
   // Calculate maximum possible aggregate (with perfect NET score)
   const maxNetPercentage = 100;
-  const maxAggregate = (maxNetPercentage * WEIGHTS.NET) + (hscPercentage * WEIGHTS.HSC) + (sscPercentage * WEIGHTS.SSC);
+  const maxAggregate = (maxNetPercentage * WEIGHTS_FSC.NET) + (hscPercentage * WEIGHTS_FSC.HSC) + (sscPercentage * WEIGHTS_FSC.SSC);
   
   const gap = closingAggregate - maxAggregate;
   
