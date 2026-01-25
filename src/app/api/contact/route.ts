@@ -1,10 +1,17 @@
 import { NextResponse } from 'next/server';
-import prisma from '@/lib/db';
+
+// Your email where you want to receive contact form submissions
+const RECIPIENT_EMAIL = 'maazhussain972@gmail.com';
+
+// Web3Forms API endpoint (free email service)
+const WEB3FORMS_API = 'https://api.web3forms.com/submit';
+// Get your free access key from https://web3forms.com/
+const WEB3FORMS_ACCESS_KEY = process.env.WEB3FORMS_ACCESS_KEY || '';
 
 /**
  * POST /api/contact
  * 
- * Handles contact form submissions.
+ * Handles contact form submissions and sends email notification.
  * 
  * Request body:
  * {
@@ -37,25 +44,56 @@ export async function POST(request: Request) {
       );
     }
 
-    // Try to save to database
-    try {
-      await prisma.contactSubmission.create({
-        data: {
-          name,
-          email,
-          subject: subject || 'General Inquiry',
-          message,
-        },
-      });
-    } catch {
-      // If database fails, just log (for now)
-      console.log('Contact form submission (DB not available):', { name, email, subject, message });
-    }
+    // Send email via Web3Forms
+    if (WEB3FORMS_ACCESS_KEY) {
+      try {
+        const web3Response = await fetch(WEB3FORMS_API, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: JSON.stringify({
+            access_key: WEB3FORMS_ACCESS_KEY,
+            to: RECIPIENT_EMAIL,
+            from_name: 'NUST Aggregate Calculator',
+            subject: `Contact Form: ${subject || 'General Inquiry'}`,
+            message: `
+New contact form submission from NUST Aggregate Calculator:
 
-    // In production, you would also:
-    // - Send email notification
-    // - Integrate with CRM
-    // - Add spam protection (reCAPTCHA, etc.)
+📧 From: ${name} (${email})
+📋 Subject: ${subject || 'General Inquiry'}
+
+💬 Message:
+${message}
+
+---
+Sent from NUST Aggregate Calculator Contact Form
+            `.trim(),
+            reply_to: email,
+          }),
+        });
+
+        const web3Data = await web3Response.json();
+        
+        if (!web3Response.ok || !web3Data.success) {
+          console.error('Web3Forms error:', web3Data);
+          // Don't fail the request, just log the error
+        }
+      } catch (emailError) {
+        console.error('Email sending error:', emailError);
+        // Don't fail the request if email fails
+      }
+    } else {
+      // If no API key, log the submission
+      console.log('Contact form submission (no email API configured):', { 
+        name, 
+        email, 
+        subject, 
+        message,
+        recipient: RECIPIENT_EMAIL 
+      });
+    }
 
     return NextResponse.json({
       success: true,
