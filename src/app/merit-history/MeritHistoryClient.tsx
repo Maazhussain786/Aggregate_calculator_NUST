@@ -62,23 +62,28 @@ export default function MeritHistoryClient({ programs, meritHistory }: MeritHist
     });
   }, [programs, selectedCampus, selectedSchool]);
 
-  // Get merit history for selected program
+  // Get merit history for selected program - filter to show only 1st, 3rd, and Final lists
   const programMeritHistory = useMemo(() => {
     if (!selectedProgram) return [];
     return meritHistory
       .filter(m => m.programId === selectedProgram.id)
       .filter(m => !selectedYear || m.year === parseInt(selectedYear))
+      // Filter to only show 1st, 3rd, and Final lists
+      .filter(m => m.meritListNumber === 1 || m.meritListNumber === 3 || m.meritListNumber === null)
       .sort((a, b) => {
         if (a.year !== b.year) return b.year - a.year;
-        return (a.meritListNumber || 0) - (b.meritListNumber || 0);
+        // Sort: 1st, 3rd, Final (null)
+        const getOrder = (num: number | null) => num === null ? 999 : num;
+        return getOrder(a.meritListNumber) - getOrder(b.meritListNumber);
       });
   }, [meritHistory, selectedProgram, selectedYear]);
 
-  // Chart data
+  // Chart data - also filter to 1st, 3rd, and Final
   const chartData = useMemo(() => {
     if (!selectedProgram) return [];
     return meritHistory
       .filter(m => m.programId === selectedProgram.id)
+      .filter(m => m.meritListNumber === 1 || m.meritListNumber === 3 || m.meritListNumber === null)
       .map(m => ({
         year: m.year,
         closingAggregate: m.closingAggregate,
