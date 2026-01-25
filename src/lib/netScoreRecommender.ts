@@ -208,12 +208,12 @@ function generateScenarios(
     Math.max(80, recommendedScore - 30),
     Math.max(100, recommendedScore - 15),
     recommendedScore,
-    Math.min(MAX_NET_SCORE, recommendedScore + 15),
-    Math.min(MAX_NET_SCORE, recommendedScore + 30),
+    Math.min(AGGREGATE_CONFIG.MAX_NET_SCORE, recommendedScore + 15),
+    Math.min(AGGREGATE_CONFIG.MAX_NET_SCORE, recommendedScore + 30),
   ].filter((score, index, arr) => arr.indexOf(score) === index); // Remove duplicates
 
   for (const netScore of scorePoints) {
-    const netPercentage = (netScore / MAX_NET_SCORE) * 100;
+    const netPercentage = (netScore / AGGREGATE_CONFIG.MAX_NET_SCORE) * 100;
     const aggregate = (netPercentage * WEIGHTS_FSC.NET) + (hscPercentage * WEIGHTS_FSC.HSC) + (sscPercentage * WEIGHTS_FSC.SSC);
     
     let chanceCategory: string;
