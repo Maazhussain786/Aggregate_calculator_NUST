@@ -215,7 +215,7 @@ function generateExplanation(
   const aboveBelow = difference >= 0 ? 'above' : 'below';
   const diffAbs = Math.abs(difference).toFixed(2);
 
-  let baseExplanation = `Your aggregate of ${userAggregate.toFixed(2)}% is ${diffAbs}% ${aboveBelow} last year's closing aggregate of ${closingAggregate.toFixed(2)}% for ${programName}.`;
+  const baseExplanation = `Your aggregate of ${userAggregate.toFixed(2)}% is ${diffAbs}% ${aboveBelow} last year's closing aggregate of ${closingAggregate.toFixed(2)}% for ${programName}.`;
 
   switch (category) {
     case 'High Chance':

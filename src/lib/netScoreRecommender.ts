@@ -6,7 +6,6 @@
  */
 
 import { calculateRequiredNetScore, AGGREGATE_CONFIG } from './calcAggregate';
-import { PREDICTION_CONFIG } from './chancePredictor';
 
 // ============================================
 // Types & Interfaces
@@ -98,7 +97,7 @@ export function getNetScoreRecommendation(
     ? equivalencePercentage
     : hscPercentage;
 
-  const { MARGINS, ACHIEVABILITY } = NET_RECOMMENDER_CONFIG;
+  const { MARGINS } = NET_RECOMMENDER_CONFIG;
 
   // Calculate required NET scores for different targets
   const minimumTarget = lastYearClosingAggregate + MARGINS.MINIMUM;
@@ -202,7 +201,7 @@ function generateScenarios(
   recommendedScore: number
 ): NetScoreScenario[] {
   const scenarios: NetScoreScenario[] = [];
-  const { MAX_NET_SCORE, WEIGHTS_FSC } = AGGREGATE_CONFIG;
+  const { WEIGHTS_FSC } = AGGREGATE_CONFIG;
 
   // Generate scenarios at key NET score points
   const scorePoints = [
@@ -303,7 +302,7 @@ export function isProgramAchievable(
   hscPercentage: number,
   sscPercentage: number
 ): { achievable: boolean; maxPossibleAggregate: number; gap: number } {
-  const { MAX_NET_SCORE, WEIGHTS_FSC } = AGGREGATE_CONFIG;
+  const { WEIGHTS_FSC } = AGGREGATE_CONFIG;
   
   // Calculate maximum possible aggregate (with perfect NET score)
   const maxNetPercentage = 100;

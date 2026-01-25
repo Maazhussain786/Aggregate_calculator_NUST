@@ -82,7 +82,7 @@ export function predictMeritList(input: MeritListPredictionInput): MeritListPred
   // Find predicted list
   let predictedList: number | null = null;
   let confidence: 'High' | 'Medium' | 'Low' = 'Low';
-  let alternatives: number[] = [];
+  const alternatives: number[] = [];
   let closestDifference = Infinity;
 
   for (const threshold of sortedThresholds) {

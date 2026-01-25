@@ -19,7 +19,11 @@ export default function Header() {
   const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
-    setMounted(true);
+    // Use requestAnimationFrame to batch the mount state update
+    const frameId = requestAnimationFrame(() => {
+      setMounted(true);
+    });
+    return () => cancelAnimationFrame(frameId);
   }, []);
 
   return (

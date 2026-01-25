@@ -111,7 +111,7 @@ export function generatePreferenceList(
   }
 
   // Score and categorize each program
-  const scoredPrograms: PreferenceItem[] = programs.map((program, index) => {
+  const scoredPrograms: PreferenceItem[] = programs.map((program) => {
     // Get chance prediction
     const chancePrediction = predictChance({
       userAggregate,
@@ -343,7 +343,6 @@ function generateRecommendations(
   const recommended = PREFERENCE_CONFIG.RECOMMENDED_MIX[riskTolerance];
   
   const safeRatio = summary.safeCount / summary.totalPrograms;
-  const moderateRatio = summary.moderateCount / summary.totalPrograms;
   const ambitiousRatio = summary.ambitiousCount / summary.totalPrograms;
   
   // Check if mix matches recommendation

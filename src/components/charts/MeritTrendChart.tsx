@@ -52,9 +52,13 @@ export default function MeritTrendChart({
   const [mounted, setMounted] = useState(false);
   
   useEffect(() => {
-    setMounted(true);
+    // Use requestAnimationFrame to batch the mount state update
+    const frameId = requestAnimationFrame(() => {
+      setMounted(true);
+    });
+    return () => cancelAnimationFrame(frameId);
   }, []);
-  
+
   const isDark = mounted ? theme === 'dark' : false;
 
   const processedData = useMemo(() => {
@@ -242,3 +246,5 @@ export default function MeritTrendChart({
     </div>
   );
 }
+
+

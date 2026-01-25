@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import type { Metadata } from 'next';
 
 // Note: Metadata needs to be in a separate server component or layout for client components
 // For now, we'll add it via generateMetadata in a layout or keep this simple

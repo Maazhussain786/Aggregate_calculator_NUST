@@ -22,7 +22,7 @@ export async function GET(request: Request) {
     if (meritListNumber) where.meritListNumber = parseInt(meritListNumber);
 
     // Try to fetch from database
-    let meritHistory = await prisma.meritHistory.findMany({
+    const meritHistory = await prisma.meritHistory.findMany({
       where,
       include: {
         program: {
