@@ -2,8 +2,8 @@
 
 import { useState, useCallback } from 'react';
 
-// Note: Metadata needs to be in a separate server component or layout for client components
-// For now, we'll add it via generateMetadata in a layout or keep this simple
+// Web3Forms API Key
+const WEB3FORMS_ACCESS_KEY = 'cfce8721-ce86-48cc-b4ec-7a2e71d8a57d';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -14,34 +14,35 @@ export default function ContactPage() {
   });
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const [directEmail, setDirectEmail] = useState<string>('');
 
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('submitting');
     setErrorMessage('');
-    setDirectEmail('');
 
     try {
-      const response = await fetch('/api/contact', {
+      // Use FormData as recommended by Web3Forms
+      const submitData = new FormData();
+      submitData.append('access_key', WEB3FORMS_ACCESS_KEY);
+      submitData.append('name', formData.name);
+      submitData.append('email', formData.email);
+      submitData.append('subject', `NUST Aggregate Calculator: ${formData.subject}`);
+      submitData.append('message', formData.message);
+      submitData.append('from_name', 'NUST Aggregate Calculator');
+
+      const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+        body: submitData,
       });
 
       const data = await response.json();
 
-      if (response.ok && data.success) {
+      if (data.success) {
         setStatus('success');
         setFormData({ name: '', email: '', subject: '', message: '' });
       } else {
         setStatus('error');
-        setErrorMessage(data.error || 'Something went wrong. Please try again later.');
-        if (data.directEmail) {
-          setDirectEmail(data.directEmail);
-        }
+        setErrorMessage(data.message || 'Something went wrong. Please try again later.');
       }
     } catch {
       setStatus('error');
@@ -131,17 +132,15 @@ export default function ContactPage() {
                     <p className="text-[var(--error)]">
                       {errorMessage}
                     </p>
-                    {directEmail && (
-                      <p className="text-[var(--error)] mt-2">
-                        You can email us directly at:{' '}
-                        <a 
-                          href={`mailto:${directEmail}`} 
-                          className="underline font-medium hover:opacity-80"
-                        >
-                          {directEmail}
-                        </a>
-                      </p>
-                    )}
+                    <p className="text-[var(--error)] mt-2">
+                      You can also email us directly at:{' '}
+                      <a 
+                        href="mailto:maazhussain972@gmail.com" 
+                        className="underline font-medium hover:opacity-80"
+                      >
+                        maazhussain972@gmail.com
+                      </a>
+                    </p>
                   </div>
                 )}
 

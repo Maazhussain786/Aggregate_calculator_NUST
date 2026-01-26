@@ -60,7 +60,7 @@ export async function POST(request: Request) {
             email: email,
             subject: `NUST Calculator: ${subject || 'General Inquiry'}`,
             message: message,
-            from_name: 'NUST Aggregate Calculator',
+            botcheck: '', // Anti-spam honeypot field (must be empty)
           }),
         });
 
