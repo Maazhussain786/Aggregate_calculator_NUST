@@ -66,10 +66,12 @@ export async function POST(request: Request) {
 
         const web3Data = await web3Response.json();
         
+        console.log('Web3Forms response:', web3Data);
+        
         if (!web3Response.ok || !web3Data.success) {
           console.error('Web3Forms error:', web3Data);
           return NextResponse.json(
-            { error: 'Failed to send message. Please try again later or email us directly.' },
+            { error: `Failed to send message: ${web3Data.message || 'Unknown error'}` },
             { status: 500 }
           );
         }
