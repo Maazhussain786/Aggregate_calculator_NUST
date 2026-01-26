@@ -56,22 +56,11 @@ export async function POST(request: Request) {
           },
           body: JSON.stringify({
             access_key: WEB3FORMS_ACCESS_KEY,
-            to: RECIPIENT_EMAIL,
+            name: name,
+            email: email,
+            subject: `NUST Calculator: ${subject || 'General Inquiry'}`,
+            message: message,
             from_name: 'NUST Aggregate Calculator',
-            subject: `Contact Form: ${subject || 'General Inquiry'}`,
-            message: `
-New contact form submission from NUST Aggregate Calculator:
-
-📧 From: ${name} (${email})
-📋 Subject: ${subject || 'General Inquiry'}
-
-💬 Message:
-${message}
-
----
-Sent from NUST Aggregate Calculator Contact Form
-            `.trim(),
-            reply_to: email,
           }),
         });
 
