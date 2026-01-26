@@ -7,7 +7,7 @@ const RECIPIENT_EMAIL = 'maazhussain972@gmail.com';
 const WEB3FORMS_API = 'https://api.web3forms.com/submit';
 // Web3Forms access key - Get your free access key from https://web3forms.com/
 // This is a public key that can be safely used in the codebase
-const WEB3FORMS_ACCESS_KEY = process.env.WEB3FORMS_ACCESS_KEY || 'YOUR_ACCESS_KEY_HERE';
+const WEB3FORMS_ACCESS_KEY = process.env.WEB3FORMS_ACCESS_KEY || 'cfce8721-ce86-48cc-b4ec-7a2e71d8a57d';
 
 /**
  * POST /api/contact
