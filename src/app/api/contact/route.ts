@@ -5,8 +5,9 @@ const RECIPIENT_EMAIL = 'maazhussain972@gmail.com';
 
 // Web3Forms API endpoint (free email service)
 const WEB3FORMS_API = 'https://api.web3forms.com/submit';
-// Get your free access key from https://web3forms.com/
-const WEB3FORMS_ACCESS_KEY = process.env.WEB3FORMS_ACCESS_KEY || '';
+// Web3Forms access key - Get your free access key from https://web3forms.com/
+// This is a public key that can be safely used in the codebase
+const WEB3FORMS_ACCESS_KEY = process.env.WEB3FORMS_ACCESS_KEY || 'YOUR_ACCESS_KEY_HERE';
 
 /**
  * POST /api/contact
@@ -45,7 +46,7 @@ export async function POST(request: Request) {
     }
 
     // Send email via Web3Forms
-    if (WEB3FORMS_ACCESS_KEY) {
+    if (WEB3FORMS_ACCESS_KEY && WEB3FORMS_ACCESS_KEY !== 'YOUR_ACCESS_KEY_HERE') {
       try {
         const web3Response = await fetch(WEB3FORMS_API, {
           method: 'POST',
@@ -78,21 +79,25 @@ Sent from NUST Aggregate Calculator Contact Form
         
         if (!web3Response.ok || !web3Data.success) {
           console.error('Web3Forms error:', web3Data);
-          // Don't fail the request, just log the error
+          return NextResponse.json(
+            { error: 'Failed to send message. Please try again later or email us directly.' },
+            { status: 500 }
+          );
         }
       } catch (emailError) {
         console.error('Email sending error:', emailError);
-        // Don't fail the request if email fails
+        return NextResponse.json(
+          { error: 'Failed to send message. Please try again later.' },
+          { status: 500 }
+        );
       }
     } else {
-      // If no API key, log the submission
-      console.log('Contact form submission (no email API configured):', { 
-        name, 
-        email, 
-        subject, 
-        message,
-        recipient: RECIPIENT_EMAIL 
-      });
+      // If no API key configured, return error with direct email option
+      return NextResponse.json({
+        success: false,
+        error: 'Contact form is temporarily unavailable. Please email us directly at maazhussain972@gmail.com',
+        directEmail: RECIPIENT_EMAIL,
+      }, { status: 503 });
     }
 
     return NextResponse.json({

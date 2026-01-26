@@ -285,6 +285,16 @@ export default function MeritHistoryClient({ programs, meritHistory }: MeritHist
                 <dd className="text-[var(--text-primary)] font-medium">{selectedProgram.seats ?? 'N/A'}</dd>
               </div>
             </dl>
+            
+            {/* Note for non-SEECS schools about seat numbers */}
+            {selectedProgram.school !== 'SEECS' && (
+              <div className="mt-4 p-3 bg-[var(--warning-light)] border border-[var(--warning)] rounded-lg">
+                <p className="text-sm text-[var(--warning)]">
+                  <strong>Note:</strong> The number of seats for this program may vary. If you have accurate seat information, please{' '}
+                  <a href="/contact" className="underline font-medium hover:opacity-80">contact us</a> to help improve our data.
+                </p>
+              </div>
+            )}
           </div>
         </div>
       )}

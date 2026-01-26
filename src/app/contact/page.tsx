@@ -13,10 +13,14 @@ export default function ContactPage() {
     message: '',
   });
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [directEmail, setDirectEmail] = useState<string>('');
 
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('submitting');
+    setErrorMessage('');
+    setDirectEmail('');
 
     try {
       const response = await fetch('/api/contact', {
@@ -34,9 +38,14 @@ export default function ContactPage() {
         setFormData({ name: '', email: '', subject: '', message: '' });
       } else {
         setStatus('error');
+        setErrorMessage(data.error || 'Something went wrong. Please try again later.');
+        if (data.directEmail) {
+          setDirectEmail(data.directEmail);
+        }
       }
     } catch {
       setStatus('error');
+      setErrorMessage('Network error. Please check your connection and try again.');
     }
   }, [formData]);
 
@@ -120,8 +129,19 @@ export default function ContactPage() {
                 {status === 'error' && (
                   <div className="mb-6 p-4 bg-[var(--error-light)] border border-[var(--error)] rounded-xl">
                     <p className="text-[var(--error)]">
-                      Something went wrong. Please try again later.
+                      {errorMessage}
                     </p>
+                    {directEmail && (
+                      <p className="text-[var(--error)] mt-2">
+                        You can email us directly at:{' '}
+                        <a 
+                          href={`mailto:${directEmail}`} 
+                          className="underline font-medium hover:opacity-80"
+                        >
+                          {directEmail}
+                        </a>
+                      </p>
+                    )}
                   </div>
                 )}
 
@@ -171,6 +191,7 @@ export default function ContactPage() {
                       <option value="">Select a subject</option>
                       <option value="general">General Inquiry</option>
                       <option value="data">Data Contribution</option>
+                      <option value="seats">Seats Information Update</option>
                       <option value="bug">Bug Report</option>
                       <option value="feature">Feature Request</option>
                       <option value="other">Other</option>
