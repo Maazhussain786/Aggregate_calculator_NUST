@@ -115,33 +115,33 @@
       "name": "BE Environmental Engineering",
       "code": "IESE-ENV",
       "campus": "H-12 Islamabad",
-      "school": "IESE",
+      "school": "IESE (SCEE)",
       "disciplineGroup": "Engineering",
       "degreeType": "BE",
       "seats": 60,
-      "description": "Bachelor of Environmental Engineering at IESE"
+      "description": "Bachelor of Environmental Engineering at IESE, SCEE - H-12 Islamabad"
     },
     {
       "id": "iese-envsc",
       "name": "BS Environmental Sciences",
       "code": "IESE-ENVSC",
       "campus": "H-12 Islamabad",
-      "school": "IESE",
+      "school": "IESE (SCEE)",
       "disciplineGroup": "Applied Sciences",
       "degreeType": "BS",
       "seats": 40,
-      "description": "Bachelor of Science in Environmental Sciences at IESE"
+      "description": "Bachelor of Science in Environmental Sciences at IESE, SCEE - H-12 Islamabad"
     },
     {
       "id": "igis-geo",
       "name": "BE Geoinformatics",
       "code": "IGIS-GEO",
       "campus": "H-12 Islamabad",
-      "school": "IGIS",
+      "school": "IGIS (SCEE)",
       "disciplineGroup": "Engineering",
       "degreeType": "BE",
       "seats": 40,
-      "description": "Bachelor of Geoinformatics at IGIS"
+      "description": "Bachelor of Geoinformatics at IGIS, SCEE - H-12 Islamabad"
     },
     {
       "id": "nbs-bba",
@@ -422,12 +422,12 @@
       "id": "nice-civil",
       "name": "BE Civil Engineering",
       "code": "NICE-CE",
-      "campus": "Rawalpindi",
-      "school": "NICE",
+      "campus": "H-12 Islamabad",
+      "school": "NICE (SCEE)",
       "disciplineGroup": "Engineering",
       "degreeType": "BE",
       "seats": 100,
-      "description": "Bachelor of Civil Engineering at NICE, Rawalpindi"
+      "description": "Bachelor of Civil Engineering at NICE, SCEE - H-12 Islamabad"
     },
     {
       "id": "cae-ae",
