@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { calculateAggregate, validateAggregateInput, type AggregateInput } from '@/lib/calcAggregate';
 import { generatePreferenceList, exportPreferenceListAsText, type PreferenceListResult, type ProgramOption, type UserInterests } from '@/lib/preferenceGenerator';
 
@@ -27,6 +27,8 @@ interface PreferenceGeneratorClientProps {
 }
 
 export default function PreferenceGeneratorClient({ programs, latestMeritData }: PreferenceGeneratorClientProps) {
+  const resultsRef = useRef<HTMLDivElement>(null);
+  
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [aggregate, setAggregate] = useState<number>(0);
   const [aggregateInput, setAggregateInput] = useState<string>('');
@@ -111,6 +113,15 @@ export default function PreferenceGeneratorClient({ programs, latestMeritData }:
     URL.revokeObjectURL(url);
   }, [result]);
 
+  // Auto-scroll to results when step changes
+  useEffect(() => {
+    if ((step === 2 || step === 3) && resultsRef.current) {
+      setTimeout(() => {
+        resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
+  }, [step]);
+
   return (
     <div className="space-y-6">
       {/* Progress Steps */}
@@ -135,8 +146,9 @@ export default function PreferenceGeneratorClient({ programs, latestMeritData }:
         {step === 3 && 'Step 3: Your Preference List'}
       </div>
 
-      {/* Step 1: Aggregate Input */}
-      {step === 1 && (
+      <div ref={resultsRef}>
+        {/* Step 1: Aggregate Input */}
+        {step === 1 && (
         <div className="card p-6 md:p-8">
           <h2 className="text-xl font-semibold text-[var(--text-primary)] mb-6">Enter Your Aggregate</h2>
           
@@ -416,6 +428,7 @@ export default function PreferenceGeneratorClient({ programs, latestMeritData }:
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }

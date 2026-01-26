@@ -8,7 +8,7 @@
       "school": "SEECS",
       "disciplineGroup": "Computing",
       "degreeType": "BS",
-      "seats": 150,
+      "seats": 250,
       "description": "Bachelor of Science in Computer Science at SEECS, NUST's premier engineering school"
     },
     {
@@ -19,7 +19,7 @@
       "school": "SEECS",
       "disciplineGroup": "Computing",
       "degreeType": "BS",
-      "seats": 120,
+      "seats": 100,
       "description": "Bachelor of Science in Software Engineering at SEECS"
     },
     {
@@ -30,7 +30,7 @@
       "school": "SEECS",
       "disciplineGroup": "Computing",
       "degreeType": "BS",
-      "seats": 80,
+      "seats": 50,
       "description": "Bachelor of Science in Data Science at SEECS"
     },
     {
@@ -63,7 +63,7 @@
       "school": "SEECS",
       "disciplineGroup": "Computing",
       "degreeType": "BE",
-      "seats": 80,
+      "seats": 50,
       "description": "Bachelor of Computer Engineering at SEECS"
     },
     {

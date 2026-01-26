@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { calculateAggregate, validateAggregateInput, type AggregateInput, type AggregateBreakdown } from '@/lib/calcAggregate';
 import { predictChance, type PredictionResult } from '@/lib/chancePredictor';
 import { predictMeritList, generateEstimatedThresholds, type MeritListPredictionResult } from '@/lib/meritListPredictor';
@@ -23,6 +23,8 @@ interface AdmissionPredictorClientProps {
 }
 
 export default function AdmissionPredictorClient({ programs, latestMeritData }: AdmissionPredictorClientProps) {
+  const resultsRef = useRef<HTMLDivElement>(null);
+  
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [formData, setFormData] = useState<AggregateInput>({
     netScore: 0,
@@ -105,6 +107,15 @@ export default function AdmissionPredictorClient({ programs, latestMeritData }: 
     setErrors([]);
   }, []);
 
+  // Auto-scroll to results when step changes
+  useEffect(() => {
+    if ((step === 2 || step === 3) && resultsRef.current) {
+      setTimeout(() => {
+        resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
+  }, [step]);
+
   return (
     <div className="space-y-6">
       {/* Progress Steps */}
@@ -133,9 +144,10 @@ export default function AdmissionPredictorClient({ programs, latestMeritData }: 
         {step === 3 && 'Step 3: View Predictions'}
       </div>
 
-      {/* Step 1: Aggregate Calculator */}
-      {step === 1 && (
-        <div className="card p-6 md:p-8">
+      <div ref={resultsRef}>
+        {/* Step 1: Aggregate Calculator */}
+        {step === 1 && (
+          <div className="card p-6 md:p-8">
           <h2 className="text-xl font-semibold text-[var(--text-primary)] mb-6">Calculate Your Aggregate</h2>
           
           <div className="grid gap-6">
@@ -387,6 +399,7 @@ export default function AdmissionPredictorClient({ programs, latestMeritData }: 
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }

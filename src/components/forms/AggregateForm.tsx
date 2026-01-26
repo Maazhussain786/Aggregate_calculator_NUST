@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { calculateAggregate, validateAggregateInput, type AggregateInput, type AggregateBreakdown } from '@/lib/calcAggregate';
 
 interface AggregateFormProps {
@@ -13,6 +13,8 @@ type FscTotalMarks = '550' | '1100' | 'custom';
 type SscTotalMarks = '1100' | '1050' | 'custom';
 
 export default function AggregateForm({ onResult, showResults = true }: AggregateFormProps) {
+  const resultsRef = useRef<HTMLDivElement>(null);
+
   // Input mode: percentage or marks
   const [inputMode, setInputMode] = useState<InputMode>('marks');
   
@@ -139,6 +141,15 @@ export default function AggregateForm({ onResult, showResults = true }: Aggregat
     setResult(null);
     setErrors([]);
   }, []);
+
+  // Auto-scroll to results when they appear
+  useEffect(() => {
+    if (result && resultsRef.current) {
+      setTimeout(() => {
+        resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
+  }, [result]);
 
   return (
     <div className="space-y-6">
@@ -586,7 +597,7 @@ export default function AggregateForm({ onResult, showResults = true }: Aggregat
 
       {/* Results */}
       {showResults && result && (
-        <div className="card p-6 md:p-8 animate-fade-in">
+        <div ref={resultsRef} className="card p-6 md:p-8 animate-fade-in">
           <h3 className="text-xl font-bold text-[var(--text-primary)] mb-6">Your NUST Aggregate</h3>
           
           {/* Main Result */}

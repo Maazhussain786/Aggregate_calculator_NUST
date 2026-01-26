@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 
 // Dynamic import for chart to avoid SSR issues
@@ -40,6 +40,8 @@ interface MeritHistoryClientProps {
 }
 
 export default function MeritHistoryClient({ programs, meritHistory }: MeritHistoryClientProps) {
+  const resultsRef = useRef<HTMLDivElement>(null);
+  
   const [selectedCampus, setSelectedCampus] = useState<string>('');
   const [selectedSchool, setSelectedSchool] = useState<string>('');
   const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
@@ -91,6 +93,15 @@ export default function MeritHistoryClient({ programs, meritHistory }: MeritHist
         meritListNumber: m.meritListNumber,
       }));
   }, [meritHistory, selectedProgram]);
+
+  // Auto-scroll to results when a program is selected
+  useEffect(() => {
+    if (selectedProgram && resultsRef.current) {
+      setTimeout(() => {
+        resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
+  }, [selectedProgram]);
 
   return (
     <div className="space-y-6">
@@ -187,9 +198,9 @@ export default function MeritHistoryClient({ programs, meritHistory }: MeritHist
 
       {/* Selected Program Details */}
       {selectedProgram && (
-        <>
+        <div ref={resultsRef}>
           {/* Chart */}
-          <div className="card p-6">
+          <div className="card p-6 mb-6">
             <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-4">
               Merit Trend: {selectedProgram.name}
             </h2>
@@ -275,7 +286,7 @@ export default function MeritHistoryClient({ programs, meritHistory }: MeritHist
               </div>
             </dl>
           </div>
-        </>
+        </div>
       )}
 
       {/* No Program Selected */}
