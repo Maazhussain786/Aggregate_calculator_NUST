@@ -31,7 +31,7 @@ function transformData() {
     seats: p.seats,
   }));
 
-  // Get latest year data for each program
+  // Get latest year data for each program (for display purposes)
   const latestMeritData = sampleData.meritHistory.reduce((acc, m) => {
     const key = m.programId;
     if (!acc[key] || m.year > acc[key].year || 
@@ -41,11 +41,33 @@ function transformData() {
     return acc;
   }, {} as Record<string, typeof sampleData.meritHistory[0]>);
 
-  return { programs, latestMeritData };
+  // Get all merit history for the latest year per program (for predictions)
+  const latestYear: Record<string, number> = {};
+  sampleData.meritHistory.forEach(m => {
+    if (!latestYear[m.programId] || m.year > latestYear[m.programId]) {
+      latestYear[m.programId] = m.year;
+    }
+  });
+
+  const allMeritHistory = sampleData.meritHistory.reduce((acc, m) => {
+    if (m.year === latestYear[m.programId]) {
+      if (!acc[m.programId]) {
+        acc[m.programId] = [];
+      }
+      acc[m.programId].push({
+        meritListNumber: m.meritListNumber,
+        closingAggregate: m.closingAggregate,
+        closingMeritPosition: m.closingMeritPosition,
+      });
+    }
+    return acc;
+  }, {} as Record<string, Array<{ meritListNumber: number | null; closingAggregate: number | null; closingMeritPosition: number | null }>>);
+
+  return { programs, latestMeritData, allMeritHistory };
 }
 
 export default function AdmissionPredictorPage() {
-  const { programs, latestMeritData } = transformData();
+  const { programs, latestMeritData, allMeritHistory } = transformData();
 
   return (
     <div className="animate-fade-in">
@@ -67,7 +89,8 @@ export default function AdmissionPredictorPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <AdmissionPredictorClient 
             programs={programs} 
-            latestMeritData={latestMeritData} 
+            latestMeritData={latestMeritData}
+            allMeritHistory={allMeritHistory}
           />
         </div>
       </section>

@@ -3,7 +3,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { calculateAggregate, validateAggregateInput, type AggregateInput, type AggregateBreakdown } from '@/lib/calcAggregate';
 import { predictChance, type PredictionResult } from '@/lib/chancePredictor';
-import { predictMeritList, generateEstimatedThresholds, type MeritListPredictionResult } from '@/lib/meritListPredictor';
+import { predictMeritList, generateThresholdsFromHistory, generateEstimatedThresholds, type MeritListPredictionResult, type HistoricalMeritData, type MeritListThreshold } from '@/lib/meritListPredictor';
 import ChanceDisplay from '@/components/results/ChanceDisplay';
 import MeritListDisplay from '@/components/results/MeritListDisplay';
 import ProgramSelector, { type Program } from '@/components/forms/ProgramSelector';
@@ -20,9 +20,10 @@ interface MeritData {
 interface AdmissionPredictorClientProps {
   programs: Program[];
   latestMeritData: Record<string, MeritData>;
+  allMeritHistory: Record<string, HistoricalMeritData[]>;
 }
 
-export default function AdmissionPredictorClient({ programs, latestMeritData }: AdmissionPredictorClientProps) {
+export default function AdmissionPredictorClient({ programs, latestMeritData, allMeritHistory }: AdmissionPredictorClientProps) {
   const resultsRef = useRef<HTMLDivElement>(null);
   
   const [step, setStep] = useState<1 | 2 | 3>(1);
@@ -65,6 +66,7 @@ export default function AdmissionPredictorClient({ programs, latestMeritData }: 
     if (!aggregateResult || !selectedProgram) return;
 
     const meritData = latestMeritData[selectedProgram.id];
+    const programMeritHistory = allMeritHistory[selectedProgram.id] || [];
 
     // Chance prediction
     const chance = predictChance({
@@ -75,10 +77,17 @@ export default function AdmissionPredictorClient({ programs, latestMeritData }: 
     });
     setChancePrediction(chance);
 
-    // Merit list prediction
-    const thresholds = meritData?.closingAggregate
-      ? generateEstimatedThresholds(meritData.closingAggregate)
-      : [];
+    // Merit list prediction - use real historical data with interpolation
+    let thresholds: MeritListThreshold[];
+    if (programMeritHistory.length > 0) {
+      // Use real data with interpolation for all merit lists
+      thresholds = generateThresholdsFromHistory(programMeritHistory);
+    } else if (meritData?.closingAggregate) {
+      // Fallback to estimated thresholds
+      thresholds = generateEstimatedThresholds(meritData.closingAggregate);
+    } else {
+      thresholds = [];
+    }
     
     const meritList = predictMeritList({
       userAggregate: aggregateResult.totalAggregate,
@@ -89,7 +98,7 @@ export default function AdmissionPredictorClient({ programs, latestMeritData }: 
     setMeritListPrediction(meritList);
 
     setStep(3);
-  }, [aggregateResult, selectedProgram, latestMeritData]);
+  }, [aggregateResult, selectedProgram, latestMeritData, allMeritHistory]);
 
   const handleReset = useCallback(() => {
     setStep(1);

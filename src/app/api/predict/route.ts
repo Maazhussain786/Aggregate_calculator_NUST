@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { predictChance } from '@/lib/chancePredictor';
-import { predictMeritList, generateEstimatedThresholds } from '@/lib/meritListPredictor';
+import { predictMeritList, generateThresholdsFromHistory, generateEstimatedThresholds, type MeritListThreshold } from '@/lib/meritListPredictor';
 import { getNetScoreRecommendation } from '@/lib/netScoreRecommender';
 import sampleData from '@/data/sampleMeritData.json';
 
@@ -39,10 +39,20 @@ export async function POST(request: Request) {
       );
     }
 
-    // Get latest merit data
-    const meritData = sampleData.meritHistory
-      .filter(m => m.programId === programId)
-      .sort((a, b) => b.year - a.year)[0];
+    // Get all merit data for this program from the latest year
+    const programMeritHistory = sampleData.meritHistory.filter(m => m.programId === programId);
+    const latestYear = Math.max(...programMeritHistory.map(m => m.year));
+    const latestYearHistory = programMeritHistory
+      .filter(m => m.year === latestYear)
+      .map(m => ({
+        meritListNumber: m.meritListNumber,
+        closingAggregate: m.closingAggregate,
+        closingMeritPosition: m.closingMeritPosition,
+      }));
+
+    // Get latest merit data for chance prediction
+    const meritData = latestYearHistory.find(m => m.meritListNumber === 1 || m.meritListNumber === null)
+      ?? latestYearHistory[0];
 
     const lastYearClosingAggregate = meritData?.closingAggregate ?? null;
 
@@ -54,10 +64,15 @@ export async function POST(request: Request) {
       lastYearClosingAggregate,
     });
 
-    // Merit list prediction
-    const thresholds = lastYearClosingAggregate
-      ? generateEstimatedThresholds(lastYearClosingAggregate)
-      : [];
+    // Merit list prediction - use real historical data
+    let thresholds: MeritListThreshold[];
+    if (latestYearHistory.length > 0) {
+      thresholds = generateThresholdsFromHistory(latestYearHistory);
+    } else if (lastYearClosingAggregate) {
+      thresholds = generateEstimatedThresholds(lastYearClosingAggregate);
+    } else {
+      thresholds = [];
+    }
     
     const meritListPrediction = predictMeritList({
       userAggregate,

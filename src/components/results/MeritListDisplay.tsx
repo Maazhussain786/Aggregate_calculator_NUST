@@ -63,12 +63,14 @@ export default function MeritListDisplay({ prediction, programName }: MeritListD
       {/* Merit List Timeline */}
       {prediction.predictedList !== null && (
         <div className="mt-6">
-          <h4 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Merit List Timeline</h4>
-          <div className="flex items-center justify-between gap-1 sm:gap-2">
-            {Array.from({ length: 8 }, (_, i) => i + 1).map((listNum) => (
+          <h4 className="text-sm font-semibold text-[var(--text-primary)] mb-4">
+            Merit List Timeline {prediction.totalLists > 8 && <span className="text-[var(--text-muted)] font-normal">(Up to {prediction.totalLists} lists)</span>}
+          </h4>
+          <div className="flex items-center justify-between gap-1 sm:gap-2 overflow-x-auto pb-2">
+            {Array.from({ length: prediction.totalLists }, (_, i) => i + 1).map((listNum) => (
               <div
                 key={listNum}
-                className={`flex-1 h-8 sm:h-10 rounded-md flex items-center justify-center text-xs sm:text-sm font-medium transition-all ${
+                className={`flex-shrink-0 ${prediction.totalLists > 10 ? 'w-8 h-8' : 'flex-1 h-8 sm:h-10'} rounded-md flex items-center justify-center text-xs sm:text-sm font-medium transition-all ${
                   listNum === prediction.predictedList
                     ? 'text-white shadow-md'
                     : prediction.alternatives.includes(listNum)
@@ -79,6 +81,7 @@ export default function MeritListDisplay({ prediction, programName }: MeritListD
                   backgroundColor: listNum === prediction.predictedList ? getListColor(listNum) : undefined,
                   borderColor: prediction.alternatives.includes(listNum) ? getListColor(listNum) : undefined,
                   color: prediction.alternatives.includes(listNum) ? getListColor(listNum) : undefined,
+                  minWidth: prediction.totalLists > 10 ? '2rem' : undefined,
                 }}
               >
                 {listNum}
@@ -87,7 +90,7 @@ export default function MeritListDisplay({ prediction, programName }: MeritListD
           </div>
           <div className="flex justify-between mt-2 text-xs text-[var(--text-muted)]">
             <span>Earlier</span>
-            <span>Later</span>
+            <span>Later (Final)</span>
           </div>
         </div>
       )}

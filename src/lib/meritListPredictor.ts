@@ -23,7 +23,7 @@ export interface MeritListPredictionInput {
 }
 
 export interface MeritListPredictionResult {
-  /** Predicted merit list number (1-8, or null if unlikely) */
+  /** Predicted merit list number (1-N, or null if unlikely) */
   predictedList: number | null;
   /** Confidence level */
   confidence: 'High' | 'Medium' | 'Low';
@@ -35,6 +35,8 @@ export interface MeritListPredictionResult {
   alternatives: number[];
   /** Whether prediction is based on real data or estimates */
   isEstimate: boolean;
+  /** Total number of merit lists available for this program */
+  totalLists: number;
 }
 
 // ============================================
@@ -121,6 +123,11 @@ export function predictMeritList(input: MeritListPredictionInput): MeritListPred
     programName
   );
 
+  // Get total number of lists from thresholds
+  const totalLists = sortedThresholds.length > 0 
+    ? Math.max(...sortedThresholds.map(t => t.meritListNumber))
+    : MERIT_LIST_CONFIG.MAX_LISTS;
+
   return {
     predictedList,
     confidence,
@@ -128,6 +135,7 @@ export function predictMeritList(input: MeritListPredictionInput): MeritListPred
     explanation,
     alternatives: alternatives.slice(0, 2), // Max 2 alternatives
     isEstimate: false,
+    totalLists,
   };
 }
 
@@ -163,6 +171,7 @@ function createNoDataPrediction(userAggregate: number, programName: string): Mer
     explanation,
     alternatives: estimatedList ? [estimatedList + 1, estimatedList + 2].filter(n => n <= 8) : [],
     isEstimate: true,
+    totalLists: 8, // Default to 8 when no data
   };
 }
 
@@ -246,8 +255,162 @@ function getOrdinal(n: number): string {
 }
 
 // ============================================
-// Generate Default Thresholds (Placeholder)
+// Generate Thresholds from Historical Data
 // ============================================
+
+export interface HistoricalMeritData {
+  meritListNumber: number | null; // null = final list
+  closingAggregate: number | null;
+  closingMeritPosition?: number | null;
+}
+
+/**
+ * Generates thresholds from actual historical merit data with interpolation
+ * This uses real data points and interpolates for missing merit lists
+ * 
+ * @param historicalData - Array of historical merit data from database
+ * @param maxLists - Maximum number of lists to consider (default 12 to cover all possibilities)
+ */
+export function generateThresholdsFromHistory(
+  historicalData: HistoricalMeritData[],
+  maxLists: number = 12
+): MeritListThreshold[] {
+  if (!historicalData || historicalData.length === 0) {
+    return [];
+  }
+
+  // Separate numbered lists and final list
+  const numberedLists = historicalData
+    .filter(d => d.meritListNumber !== null && d.closingAggregate !== null)
+    .sort((a, b) => (a.meritListNumber as number) - (b.meritListNumber as number));
+  
+  const finalList = historicalData.find(d => d.meritListNumber === null && d.closingAggregate !== null);
+
+  // If no data at all, return empty
+  if (numberedLists.length === 0 && !finalList) {
+    return [];
+  }
+
+  // Determine the actual maximum list number from data
+  const highestNumberedList = numberedLists.length > 0 
+    ? numberedLists[numberedLists.length - 1].meritListNumber as number 
+    : 0;
+  
+  // If we have a final list, assume it's ~2-3 lists after the highest numbered one
+  // or at least list 8 (typical NUST pattern)
+  const estimatedFinalListNumber = finalList 
+    ? Math.max(highestNumberedList + 2, 8, maxLists) 
+    : highestNumberedList;
+
+  const actualMaxLists = Math.min(Math.max(estimatedFinalListNumber, highestNumberedList), maxLists);
+
+  // Build known data points for interpolation
+  const knownPoints: { listNumber: number; aggregate: number }[] = [];
+
+  numberedLists.forEach(d => {
+    knownPoints.push({
+      listNumber: d.meritListNumber as number,
+      aggregate: d.closingAggregate as number,
+    });
+  });
+
+  // Add final list as the last point
+  if (finalList && finalList.closingAggregate !== null) {
+    knownPoints.push({
+      listNumber: actualMaxLists,
+      aggregate: finalList.closingAggregate,
+    });
+  }
+
+  // Sort by list number
+  knownPoints.sort((a, b) => a.listNumber - b.listNumber);
+
+  // Generate thresholds with interpolation
+  const thresholds: MeritListThreshold[] = [];
+
+  for (let i = 1; i <= actualMaxLists; i++) {
+    const exactMatch = knownPoints.find(p => p.listNumber === i);
+    
+    if (exactMatch) {
+      thresholds.push({
+        meritListNumber: i,
+        closingAggregate: exactMatch.aggregate,
+      });
+    } else {
+      // Interpolate between known points
+      const interpolated = interpolateAggregate(i, knownPoints);
+      if (interpolated !== null) {
+        thresholds.push({
+          meritListNumber: i,
+          closingAggregate: interpolated,
+        });
+      }
+    }
+  }
+
+  return thresholds;
+}
+
+/**
+ * Interpolates aggregate for a given list number based on known data points
+ */
+function interpolateAggregate(
+  listNumber: number, 
+  knownPoints: { listNumber: number; aggregate: number }[]
+): number | null {
+  if (knownPoints.length === 0) return null;
+  if (knownPoints.length === 1) {
+    // Single point - estimate using default drop
+    const point = knownPoints[0];
+    const diff = listNumber - point.listNumber;
+    return Math.max(50, point.aggregate - diff * MERIT_LIST_CONFIG.DEFAULT_AGGREGATE_DROP_PER_LIST);
+  }
+
+  // Find surrounding points for linear interpolation
+  let lowerPoint: { listNumber: number; aggregate: number } | null = null;
+  let upperPoint: { listNumber: number; aggregate: number } | null = null;
+
+  for (const point of knownPoints) {
+    if (point.listNumber <= listNumber) {
+      lowerPoint = point;
+    }
+    if (point.listNumber >= listNumber && !upperPoint) {
+      upperPoint = point;
+    }
+  }
+
+  if (lowerPoint && upperPoint && lowerPoint !== upperPoint) {
+    // Linear interpolation
+    const range = upperPoint.listNumber - lowerPoint.listNumber;
+    const position = listNumber - lowerPoint.listNumber;
+    const aggregateRange = upperPoint.aggregate - lowerPoint.aggregate;
+    return lowerPoint.aggregate + (position / range) * aggregateRange;
+  } else if (lowerPoint) {
+    // Extrapolate forward using average drop rate
+    const avgDrop = calculateAverageDropRate(knownPoints);
+    return Math.max(50, lowerPoint.aggregate - (listNumber - lowerPoint.listNumber) * avgDrop);
+  } else if (upperPoint) {
+    // Extrapolate backward (unlikely but handle it)
+    const avgDrop = calculateAverageDropRate(knownPoints);
+    return Math.min(100, upperPoint.aggregate + (upperPoint.listNumber - listNumber) * avgDrop);
+  }
+
+  return null;
+}
+
+/**
+ * Calculates average drop rate per list from known data points
+ */
+function calculateAverageDropRate(knownPoints: { listNumber: number; aggregate: number }[]): number {
+  if (knownPoints.length < 2) return MERIT_LIST_CONFIG.DEFAULT_AGGREGATE_DROP_PER_LIST;
+  
+  const first = knownPoints[0];
+  const last = knownPoints[knownPoints.length - 1];
+  const totalDrop = first.aggregate - last.aggregate;
+  const listRange = last.listNumber - first.listNumber;
+  
+  return listRange > 0 ? totalDrop / listRange : MERIT_LIST_CONFIG.DEFAULT_AGGREGATE_DROP_PER_LIST;
+}
 
 /**
  * Generates estimated thresholds when real data not available
