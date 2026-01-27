@@ -9,6 +9,7 @@ const navigation = [
   { name: 'Calculator', href: '/aggregate-calculator' },
   { name: 'Merit History', href: '/merit-history' },
   { name: 'Predictor', href: '/admission-predictor' },
+  { name: 'Position', href: '/position-estimator' },
   { name: 'Preferences', href: '/preference-generator' },
   { name: 'About', href: '/about' },
 ];

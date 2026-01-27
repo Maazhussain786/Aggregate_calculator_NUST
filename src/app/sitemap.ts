@@ -12,6 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/aggregate-calculator', priority: 0.9, changeFreq: 'weekly' }, // Main feature
     { path: '/merit-history', priority: 0.9, changeFreq: 'weekly' }, // Important content
     { path: '/admission-predictor', priority: 0.8, changeFreq: 'monthly' },
+    { path: '/position-estimator', priority: 0.8, changeFreq: 'monthly' },
     { path: '/preference-generator', priority: 0.8, changeFreq: 'monthly' },
     { path: '/about', priority: 0.7, changeFreq: 'monthly' },
     { path: '/blog', priority: 0.7, changeFreq: 'weekly' },
