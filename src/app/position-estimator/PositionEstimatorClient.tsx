@@ -3,14 +3,114 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { calculateAggregate, validateAggregateInput, type AggregateInput, type AggregateBreakdown } from '@/lib/calcAggregate';
 import { estimatePosition, type PositionEstimateResult, type PositionDataPoint } from '@/lib/positionEstimator';
-import ProgramSelector, { type Program } from '@/components/forms/ProgramSelector';
 
-interface PositionEstimatorClientProps {
-  programs: Program[];
-  positionData: Record<string, PositionDataPoint[]>;
+// NET Types based on official NUST admission policy
+export type NETType = 'engineering' | 'business' | 'applied-sciences' | 'architecture' | 'natural-sciences';
+
+export interface NETTypeInfo {
+  id: NETType;
+  name: string;
+  fullName: string;
+  description: string;
+  programs: string[];
+  subjects: { name: string; weight: string }[];
 }
 
-export default function PositionEstimatorClient({ programs, positionData }: PositionEstimatorClientProps) {
+export const NET_TYPES: NETTypeInfo[] = [
+  {
+    id: 'engineering',
+    name: 'NET-Engineering',
+    fullName: 'NET-Engineering (Including Computing)',
+    description: 'For all Engineering & Computing Programs',
+    programs: [
+      'All Engineering Programs (Mechanical, Electrical, Civil, Chemical, etc.)',
+      'All Computing Programs (CS, SE, DS, AI, CE, IS, Bioinformatics)',
+      'BS Mathematics, Physics, Chemistry (Pre-Engineering background)',
+      'BS Food Science & Technology (Pre-Engineering background)',
+    ],
+    subjects: [
+      { name: 'Mathematics', weight: '50%' },
+      { name: 'Physics', weight: '30%' },
+      { name: 'English', weight: '20%' },
+    ],
+  },
+  {
+    id: 'business',
+    name: 'NET-Business',
+    fullName: 'NET-Business Studies & Social Sciences',
+    description: 'For Business & Social Sciences Programs',
+    programs: [
+      'BBA (NBS)',
+      'BS Accounting & Finance (NBS)',
+      'BS Tourism & Hospitality (NBS)',
+      'BS Economics (S3H)',
+      'BS Mass Communication (S3H)',
+      'BS Psychology (S3H)',
+      'BS Liberal Arts & Humanities (S3H)',
+      'Bachelor of Public Administration (JSPPL)',
+      'LLB (NLS)',
+    ],
+    subjects: [
+      { name: 'Quantitative Mathematics', weight: '50%' },
+      { name: 'English', weight: '50%' },
+    ],
+  },
+  {
+    id: 'applied-sciences',
+    name: 'NET-Applied Sciences',
+    fullName: 'NET-Applied Sciences',
+    description: 'For Applied Biosciences Programs (Pre-Medical)',
+    programs: [
+      'BS Biotechnology (ASAB)',
+      'BS Environmental Science (SCEE)',
+      'BS Agriculture (ASAB)',
+      'BS Food Science & Technology (ASAB)',
+      'BS Bioinformatics (Pre-Medical background)',
+      'BS Chemistry (Pre-Medical background)',
+    ],
+    subjects: [
+      { name: 'Biology', weight: '50%' },
+      { name: 'Chemistry', weight: '30%' },
+      { name: 'English', weight: '20%' },
+    ],
+  },
+  {
+    id: 'architecture',
+    name: 'NET-Architecture',
+    fullName: 'NET-Architecture & Design',
+    description: 'For Architecture & Industrial Design Programs',
+    programs: [
+      'Bachelor of Architecture (SADA)',
+      'Bachelor of Industrial Design (SADA)',
+    ],
+    subjects: [
+      { name: 'Design Aptitude', weight: '50%' },
+      { name: 'Mathematics', weight: '30%' },
+      { name: 'English', weight: '20%' },
+    ],
+  },
+  {
+    id: 'natural-sciences',
+    name: 'NET-Natural Sciences',
+    fullName: 'NET-Natural Sciences',
+    description: 'For Natural Sciences Programs (Non-standard background)',
+    programs: [
+      'BS Mathematics (SNS)',
+      'BS Physics (SNS)',
+      'BS Chemistry (SNS)',
+    ],
+    subjects: [
+      { name: 'Mathematics', weight: '50%' },
+      { name: 'English', weight: '50%' },
+    ],
+  },
+];
+
+interface PositionEstimatorClientProps {
+  positionData: Record<NETType, PositionDataPoint[]>;
+}
+
+export default function PositionEstimatorClient({ positionData }: PositionEstimatorClientProps) {
   const resultsRef = useRef<HTMLDivElement>(null);
   
   const [step, setStep] = useState<1 | 2 | 3>(1);
@@ -25,7 +125,7 @@ export default function PositionEstimatorClient({ programs, positionData }: Posi
   });
   const [errors, setErrors] = useState<string[]>([]);
   const [aggregateResult, setAggregateResult] = useState<AggregateBreakdown | null>(null);
-  const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
+  const [selectedNETType, setSelectedNETType] = useState<NETTypeInfo | null>(null);
   const [positionEstimate, setPositionEstimate] = useState<PositionEstimateResult | null>(null);
 
   const handleInputChange = useCallback((field: keyof AggregateInput, value: number | boolean | undefined) => {
@@ -63,25 +163,25 @@ export default function PositionEstimatorClient({ programs, positionData }: Posi
     setStep(2);
   }, [formData, inputMode, directAggregate]);
 
-  const handleSelectProgram = useCallback((program: Program | null) => {
-    setSelectedProgram(program);
+  const handleSelectNETType = useCallback((netType: NETTypeInfo) => {
+    setSelectedNETType(netType);
   }, []);
 
   const handleEstimate = useCallback(() => {
-    if (!aggregateResult || !selectedProgram) return;
+    if (!aggregateResult || !selectedNETType) return;
 
-    const programPositionData = positionData[selectedProgram.id] || [];
+    const netTypePositionData = positionData[selectedNETType.id] || [];
 
     const estimate = estimatePosition({
       userAggregate: aggregateResult.totalAggregate,
-      programId: selectedProgram.id,
-      programName: selectedProgram.name,
-      historicalData: programPositionData,
+      programId: selectedNETType.id,
+      programName: selectedNETType.fullName,
+      historicalData: netTypePositionData,
     });
 
     setPositionEstimate(estimate);
     setStep(3);
-  }, [aggregateResult, selectedProgram, positionData]);
+  }, [aggregateResult, selectedNETType, positionData]);
 
   const handleReset = useCallback(() => {
     setStep(1);
@@ -94,7 +194,7 @@ export default function PositionEstimatorClient({ programs, positionData }: Posi
     });
     setDirectAggregate(0);
     setAggregateResult(null);
-    setSelectedProgram(null);
+    setSelectedNETType(null);
     setPositionEstimate(null);
     setErrors([]);
   }, []);
@@ -140,7 +240,7 @@ export default function PositionEstimatorClient({ programs, positionData }: Posi
 
       <div className="text-center text-sm text-[var(--text-muted)]">
         {step === 1 && 'Step 1: Enter Your Aggregate'}
-        {step === 2 && 'Step 2: Select Program'}
+        {step === 2 && 'Step 2: Select NET Type'}
         {step === 3 && 'Step 3: View Position Estimate'}
       </div>
 
@@ -324,7 +424,7 @@ export default function PositionEstimatorClient({ programs, positionData }: Posi
           </div>
         )}
 
-        {/* Step 2: Program Selection */}
+        {/* Step 2: NET Type Selection */}
         {step === 2 && aggregateResult && (
           <div className="space-y-6">
             {/* Aggregate Summary */}
@@ -341,41 +441,86 @@ export default function PositionEstimatorClient({ programs, positionData }: Posi
               <div className="text-4xl font-bold text-[var(--accent-primary)] mono">{aggregateResult.totalAggregate}%</div>
             </div>
 
-            {/* Program Selector */}
+            {/* NET Type Selector */}
             <div className="card p-6 md:p-8">
-              <h2 className="text-xl font-semibold text-[var(--text-primary)] mb-6">Select Program</h2>
+              <h2 className="text-xl font-semibold text-[var(--text-primary)] mb-2">Select Your NET Type</h2>
+              <p className="text-sm text-[var(--text-muted)] mb-6">
+                NUST has separate merit lists for each NET type. Your position will be the same for all programs within a NET category.
+              </p>
               
-              <ProgramSelector
-                programs={programs}
-                selectedProgram={selectedProgram}
-                onSelect={handleSelectProgram}
-                label="Choose a program to estimate position"
-                placeholder="Search for a program..."
-              />
-
-              {selectedProgram && (
-                <div className="mt-6 p-4 bg-[var(--bg-secondary)] rounded-lg border border-[var(--border-color)]">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <p className="text-[var(--text-primary)] font-medium">{selectedProgram.name}</p>
-                      <p className="text-sm text-[var(--text-muted)]">{selectedProgram.campus} • {selectedProgram.school}</p>
-                    </div>
-                    {positionData[selectedProgram.id] && positionData[selectedProgram.id].length > 0 && (
-                      <div className="text-right">
-                        <p className="text-xs text-[var(--text-muted)]">Data Points</p>
-                        <p className="text-[var(--success)] font-mono">
-                          {positionData[selectedProgram.id].length} records
-                        </p>
+              <div className="grid gap-4">
+                {NET_TYPES.map((netType) => (
+                  <button
+                    key={netType.id}
+                    onClick={() => handleSelectNETType(netType)}
+                    className={`text-left p-4 rounded-xl border-2 transition-all ${
+                      selectedNETType?.id === netType.id
+                        ? 'border-[var(--accent-primary)] bg-[var(--accent-primary)]/5'
+                        : 'border-[var(--border-color)] hover:border-[var(--accent-primary)]/50 bg-[var(--bg-secondary)]'
+                    }`}
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <h3 className={`font-semibold ${
+                            selectedNETType?.id === netType.id 
+                              ? 'text-[var(--accent-primary)]' 
+                              : 'text-[var(--text-primary)]'
+                          }`}>
+                            {netType.name}
+                          </h3>
+                          {selectedNETType?.id === netType.id && (
+                            <span className="text-[var(--accent-primary)]">✓</span>
+                          )}
+                        </div>
+                        <p className="text-sm text-[var(--text-secondary)] mt-1">{netType.description}</p>
+                        
+                        {/* Test Composition */}
+                        <div className="flex flex-wrap gap-2 mt-3">
+                          {netType.subjects.map((subject, idx) => (
+                            <span 
+                              key={idx} 
+                              className="text-xs px-2 py-1 rounded bg-[var(--bg-input)] text-[var(--text-muted)]"
+                            >
+                              {subject.name}: {subject.weight}
+                            </span>
+                          ))}
+                        </div>
                       </div>
-                    )}
-                  </div>
+                      
+                      {positionData[netType.id] && positionData[netType.id].length > 0 && (
+                        <div className="text-right ml-4">
+                          <p className="text-xs text-[var(--text-muted)]">Data</p>
+                          <p className="text-[var(--success)] font-mono text-sm">
+                            {positionData[netType.id].length} pts
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </button>
+                ))}
+              </div>
+
+              {selectedNETType && (
+                <div className="mt-6 p-4 bg-[var(--bg-secondary)] rounded-lg border border-[var(--border-color)]">
+                  <h4 className="text-sm font-semibold text-[var(--text-primary)] mb-3">
+                    Programs in {selectedNETType.name}:
+                  </h4>
+                  <ul className="text-sm text-[var(--text-secondary)] space-y-1">
+                    {selectedNETType.programs.map((program, idx) => (
+                      <li key={idx} className="flex items-start gap-2">
+                        <span className="text-[var(--accent-primary)]">•</span>
+                        {program}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               )}
 
               <button
                 type="button"
                 onClick={handleEstimate}
-                disabled={!selectedProgram}
+                disabled={!selectedNETType}
                 className="w-full mt-6 btn btn-primary py-4 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Estimate My Position
@@ -385,13 +530,13 @@ export default function PositionEstimatorClient({ programs, positionData }: Posi
         )}
 
         {/* Step 3: Results */}
-        {step === 3 && positionEstimate && selectedProgram && (
+        {step === 3 && positionEstimate && selectedNETType && (
           <div className="space-y-6">
             {/* Summary Bar */}
             <div className="card p-4 flex flex-wrap items-center justify-between gap-4">
               <div>
-                <p className="text-sm text-[var(--text-muted)]">Program</p>
-                <p className="text-[var(--text-primary)] font-medium">{selectedProgram.name}</p>
+                <p className="text-sm text-[var(--text-muted)]">NET Type</p>
+                <p className="text-[var(--text-primary)] font-medium">{selectedNETType.name}</p>
               </div>
               <div>
                 <p className="text-sm text-[var(--text-muted)]">Your Aggregate</p>
@@ -408,7 +553,7 @@ export default function PositionEstimatorClient({ programs, positionData }: Posi
             {/* Position Estimate Card */}
             <div className="card p-6 md:p-8">
               <h3 className="text-lg font-bold text-[var(--text-primary)] mb-1">Estimated Merit Position</h3>
-              <p className="text-sm text-[var(--text-muted)] mb-6">{selectedProgram.name}</p>
+              <p className="text-sm text-[var(--text-muted)] mb-6">{selectedNETType.fullName}</p>
 
               {/* Main Position Display */}
               <div className="text-center py-8 bg-[var(--bg-secondary)] rounded-xl">
@@ -427,6 +572,16 @@ export default function PositionEstimatorClient({ programs, positionData }: Posi
                 >
                   {positionEstimate.confidence} Confidence
                 </div>
+              </div>
+
+              {/* Applicable Programs Info */}
+              <div className="mt-6 p-4 bg-[var(--accent-primary)]/5 border border-[var(--accent-primary)]/20 rounded-lg">
+                <h4 className="text-sm font-semibold text-[var(--accent-primary)] mb-2">
+                  ✓ This position applies to all {selectedNETType.name} programs
+                </h4>
+                <p className="text-sm text-[var(--text-secondary)]">
+                  Since NUST uses a single merit list per NET type, your estimated position is the same for all programs in this category.
+                </p>
               </div>
 
               {/* Position Visualization */}
