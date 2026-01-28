@@ -383,6 +383,14 @@ export default function PreferenceGeneratorClient({ programs, latestMeritData }:
                 </ul>
               </div>
             )}
+
+            {/* Final Merit List Note */}
+            <div className="p-4 bg-[var(--accent-primary)]/5 border border-[var(--accent-primary)]/20 rounded-lg mt-4">
+              <p className="text-sm text-[var(--text-secondary)]">
+                <span className="font-semibold text-[var(--accent-primary)]">ℹ️ Note:</span> Admission chances are calculated based on <strong>Final Merit List</strong> closing aggregates. 
+                The Final Merit List represents the actual last cutoff after all merit rounds, giving you the most realistic prediction of your chances.
+              </p>
+            </div>
           </div>
 
           {/* Ranked List */}

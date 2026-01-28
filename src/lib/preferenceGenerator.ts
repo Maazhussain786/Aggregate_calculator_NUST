@@ -309,11 +309,8 @@ function generateReasoning(
   // Chance-based reasoning
   parts.push(`${chance.chancePercentage}% admission chance`);
   
-  // Merit list info
-  if (meritList.predictedList) {
-    const ordinal = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th'][meritList.predictedList - 1] || `${meritList.predictedList}th`;
-    parts.push(`likely ${ordinal} merit list`);
-  }
+  // Note that predictions are based on Final merit list
+  parts.push('based on Final merit list');
   
   // Interest note
   if (interestScore >= 80) {
