@@ -30,11 +30,30 @@ function transformData() {
     seats: p.seats,
   }));
 
+  // Get the Final merit list data (meritListNumber: null) for the latest year
+  // Final list represents the actual closing aggregate after all merit lists
   const latestMeritData = sampleData.meritHistory.reduce((acc, m) => {
     const key = m.programId;
-    if (!acc[key] || m.year > acc[key].year) {
+    const existing = acc[key];
+    
+    // Prefer Final list (meritListNumber === null) over numbered merit lists
+    // Within the same year, Final list is the most accurate closing aggregate
+    const isFinalList = m.meritListNumber === null;
+    const existingIsFinalList = existing?.meritListNumber === null;
+    
+    if (!existing) {
+      // No existing record, use this one
       acc[key] = m;
+    } else if (m.year > existing.year) {
+      // Newer year always wins
+      acc[key] = m;
+    } else if (m.year === existing.year) {
+      // Same year: prefer Final list over numbered lists
+      if (isFinalList && !existingIsFinalList) {
+        acc[key] = m;
+      }
     }
+    
     return acc;
   }, {} as Record<string, typeof sampleData.meritHistory[0]>);
 
