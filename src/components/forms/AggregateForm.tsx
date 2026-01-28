@@ -158,8 +158,8 @@ export default function AggregateForm({ onResult, showResults = true }: Aggregat
         <div className="space-y-6">
           {/* NET Score */}
           <div>
-            <label htmlFor="netScore" className="block text-sm font-semibold text-[var(--text-primary)] mb-2">
-              NET Score
+            <label htmlFor="netScore" className="block text-sm text-[var(--text-primary)] mb-2" style={{ fontFamily: "'Press Start 2P', cursive", fontSize: '0.5rem' }}>
+              {'>'} NET SCORE
             </label>
             <div className="relative">
               <input
@@ -169,30 +169,30 @@ export default function AggregateForm({ onResult, showResults = true }: Aggregat
                 max="200"
                 value={netScore || ''}
                 onChange={(e) => setNetScore(parseFloat(e.target.value) || 0)}
-                placeholder="Enter your NET score (0-200)"
+                placeholder="Enter NET score (0-200)"
                 className="input pr-16"
                 aria-describedby="netScore-help"
               />
-              <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--text-muted)] text-sm font-medium">/ 200</span>
+              <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--text-muted)] text-sm font-mono">/ 200</span>
             </div>
             <p id="netScore-help" className="mt-1.5 text-xs text-[var(--text-muted)]">
-              NET exam score carries <strong>75%</strong> weight in your aggregate
+              ■ NET carries <strong>75%</strong> weight
             </p>
           </div>
 
           {/* Education System Toggle */}
           <div>
-            <label className="block text-sm font-semibold text-[var(--text-primary)] mb-3">
-              Education System
+            <label className="block text-sm text-[var(--text-primary)] mb-3" style={{ fontFamily: "'Press Start 2P', cursive", fontSize: '0.5rem' }}>
+              {'>'} EDUCATION SYSTEM
             </label>
             <div className="flex gap-3">
               <button
                 type="button"
                 onClick={() => setUseEquivalence(false)}
-                className={`flex-1 px-4 py-3 rounded-lg text-sm font-medium transition-all border ${
+                className={`flex-1 px-4 py-3 text-sm font-medium transition-all border-4 ${
                   !useEquivalence
-                    ? 'bg-[var(--accent-primary)] text-white border-[var(--accent-primary)]'
-                    : 'bg-[var(--bg-input)] text-[var(--text-secondary)] border-[var(--border-color)] hover:border-[var(--accent-primary)]'
+                    ? 'bg-[var(--accent-primary)] text-[var(--text-inverse)] border-[var(--border-color)]'
+                    : 'bg-[var(--bg-input)] text-[var(--text-secondary)] border-[var(--border-color)] hover:bg-[var(--bg-hover)]'
                 }`}
               >
                 FSc / HSSC
@@ -200,10 +200,10 @@ export default function AggregateForm({ onResult, showResults = true }: Aggregat
               <button
                 type="button"
                 onClick={() => setUseEquivalence(true)}
-                className={`flex-1 px-4 py-3 rounded-lg text-sm font-medium transition-all border ${
+                className={`flex-1 px-4 py-3 text-sm font-medium transition-all border-4 ${
                   useEquivalence
-                    ? 'bg-[var(--accent-primary)] text-white border-[var(--accent-primary)]'
-                    : 'bg-[var(--bg-input)] text-[var(--text-secondary)] border-[var(--border-color)] hover:border-[var(--accent-primary)]'
+                    ? 'bg-[var(--accent-primary)] text-[var(--text-inverse)] border-[var(--border-color)]'
+                    : 'bg-[var(--bg-input)] text-[var(--text-secondary)] border-[var(--border-color)] hover:bg-[var(--bg-hover)]'
                 }`}
               >
                 O/A Levels
@@ -212,21 +212,21 @@ export default function AggregateForm({ onResult, showResults = true }: Aggregat
           </div>
 
           {/* Show formula based on selection */}
-          <div className="p-4 bg-[var(--bg-secondary)] rounded-lg border border-[var(--border-color)]">
-            <p className="text-xs text-[var(--text-muted)] mb-2">Formula being used:</p>
+          <div className="p-4 bg-[var(--bg-secondary)] border-4 border-[var(--border-color)]">
+            <p className="text-xs text-[var(--text-muted)] mb-2 font-mono">FORMULA:</p>
             {useEquivalence ? (
-              <p className="text-sm font-medium text-[var(--text-primary)]">
-                <span className="text-[var(--accent-primary)]">NET × 75%</span>
+              <p className="text-sm font-mono text-[var(--text-primary)]">
+                <span className="border-2 border-[var(--border-color)] px-2 py-0.5">NET × 75%</span>
                 <span className="text-[var(--text-muted)]"> + </span>
-                <span className="text-[var(--success)]">O-Level Equivalence × 25%</span>
+                <span className="border-2 border-[var(--border-color)] px-2 py-0.5">O-Level × 25%</span>
               </p>
             ) : (
-              <p className="text-sm font-medium text-[var(--text-primary)]">
-                <span className="text-[var(--accent-primary)]">NET × 75%</span>
+              <p className="text-sm font-mono text-[var(--text-primary)]">
+                <span className="border-2 border-[var(--border-color)] px-2 py-0.5">NET × 75%</span>
                 <span className="text-[var(--text-muted)]"> + </span>
-                <span className="text-[var(--success)]">FSc × 15%</span>
+                <span className="border-2 border-[var(--border-color)] px-2 py-0.5">FSc × 15%</span>
                 <span className="text-[var(--text-muted)]"> + </span>
-                <span className="text-[var(--warning)]">Matric × 10%</span>
+                <span className="border-2 border-[var(--border-color)] px-2 py-0.5">Matric × 10%</span>
               </p>
             )}
           </div>
@@ -234,8 +234,8 @@ export default function AggregateForm({ onResult, showResults = true }: Aggregat
           {useEquivalence ? (
             /* O/A Level - Only Equivalence Input */
             <div className="space-y-4">
-              <label className="block text-sm font-semibold text-[var(--text-primary)]">
-                O-Level Equivalence (IBCC)
+              <label className="block text-sm text-[var(--text-primary)]" style={{ fontFamily: "'Press Start 2P', cursive", fontSize: '0.5rem' }}>
+                {'>'} O-LEVEL EQUIVALENCE
               </label>
               
               {/* Input Mode Toggle */}
@@ -243,9 +243,9 @@ export default function AggregateForm({ onResult, showResults = true }: Aggregat
                 <button
                   type="button"
                   onClick={() => setEquivalenceInputMode('marks')}
-                  className={`flex-1 px-4 py-2.5 rounded-lg text-sm font-medium transition-all border ${
+                  className={`flex-1 px-4 py-2.5 text-sm font-medium transition-all border-4 ${
                     equivalenceInputMode === 'marks'
-                      ? 'bg-[var(--accent-light)] text-[var(--accent-primary)] border-[var(--accent-primary)]'
+                      ? 'bg-[var(--accent-primary)] text-[var(--text-inverse)] border-[var(--border-color)]'
                       : 'bg-[var(--bg-input)] text-[var(--text-secondary)] border-[var(--border-color)]'
                   }`}
                 >
@@ -254,9 +254,9 @@ export default function AggregateForm({ onResult, showResults = true }: Aggregat
                 <button
                   type="button"
                   onClick={() => setEquivalenceInputMode('percentage')}
-                  className={`flex-1 px-4 py-2.5 rounded-lg text-sm font-medium transition-all border ${
+                  className={`flex-1 px-4 py-2.5 text-sm font-medium transition-all border-4 ${
                     equivalenceInputMode === 'percentage'
-                      ? 'bg-[var(--accent-light)] text-[var(--accent-primary)] border-[var(--accent-primary)]'
+                      ? 'bg-[var(--accent-primary)] text-[var(--text-inverse)] border-[var(--border-color)]'
                       : 'bg-[var(--bg-input)] text-[var(--text-secondary)] border-[var(--border-color)]'
                   }`}
                 >
@@ -583,14 +583,14 @@ export default function AggregateForm({ onResult, showResults = true }: Aggregat
             disabled={isCalculating}
             className="flex-1 btn btn-primary py-4"
           >
-            {isCalculating ? 'Calculating...' : 'Calculate Aggregate'}
+            {isCalculating ? '■ CALCULATING...' : '> CALCULATE AGGREGATE'}
           </button>
           <button
             type="button"
             onClick={handleReset}
             className="btn btn-secondary py-4 sm:w-auto"
           >
-            Reset
+            RESET
           </button>
         </div>
       </div>
@@ -598,26 +598,28 @@ export default function AggregateForm({ onResult, showResults = true }: Aggregat
       {/* Results */}
       {showResults && result && (
         <div ref={resultsRef} className="card p-6 md:p-8 animate-fade-in">
-          <h3 className="text-xl font-bold text-[var(--text-primary)] mb-6">Your NUST Aggregate</h3>
+          <h3 className="text-[var(--text-primary)] mb-6" style={{ fontFamily: "'Press Start 2P', cursive", fontSize: '0.75rem' }}>
+            ★ YOUR NUST AGGREGATE ★
+          </h3>
           
           {/* Main Result */}
-          <div className="text-center py-8 bg-[var(--bg-secondary)] rounded-xl border border-[var(--border-color)]">
-            <div className="text-5xl sm:text-6xl font-bold text-[var(--accent-primary)] mono">
+          <div className="text-center py-8 bg-[var(--bg-secondary)] border-4 border-[var(--border-color)]">
+            <div className="text-4xl sm:text-5xl font-bold text-[var(--accent-primary)] font-mono" style={{ fontFamily: "'Press Start 2P', cursive" }}>
               {result.totalAggregate}%
             </div>
-            <p className="mt-2 text-[var(--text-muted)]">Final Aggregate</p>
-            <p className="mt-1 text-xs text-[var(--text-muted)]">
-              ({result.isOALevel ? 'O/A Level Formula' : 'FSc Formula'})
+            <p className="mt-4 text-[var(--text-muted)]">[ FINAL AGGREGATE ]</p>
+            <p className="mt-1 text-xs text-[var(--text-muted)] font-mono">
+              MODE: {result.isOALevel ? 'O/A LEVEL' : 'FSc/HSSC'}
             </p>
           </div>
 
           {/* Breakdown */}
           <div className="mt-8 space-y-4">
-            <h4 className="text-sm font-semibold text-[var(--text-muted)] uppercase tracking-wider">Breakdown</h4>
+            <h4 className="text-[var(--text-muted)] uppercase tracking-wider" style={{ fontFamily: "'Press Start 2P', cursive", fontSize: '0.5rem' }}>▼ BREAKDOWN</h4>
             
             <div className="space-y-3">
               {/* NET */}
-              <div className="flex items-center justify-between p-4 bg-[var(--bg-secondary)] rounded-lg border border-[var(--border-color)]">
+              <div className="flex items-center justify-between p-4 bg-[var(--bg-secondary)] border-4 border-[var(--border-color)]">
                 <div className="flex items-center gap-3">
                   <div className="h-10 w-10 rounded-lg bg-[var(--accent-light)] flex items-center justify-center">
                     <span className="text-[var(--accent-primary)] font-bold text-xs">75%</span>

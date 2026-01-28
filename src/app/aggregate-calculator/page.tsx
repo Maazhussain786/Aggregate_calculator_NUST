@@ -51,15 +51,30 @@ export default function AggregateCalculatorPage() {
   return (
     <div className="animate-fade-in">
       {/* Header */}
-      <section className="py-12 md:py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[var(--text-primary)] mb-4">
-            NUST Aggregate Calculator
+      <section className="py-12 md:py-16 relative">
+        {/* Pixel Grid Background */}
+        <div className="absolute inset-0 opacity-[0.03]" style={{
+          backgroundImage: `
+            linear-gradient(var(--border-color) 1px, transparent 1px),
+            linear-gradient(90deg, var(--border-color) 1px, transparent 1px)
+          `,
+          backgroundSize: '16px 16px'
+        }} />
+        
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
+          <div className="inline-block border-4 border-[var(--border-color)] px-4 py-2 bg-[var(--bg-card)] mb-6">
+            <span className="text-xs text-[var(--text-muted)] font-mono">{'>'} SYSTEM TOOL 01</span>
+          </div>
+          <h1 className="text-[var(--text-primary)] mb-4">
+            NUST AGGREGATE CALCULATOR
           </h1>
           <p className="text-[var(--text-secondary)] max-w-2xl mx-auto">
             Calculate your NUST admission aggregate using the official formula. 
             Supports both marks and percentage input.
           </p>
+          <div className="mt-4 text-[var(--text-muted)] text-sm">
+            ■ ■ ■ ENTER YOUR DATA BELOW ■ ■ ■
+          </div>
         </div>
       </section>
 
@@ -71,10 +86,10 @@ export default function AggregateCalculatorPage() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-16 bg-[var(--bg-primary)] border-t border-[var(--border-color)]">
+      <section className="py-16 bg-[var(--bg-primary)] border-t-4 border-[var(--border-color)]">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-xl sm:text-2xl font-bold text-[var(--text-primary)] text-center mb-8">
-            Frequently Asked Questions
+          <h2 className="text-[var(--text-primary)] text-center mb-8">
+            ▼ FAQ ▼
           </h2>
 
           <div className="space-y-4">

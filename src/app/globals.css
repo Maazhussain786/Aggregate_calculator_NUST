@@ -1,136 +1,192 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Silkscreen:wght@400;700&display=swap');
 @import "tailwindcss";
 
 /* ============================================
-   NUST Aggregate Calculator - Global Styles
-   Clean, Professional Design
+   NUST Aggregate Calculator
+   ██████╗ ██╗██╗  ██╗███████╗██╗     
+   ██╔══██╗██║╚██╗██╔╝██╔════╝██║     
+   ██████╔╝██║ ╚███╔╝ █████╗  ██║     
+   ██╔═══╝ ██║ ██╔██╗ ██╔══╝  ██║     
+   ██║     ██║██╔╝ ██╗███████╗███████╗
+   ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚══════╝
+   8-BIT RETRO THEME - B&W Edition
    ============================================ */
 
-/* Light Mode (Default) - Improved Contrast */
+/* ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+   LIGHT MODE - White Background, Black Elements
+   ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ */
 :root,
 .light {
   --bg-primary: #ffffff;
-  --bg-secondary: #f8fafc;
+  --bg-secondary: #f5f5f5;
   --bg-card: #ffffff;
-  --bg-input: #f1f5f9;
-  --bg-hover: #e2e8f0;
+  --bg-input: #ffffff;
+  --bg-hover: #eeeeee;
   
-  --text-primary: #0f172a;
-  --text-secondary: #1e293b;
-  --text-muted: #475569;
+  --text-primary: #000000;
+  --text-secondary: #222222;
+  --text-muted: #555555;
   --text-inverse: #ffffff;
   
-  --border-color: #cbd5e1;
-  --border-focus: #1e40af;
+  --border-color: #000000;
+  --border-focus: #000000;
   
-  --accent-primary: #1e40af;
-  --accent-secondary: #3b82f6;
-  --accent-light: #dbeafe;
+  --accent-primary: #000000;
+  --accent-secondary: #333333;
+  --accent-light: #e5e5e5;
   
-  --success: #059669;
-  --success-light: #d1fae5;
-  --warning: #d97706;
-  --warning-light: #fef3c7;
-  --error: #dc2626;
-  --error-light: #fee2e2;
+  --success: #000000;
+  --success-light: #d5d5d5;
+  --warning: #000000;
+  --warning-light: #e0e0e0;
+  --error: #000000;
+  --error-light: #e8e8e8;
   
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-pixel: 4px 4px 0px #000000;
+  --shadow-pixel-lg: 6px 6px 0px #000000;
+  --shadow-sm: 0 0 0 transparent;
+  --shadow-md: 4px 4px 0px #000000;
+  --shadow-lg: 6px 6px 0px #000000;
 }
 
-/* Dark Mode */
+/* ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+   DARK MODE - INVERTED (Black bg, White elements)
+   ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ */
 .dark {
-  --bg-primary: #0f172a;
-  --bg-secondary: #1e293b;
-  --bg-card: #1e293b;
-  --bg-input: #334155;
-  --bg-hover: #334155;
+  --bg-primary: #000000;
+  --bg-secondary: #0a0a0a;
+  --bg-card: #000000;
+  --bg-input: #111111;
+  --bg-hover: #1a1a1a;
   
-  --text-primary: #f8fafc;
-  --text-secondary: #cbd5e1;
-  --text-muted: #94a3b8;
-  --text-inverse: #0f172a;
+  --text-primary: #ffffff;
+  --text-secondary: #dddddd;
+  --text-muted: #aaaaaa;
+  --text-inverse: #000000;
   
-  --border-color: #334155;
-  --border-focus: #60a5fa;
+  --border-color: #ffffff;
+  --border-focus: #ffffff;
   
-  --accent-primary: #3b82f6;
-  --accent-secondary: #60a5fa;
-  --accent-light: #1e3a5f;
+  --accent-primary: #ffffff;
+  --accent-secondary: #cccccc;
+  --accent-light: #1a1a1a;
   
-  --success: #10b981;
-  --success-light: #064e3b;
-  --warning: #f59e0b;
-  --warning-light: #78350f;
-  --error: #ef4444;
-  --error-light: #7f1d1d;
+  --success: #ffffff;
+  --success-light: #1a1a1a;
+  --warning: #ffffff;
+  --warning-light: #1a1a1a;
+  --error: #ffffff;
+  --error-light: #1a1a1a;
   
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+  --shadow-pixel: 4px 4px 0px #ffffff;
+  --shadow-pixel-lg: 6px 6px 0px #ffffff;
+  --shadow-sm: 0 0 0 transparent;
+  --shadow-md: 4px 4px 0px #ffffff;
+  --shadow-lg: 6px 6px 0px #ffffff;
 }
 
-/* Base Styles */
+/* ============================================
+   BASE PIXEL STYLES
+   ============================================ */
 * {
   box-sizing: border-box;
+  /* Crisp pixel rendering */
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
 }
 
 html {
-  scroll-behavior: smooth;
+  /* No smooth scroll - instant for retro feel */
+  scroll-behavior: auto;
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background-color: var(--bg-secondary);
+  font-family: 'VT323', monospace;
+  font-size: 22px;
+  background-color: var(--bg-primary);
   color: var(--text-primary);
   min-height: 100vh;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  line-height: 1.6;
+  line-height: 1.5;
+  letter-spacing: 0.5px;
+  /* Disable font smoothing for crisp pixels */
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: unset;
 }
 
-/* Typography */
+/* ============================================
+   PIXEL TYPOGRAPHY
+   ============================================ */
 h1, h2, h3, h4, h5, h6 {
-  font-weight: 700;
-  line-height: 1.3;
+  font-family: 'Press Start 2P', cursive;
+  font-weight: 400;
+  line-height: 1.8;
   color: var(--text-primary);
+  letter-spacing: 1px;
 }
 
-/* Custom Scrollbar */
+h1 { font-size: 1.25rem; }
+h2 { font-size: 1rem; }
+h3 { font-size: 0.875rem; }
+h4 { font-size: 0.75rem; }
+h5 { font-size: 0.625rem; }
+
+@media (min-width: 768px) {
+  h1 { font-size: 1.75rem; }
+  h2 { font-size: 1.25rem; }
+  h3 { font-size: 1rem; }
+}
+
+p, span, label, li {
+  font-family: 'VT323', monospace;
+  font-size: 1.375rem;
+}
+
+/* ============================================
+   PIXEL SCROLLBAR
+   ============================================ */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 16px;
+  height: 16px;
 }
 
 ::-webkit-scrollbar-track {
   background: var(--bg-secondary);
+  border-left: 2px solid var(--border-color);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--border-color);
-  border-radius: 4px;
+  background: var(--text-muted);
+  border: 2px solid var(--border-color);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
+  background: var(--accent-primary);
 }
 
-/* Focus Styles */
+::-webkit-scrollbar-corner {
+  background: var(--bg-secondary);
+}
+
+/* ============================================
+   FOCUS & SELECTION
+   ============================================ */
 :focus-visible {
-  outline: 2px solid var(--border-focus);
+  outline: 4px solid var(--border-color);
   outline-offset: 2px;
 }
 
-/* Selection */
 ::selection {
-  background: var(--accent-light);
-  color: var(--text-primary);
+  background: var(--accent-primary);
+  color: var(--text-inverse);
 }
 
-/* Form Elements */
+/* ============================================
+   FORM ELEMENTS
+   ============================================ */
 input, select, textarea {
-  font-family: inherit;
+  font-family: 'VT323', monospace;
+  font-size: 1.25rem;
 }
 
 input[type="number"]::-webkit-inner-spin-button,
@@ -140,139 +196,181 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 input[type="number"] {
+  appearance: textfield;
   -moz-appearance: textfield;
 }
 
+/* Pixel Select Dropdown */
 select {
   -webkit-appearance: none !important;
   -moz-appearance: none !important;
   appearance: none !important;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23475569'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E") !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23000000'%3E%3Crect x='2' y='4' width='4' height='4'/%3E%3Crect x='6' y='8' width='4' height='4'/%3E%3Crect x='10' y='4' width='4' height='4'/%3E%3C/svg%3E") !important;
   background-repeat: no-repeat !important;
   background-position: right 12px center !important;
   background-size: 16px !important;
-  padding-right: 40px !important;
+  padding-right: 44px !important;
 }
 
 .dark select {
-  -webkit-appearance: none !important;
-  -moz-appearance: none !important;
-  appearance: none !important;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E") !important;
-  background-repeat: no-repeat !important;
-  background-position: right 12px center !important;
-  background-size: 16px !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23ffffff'%3E%3Crect x='2' y='4' width='4' height='4'/%3E%3Crect x='6' y='8' width='4' height='4'/%3E%3Crect x='10' y='4' width='4' height='4'/%3E%3C/svg%3E") !important;
 }
 
-/* Hide native arrows in all browsers */
 select::-ms-expand {
   display: none !important;
-}
-
-select::-webkit-appearance {
-  -webkit-appearance: none !important;
-}
-
-/* Firefox specific fix */
-@-moz-document url-prefix() {
-  select {
-    text-indent: 0.01px;
-    text-overflow: '';
-    -moz-appearance: none !important;
-  }
 }
 
 select option {
   background: var(--bg-card);
   color: var(--text-primary);
+  padding: 8px;
 }
 
-/* Animations */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+/* ============================================
+   PIXEL ANIMATIONS
+   ============================================ */
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
 }
 
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+@keyframes pixelFadeIn {
+  0% { opacity: 0; }
+  25% { opacity: 0.25; }
+  50% { opacity: 0.5; }
+  75% { opacity: 0.75; }
+  100% { opacity: 1; }
+}
+
+@keyframes pixelSlideUp {
+  0% { transform: translateY(16px); opacity: 0; }
+  25% { transform: translateY(12px); opacity: 0.25; }
+  50% { transform: translateY(8px); opacity: 0.5; }
+  75% { transform: translateY(4px); opacity: 0.75; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes pixelBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes glitch {
+  0%, 90%, 100% { transform: translate(0); }
+  92% { transform: translate(-2px, 2px); }
+  94% { transform: translate(2px, -2px); }
+  96% { transform: translate(-2px, -2px); }
+  98% { transform: translate(2px, 2px); }
 }
 
 /* Utility Classes */
 .animate-fade-in {
-  animation: fadeIn 0.4s ease-out forwards;
+  animation: pixelFadeIn 0.4s steps(4) forwards;
 }
 
 .animate-slide-up {
-  animation: slideUp 0.5s ease-out forwards;
+  animation: pixelSlideUp 0.5s steps(5) forwards;
 }
 
-/* Card Styles */
+.animate-blink {
+  animation: blink 1s steps(1) infinite;
+}
+
+.animate-bounce {
+  animation: pixelBounce 0.6s steps(4) infinite;
+}
+
+.animate-glitch:hover {
+  animation: glitch 0.3s steps(1) infinite;
+}
+
+/* ============================================
+   CARD STYLES - PIXEL BOX
+   ============================================ */
 .card {
   background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  box-shadow: var(--shadow-sm);
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  border: 4px solid var(--border-color);
+  box-shadow: var(--shadow-pixel);
+  transition: transform 0.1s steps(2), box-shadow 0.1s steps(2);
 }
 
 .card:hover {
-  box-shadow: var(--shadow-md);
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-pixel-lg);
 }
 
-/* Button Base */
+/* ============================================
+   BUTTON STYLES - 8-BIT
+   ============================================ */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 12px 24px;
-  font-weight: 600;
-  font-size: 14px;
-  border-radius: 8px;
-  transition: all 0.2s ease;
+  padding: 14px 28px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.625rem;
+  font-weight: 400;
+  border: 4px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-primary);
   cursor: pointer;
-  border: none;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: var(--shadow-pixel);
+  transition: transform 0.1s steps(2), box-shadow 0.1s steps(2);
+}
+
+.btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-pixel-lg);
+}
+
+.btn:active {
+  transform: translate(4px, 4px);
+  box-shadow: none;
 }
 
 .btn-primary {
   background: var(--accent-primary);
-  color: white;
+  color: var(--text-inverse);
+  border-color: var(--border-color);
 }
 
 .btn-primary:hover {
-  background: var(--accent-secondary);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+  background: var(--accent-primary);
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-pixel-lg);
 }
 
 .btn-secondary {
-  background: var(--bg-input);
+  background: transparent;
   color: var(--text-primary);
-  border: 1px solid var(--border-color);
+  border: 4px solid var(--border-color);
 }
 
 .btn-secondary:hover {
-  background: var(--bg-hover);
-  border-color: var(--accent-primary);
+  background: var(--accent-primary);
+  color: var(--text-inverse);
 }
 
-/* Input Styles */
+/* ============================================
+   INPUT STYLES - PIXEL
+   ============================================ */
 .input {
   width: 100%;
-  padding: 12px 16px;
+  padding: 14px 16px;
+  font-family: 'VT323', monospace;
+  font-size: 1.375rem;
   background: var(--bg-input);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border: 4px solid var(--border-color);
   color: var(--text-primary);
-  font-size: 15px;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: box-shadow 0.1s steps(2);
 }
 
 .input:focus {
   outline: none;
-  border-color: var(--border-focus);
-  box-shadow: 0 0 0 3px var(--accent-light);
+  box-shadow: var(--shadow-pixel);
   background: var(--bg-card);
 }
 
@@ -280,57 +378,317 @@ select option {
   color: var(--text-muted);
 }
 
-/* Badge */
+/* ============================================
+   BADGE - PIXEL STYLE
+   ============================================ */
 .badge {
   display: inline-flex;
   align-items: center;
-  padding: 4px 10px;
-  font-size: 12px;
-  font-weight: 600;
-  border-radius: 9999px;
+  padding: 6px 12px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.5rem;
+  font-weight: 400;
+  border: 3px solid var(--border-color);
+  text-transform: uppercase;
 }
 
 .badge-success {
   background: var(--success-light);
-  color: var(--success);
+  color: var(--text-primary);
 }
 
 .badge-warning {
   background: var(--warning-light);
-  color: var(--warning);
+  color: var(--text-primary);
 }
 
 .badge-error {
   background: var(--error-light);
-  color: var(--error);
+  color: var(--text-primary);
 }
 
-/* Monospace for numbers */
+/* ============================================
+   MONOSPACE NUMBERS
+   ============================================ */
 .mono {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'VT323', monospace;
+  font-size: 1.5rem;
+  letter-spacing: 2px;
 }
 
-/* Print Styles */
+/* ============================================
+   PIXEL DECORATIONS
+   ============================================ */
+
+/* Dotted pixel line */
+.pixel-line {
+  height: 4px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--border-color) 0px,
+    var(--border-color) 8px,
+    transparent 8px,
+    transparent 16px
+  );
+}
+
+/* Pixel corner decoration */
+.pixel-corners {
+  position: relative;
+}
+
+.pixel-corners::before,
+.pixel-corners::after {
+  content: '■';
+  position: absolute;
+  font-size: 12px;
+  color: var(--border-color);
+}
+
+.pixel-corners::before {
+  top: -6px;
+  left: -6px;
+}
+
+.pixel-corners::after {
+  bottom: -6px;
+  right: -6px;
+}
+
+/* CRT Scanlines overlay */
+.scanlines::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.03) 2px,
+    rgba(0, 0, 0, 0.03) 4px
+  );
+  pointer-events: none;
+}
+
+.dark .scanlines::after {
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 255, 255, 0.02) 2px,
+    rgba(255, 255, 255, 0.02) 4px
+  );
+}
+
+/* ============================================
+   PIXEL ICON BOX
+   ============================================ */
+.icon-box {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid var(--border-color);
+  background: var(--bg-card);
+}
+
+/* ============================================
+   BLINKING CURSOR
+   ============================================ */
+.cursor::after {
+  content: '█';
+  animation: blink 1s steps(1) infinite;
+}
+
+/* ============================================
+   RETRO STATS DISPLAY
+   ============================================ */
+.stat-display {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.625rem;
+  padding: 12px 16px;
+  border: 3px solid var(--border-color);
+  background: var(--bg-card);
+  display: inline-block;
+}
+
+.stat-value {
+  font-family: 'VT323', monospace;
+  font-size: 2rem;
+  letter-spacing: 2px;
+}
+
+/* ============================================
+   PIXEL DIVIDER
+   ============================================ */
+.divider-pixel {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.divider-pixel::before,
+.divider-pixel::after {
+  content: '';
+  flex: 1;
+  height: 4px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--border-color) 0px,
+    var(--border-color) 4px,
+    transparent 4px,
+    transparent 8px
+  );
+}
+
+/* ============================================
+   LINK STYLES
+   ============================================ */
+a {
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+a:hover {
+  background: var(--accent-primary);
+  color: var(--text-inverse);
+  text-decoration: none;
+  padding: 0 4px;
+  margin: 0 -4px;
+}
+
+nav a {
+  text-decoration: none;
+  padding: 8px 12px;
+  border: 2px solid transparent;
+}
+
+nav a:hover {
+  border-color: var(--border-color);
+  background: transparent;
+  color: var(--text-primary);
+  padding: 8px 12px;
+  margin: 0;
+}
+
+/* ============================================
+   PROGRESS BAR - PIXEL STYLE
+   ============================================ */
+.progress-pixel {
+  height: 24px;
+  background: var(--bg-secondary);
+  border: 4px solid var(--border-color);
+  padding: 2px;
+}
+
+.progress-bar-pixel {
+  height: 100%;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--accent-primary) 0px,
+    var(--accent-primary) 6px,
+    transparent 6px,
+    transparent 10px
+  );
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
 @media print {
   body {
     background: white;
     color: black;
+    font-family: monospace;
+  }
+  
+  .card {
+    box-shadow: none;
+    border: 2px solid black;
   }
 }
 
-/* Mobile Optimizations */
+/* ============================================
+   MOBILE PIXEL OPTIMIZATIONS
+   ============================================ */
 @media (max-width: 640px) {
   body {
-    font-size: 14px;
+    font-size: 18px;
+  }
+  
+  h1 { font-size: 0.875rem; }
+  h2 { font-size: 0.75rem; }
+  h3 { font-size: 0.625rem; }
+  
+  p, span, label, li {
+    font-size: 1.125rem;
   }
   
   .btn {
-    padding: 10px 20px;
-    font-size: 13px;
+    padding: 12px 20px;
+    font-size: 0.5rem;
+    border-width: 3px;
+    box-shadow: 3px 3px 0px var(--border-color);
+  }
+  
+  .card {
+    border-width: 3px;
+    box-shadow: 3px 3px 0px var(--border-color);
   }
   
   .input {
-    padding: 10px 14px;
-    font-size: 14px;
+    padding: 12px 14px;
+    font-size: 1.125rem;
+    border-width: 3px;
   }
+}
+
+/* ============================================
+   FEATURE CARD HOVER (Invert on hover)
+   ============================================ */
+.feature-card {
+  background: var(--bg-card);
+  border: 4px solid var(--border-color);
+  padding: 24px;
+  box-shadow: var(--shadow-pixel);
+  transition: all 0.1s steps(2);
+}
+
+.feature-card:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: var(--shadow-pixel-lg);
+  background: var(--accent-primary);
+  color: var(--text-inverse);
+}
+
+.feature-card:hover h3,
+.feature-card:hover p,
+.feature-card:hover .icon-box {
+  color: var(--text-inverse) !important;
+  border-color: var(--text-inverse) !important;
+}
+
+/* ============================================
+   HIGHLIGHT/RESULT BOX
+   ============================================ */
+.result-box {
+  position: relative;
+  padding: 24px;
+  border: 4px solid var(--border-color);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-pixel);
+}
+
+.result-box::before {
+  content: '★';
+  position: absolute;
+  top: -14px;
+  left: 20px;
+  background: var(--bg-primary);
+  padding: 0 8px;
+  font-size: 14px;
 }
