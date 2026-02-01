@@ -67,51 +67,29 @@ export default function HomePage() {
   return (
     <div className="animate-fade-in">
       {/* Hero Section */}
-      <section className="py-16 md:py-24 lg:py-32 relative">
-        {/* Pixel Grid Background */}
-        <div className="absolute inset-0 opacity-[0.03]" style={{
-          backgroundImage: `
-            linear-gradient(var(--border-color) 1px, transparent 1px),
-            linear-gradient(90deg, var(--border-color) 1px, transparent 1px)
-          `,
-          backgroundSize: '24px 24px'
-        }} />
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+      <section className="py-16 md:py-24 lg:py-32">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto">
-            {/* Pixel Decoration */}
-            <div className="flex justify-center items-center gap-2 mb-6">
-              <span className="text-[var(--text-muted)]">■ ■ ■</span>
-              <span className="text-xs text-[var(--text-muted)] font-mono tracking-widest">LOADING COMPLETE</span>
-              <span className="text-[var(--text-muted)]">■ ■ ■</span>
-            </div>
-            
             {/* Logo */}
             <div className="flex justify-center mb-8">
-              <div className="relative h-20 w-20 sm:h-24 sm:w-24 border-4 border-[var(--border-color)] p-2 bg-[var(--bg-card)]">
+              <div className="relative h-20 w-20 sm:h-24 sm:w-24">
                 <Image
                   src="/nust-logo.png"
                   alt="NUST Logo"
                   fill
                   className="object-contain"
-                  style={{ imageRendering: 'pixelated' }}
                   priority
                 />
               </div>
             </div>
             
             {/* Heading */}
-            <h1 className="text-[var(--text-primary)] leading-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-[var(--text-primary)] leading-tight">
               NUST Aggregate Calculator 2025
             </h1>
             
-            {/* Blinking cursor effect */}
-            <div className="mt-4 flex justify-center">
-              <span className="text-[var(--text-muted)] text-sm font-mono">{'>'} READY_<span className="animate-blink">█</span></span>
-            </div>
-            
             {/* Description */}
-            <p className="mt-6 text-[var(--text-secondary)] max-w-2xl mx-auto">
+            <p className="mt-6 text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
               Free NUST aggregate calculator 2025. Calculate your NUST admission merit using the official formula (NET 75%, FSc 15%, Matric 10%). 
               Check historical closing merits, predict admission chances, and explore merit data for all NUST programs including SEECS, SMME, NBS, and more.
             </p>
@@ -120,15 +98,15 @@ export default function HomePage() {
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
                 href="/aggregate-calculator"
-                className="w-full sm:w-auto btn btn-primary"
+                className="w-full sm:w-auto btn btn-primary px-8 py-4 text-base"
               >
-                {'>'} Calculate Aggregate
+                Calculate Your Aggregate
               </Link>
               <Link
                 href="/merit-history"
-                className="w-full sm:w-auto btn btn-secondary"
+                className="w-full sm:w-auto btn btn-secondary px-8 py-4 text-base"
               >
-                {'>'} Merit History
+                View Merit History
               </Link>
             </div>
           </div>
@@ -136,53 +114,51 @@ export default function HomePage() {
       </section>
 
       {/* Formula Section */}
-      <section className="py-12 bg-[var(--bg-primary)] border-y-4 border-[var(--border-color)]">
+      <section className="py-12 bg-[var(--bg-primary)] border-y border-[var(--border-color)]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center space-y-6">
-            <div className="inline-block border-4 border-[var(--border-color)] px-4 py-2 bg-[var(--bg-card)]">
-              <h2 className="text-xs text-[var(--text-primary)] uppercase tracking-widest">
-                ★ Official NUST Merit Formula ★
-              </h2>
-            </div>
+            <h2 className="text-sm font-semibold text-[var(--text-muted)] uppercase tracking-wider">
+              Official NUST Merit Formula
+            </h2>
             
             {/* FSc Formula */}
-            <div className="card p-6">
-              <p className="text-xs text-[var(--text-muted)] mb-4 uppercase tracking-wider">[ FSc / HSSC Students ]</p>
-              <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 font-mono">
-                <div className="flex items-center gap-1.5 border-2 border-[var(--border-color)] px-3 py-1">
-                  <span className="font-bold text-[var(--text-primary)]">NET</span>
+            <div>
+              <p className="text-xs text-[var(--text-muted)] mb-2">For FSc / HSSC Students</p>
+              <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-base sm:text-lg md:text-xl">
+                <div className="flex items-center gap-1.5">
+                  <span className="font-bold text-[var(--accent-primary)]">NET</span>
                   <span className="text-[var(--text-muted)]">×</span>
-                  <span className="font-bold text-[var(--text-primary)]">75%</span>
+                  <span className="font-mono font-bold text-[var(--text-primary)]">75%</span>
                 </div>
-                <span className="text-[var(--text-primary)] text-xl">+</span>
-                <div className="flex items-center gap-1.5 border-2 border-[var(--border-color)] px-3 py-1">
-                  <span className="font-bold text-[var(--text-primary)]">FSc</span>
+                <span className="text-[var(--text-muted)]">+</span>
+                <div className="flex items-center gap-1.5">
+                  <span className="font-bold text-[var(--success)]">FSc</span>
                   <span className="text-[var(--text-muted)]">×</span>
-                  <span className="font-bold text-[var(--text-primary)]">15%</span>
+                  <span className="font-mono font-bold text-[var(--text-primary)]">15%</span>
                 </div>
-                <span className="text-[var(--text-primary)] text-xl">+</span>
-                <div className="flex items-center gap-1.5 border-2 border-[var(--border-color)] px-3 py-1">
-                  <span className="font-bold text-[var(--text-primary)]">Matric</span>
+                <span className="text-[var(--text-muted)]">+</span>
+                <div className="flex items-center gap-1.5">
+                  <span className="font-bold text-[var(--warning)]">Matric</span>
                   <span className="text-[var(--text-muted)]">×</span>
-                  <span className="font-bold text-[var(--text-primary)]">10%</span>
+                  <span className="font-mono font-bold text-[var(--text-primary)]">10%</span>
                 </div>
               </div>
             </div>
 
             {/* O/A Level Formula */}
-            <div className="card p-6">
-              <p className="text-xs text-[var(--text-muted)] mb-4 uppercase tracking-wider">[ O/A Level Students ]</p>
-              <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 font-mono">
-                <div className="flex items-center gap-1.5 border-2 border-[var(--border-color)] px-3 py-1">
-                  <span className="font-bold text-[var(--text-primary)]">NET</span>
+            <div>
+              <p className="text-xs text-[var(--text-muted)] mb-2">For O/A Level Students</p>
+              <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-base sm:text-lg md:text-xl">
+                <div className="flex items-center gap-1.5">
+                  <span className="font-bold text-[var(--accent-primary)]">NET</span>
                   <span className="text-[var(--text-muted)]">×</span>
-                  <span className="font-bold text-[var(--text-primary)]">75%</span>
+                  <span className="font-mono font-bold text-[var(--text-primary)]">75%</span>
                 </div>
-                <span className="text-[var(--text-primary)] text-xl">+</span>
-                <div className="flex items-center gap-1.5 border-2 border-[var(--border-color)] px-3 py-1">
-                  <span className="font-bold text-[var(--text-primary)]">O-Level Eqv.</span>
+                <span className="text-[var(--text-muted)]">+</span>
+                <div className="flex items-center gap-1.5">
+                  <span className="font-bold text-[var(--success)]">O-Level Eqv.</span>
                   <span className="text-[var(--text-muted)]">×</span>
-                  <span className="font-bold text-[var(--text-primary)]">25%</span>
+                  <span className="font-mono font-bold text-[var(--text-primary)]">25%</span>
                 </div>
               </div>
             </div>
@@ -194,40 +170,30 @@ export default function HomePage() {
       <section className="py-16 md:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-3 mb-4">
-              <span className="text-[var(--border-color)]">◄</span>
-              <h2 className="text-[var(--text-primary)]">
-                SELECT YOUR TOOL
-              </h2>
-              <span className="text-[var(--border-color)]">►</span>
-            </div>
-            <p className="text-[var(--text-secondary)]">
+            <h2 className="text-2xl sm:text-3xl font-bold text-[var(--text-primary)]">
+              Everything You Need
+            </h2>
+            <p className="mt-3 text-[var(--text-secondary)]">
               Tools to help you navigate NUST admissions
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {features.map((feature, index) => (
+            {features.map((feature) => (
               <Link
                 key={feature.title}
                 href={feature.href}
-                className="feature-card group"
+                className="card p-6 hover:border-[var(--accent-primary)] transition-all group"
               >
-                <div className="icon-box mb-4 group-hover:bg-[var(--text-inverse)] transition-colors">
+                <div className="w-12 h-12 rounded-lg bg-[var(--accent-light)] flex items-center justify-center text-[var(--accent-primary)] mb-4 group-hover:scale-110 transition-transform">
                   {feature.icon}
                 </div>
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-xs text-[var(--text-muted)]">[{String(index + 1).padStart(2, '0')}]</span>
-                  <h3 className="text-[var(--text-primary)]">
-                    {feature.title}
-                  </h3>
-                </div>
+                <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2 group-hover:text-[var(--accent-primary)] transition-colors">
+                  {feature.title}
+                </h3>
                 <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
                   {feature.description}
                 </p>
-                <div className="mt-4 text-xs text-[var(--text-muted)] group-hover:text-[var(--text-inverse)]">
-                  {'>'} PRESS TO SELECT
-                </div>
               </Link>
             ))}
           </div>
@@ -235,40 +201,40 @@ export default function HomePage() {
       </section>
 
       {/* How It Works */}
-      <section className="py-16 md:py-24 bg-[var(--bg-primary)] border-t-4 border-[var(--border-color)]">
+      <section className="py-16 md:py-24 bg-[var(--bg-primary)] border-t border-[var(--border-color)]">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-[var(--text-primary)]">
-              ▼ HOW IT WORKS ▼
+            <h2 className="text-2xl sm:text-3xl font-bold text-[var(--text-primary)]">
+              How It Works
             </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center card p-6">
-              <div className="w-12 h-12 border-4 border-[var(--border-color)] bg-[var(--accent-primary)] text-[var(--text-inverse)] flex items-center justify-center text-xl font-bold mx-auto mb-4 font-mono">
-                01
+            <div className="text-center">
+              <div className="w-12 h-12 rounded-full bg-[var(--accent-primary)] text-white flex items-center justify-center text-xl font-bold mx-auto mb-4">
+                1
               </div>
-              <h3 className="text-[var(--text-primary)] mb-2">Enter Scores</h3>
+              <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">Enter Your Scores</h3>
               <p className="text-sm text-[var(--text-secondary)]">
                 Input your NET score, FSc marks (or percentage), and Matric marks. Supports both marks and percentage input.
               </p>
             </div>
 
-            <div className="text-center card p-6">
-              <div className="w-12 h-12 border-4 border-[var(--border-color)] bg-[var(--accent-primary)] text-[var(--text-inverse)] flex items-center justify-center text-xl font-bold mx-auto mb-4 font-mono">
-                02
+            <div className="text-center">
+              <div className="w-12 h-12 rounded-full bg-[var(--accent-primary)] text-white flex items-center justify-center text-xl font-bold mx-auto mb-4">
+                2
               </div>
-              <h3 className="text-[var(--text-primary)] mb-2">Get Aggregate</h3>
+              <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">Get Your Aggregate</h3>
               <p className="text-sm text-[var(--text-secondary)]">
                 See your calculated aggregate with a detailed breakdown of how each component contributes.
               </p>
             </div>
 
-            <div className="text-center card p-6">
-              <div className="w-12 h-12 border-4 border-[var(--border-color)] bg-[var(--accent-primary)] text-[var(--text-inverse)] flex items-center justify-center text-xl font-bold mx-auto mb-4 font-mono">
-                03
+            <div className="text-center">
+              <div className="w-12 h-12 rounded-full bg-[var(--accent-primary)] text-white flex items-center justify-center text-xl font-bold mx-auto mb-4">
+                3
               </div>
-              <h3 className="text-[var(--text-primary)] mb-2">Check Chances</h3>
+              <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">Check Your Chances</h3>
               <p className="text-sm text-[var(--text-secondary)]">
                 Compare with historical data and get predictions for your target programs.
               </p>
@@ -278,9 +244,9 @@ export default function HomePage() {
           <div className="text-center mt-12">
             <Link
               href="/aggregate-calculator"
-              className="btn btn-primary"
+              className="btn btn-primary px-8 py-4"
             >
-              {'>'} START CALCULATING
+              Start Calculating
             </Link>
           </div>
         </div>
@@ -289,20 +255,14 @@ export default function HomePage() {
       {/* Info Banner */}
       <section className="py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="card p-6 md:p-8 relative">
-            <div className="absolute top-0 left-0 w-full h-1 bg-[var(--border-color)]"></div>
-            <div className="flex items-start gap-4">
-              <span className="text-2xl">!</span>
-              <div>
-                <h3 className="text-[var(--text-primary)] mb-2">
-                  SYSTEM UPDATE 2025
-                </h3>
-                <p className="text-[var(--text-secondary)] text-sm leading-relaxed">
-                  This calculator uses the official NUST aggregate formula. Historical merit data is available 
-                  for reference. Always verify information with official NUST sources before making decisions.
-                </p>
-              </div>
-            </div>
+          <div className="card p-6 md:p-8 border-l-4 border-l-[var(--accent-primary)]">
+            <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">
+              Updated for 2025 Admissions
+            </h3>
+            <p className="text-[var(--text-secondary)] text-sm leading-relaxed">
+              This calculator uses the official NUST aggregate formula. Historical merit data is available 
+              for reference. Always verify information with official NUST sources before making decisions.
+            </p>
           </div>
         </div>
       </section>
