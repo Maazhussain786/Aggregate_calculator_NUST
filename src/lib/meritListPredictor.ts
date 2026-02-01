@@ -69,7 +69,6 @@ export const MERIT_LIST_CONFIG = {
  * 1. Sort thresholds by merit list number
  * 2. Find the first list where user aggregate >= closing aggregate
  * 3. Return prediction with confidence level
- * 4. Alternatives are lists AFTER the predicted list (not before)
  */
 export function predictMeritList(input: MeritListPredictionInput): MeritListPredictionResult {
   const { userAggregate, programName, thresholds } = input;
@@ -82,10 +81,11 @@ export function predictMeritList(input: MeritListPredictionInput): MeritListPred
   // Sort thresholds by list number
   const sortedThresholds = [...thresholds].sort((a, b) => a.meritListNumber - b.meritListNumber);
 
-  // Find the FIRST list where user qualifies (aggregate >= closing aggregate)
-  // This is the earliest list where they can get in
+  // Find predicted list
   let predictedList: number | null = null;
   let confidence: 'High' | 'Medium' | 'Low' = 'Low';
+  const alternatives: number[] = [];
+  let closestDifference = Infinity;
 
   for (const threshold of sortedThresholds) {
     const closingAggregate = threshold.closingAggregate;
@@ -94,44 +94,23 @@ export function predictMeritList(input: MeritListPredictionInput): MeritListPred
 
     const difference = userAggregate - closingAggregate;
 
-    // User qualifies for this list - take the first one they qualify for
+    // User qualifies for this list
     if (difference >= 0) {
-      predictedList = threshold.meritListNumber;
-      confidence = getConfidence(difference);
-      break; // First qualifying list is the predicted one
-    }
-  }
-
-  // If user doesn't qualify for any list based on thresholds,
-  // check if they're close to any list (within 3% of threshold)
-  if (predictedList === null) {
-    for (const threshold of sortedThresholds) {
-      const closingAggregate = threshold.closingAggregate;
-      if (closingAggregate === undefined) continue;
-      
-      const difference = userAggregate - closingAggregate;
-      // User is close but below threshold - predict this list with low confidence
-      if (difference >= -3) {
+      if (predictedList === null) {
         predictedList = threshold.meritListNumber;
-        confidence = 'Low';
-        break;
+        confidence = getConfidence(difference);
+        closestDifference = difference;
+      } else if (Math.abs(difference) < closestDifference) {
+        alternatives.push(predictedList);
+        predictedList = threshold.meritListNumber;
+        confidence = getConfidence(difference);
+        closestDifference = difference;
+      } else {
+        alternatives.push(threshold.meritListNumber);
       }
-    }
-  }
-
-  // Alternatives should be lists AFTER the predicted list (±1 from predicted)
-  // These represent where user might end up if things go slightly differently
-  const alternatives: number[] = [];
-  if (predictedList !== null) {
-    const maxList = Math.max(...sortedThresholds.map(t => t.meritListNumber));
-    
-    // Add one list before (if exists and > 0) - might get in earlier if more seats
-    if (predictedList > 1) {
-      alternatives.push(predictedList - 1);
-    }
-    // Add one list after (if exists) - might get in later if competition is higher
-    if (predictedList < maxList) {
-      alternatives.push(predictedList + 1);
+    } else if (predictedList === null && Math.abs(difference) < 3) {
+      // User is close but below threshold - might still qualify
+      alternatives.push(threshold.meritListNumber);
     }
   }
 
