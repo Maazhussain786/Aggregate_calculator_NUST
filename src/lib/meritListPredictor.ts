@@ -69,6 +69,7 @@ export const MERIT_LIST_CONFIG = {
  * 1. Sort thresholds by merit list number
  * 2. Find the first list where user aggregate >= closing aggregate
  * 3. Return prediction with confidence level
+ * 4. Alternatives are adjacent lists (±1 from predicted)
  */
 export function predictMeritList(input: MeritListPredictionInput): MeritListPredictionResult {
   const { userAggregate, programName, thresholds } = input;
@@ -81,11 +82,9 @@ export function predictMeritList(input: MeritListPredictionInput): MeritListPred
   // Sort thresholds by list number
   const sortedThresholds = [...thresholds].sort((a, b) => a.meritListNumber - b.meritListNumber);
 
-  // Find predicted list
+  // Find the FIRST list where user qualifies (aggregate >= closing aggregate)
   let predictedList: number | null = null;
   let confidence: 'High' | 'Medium' | 'Low' = 'Low';
-  const alternatives: number[] = [];
-  let closestDifference = Infinity;
 
   for (const threshold of sortedThresholds) {
     const closingAggregate = threshold.closingAggregate;
@@ -94,23 +93,41 @@ export function predictMeritList(input: MeritListPredictionInput): MeritListPred
 
     const difference = userAggregate - closingAggregate;
 
-    // User qualifies for this list
+    // User qualifies for this list - take the first one they qualify for
     if (difference >= 0) {
-      if (predictedList === null) {
+      predictedList = threshold.meritListNumber;
+      confidence = getConfidence(difference);
+      break;
+    }
+  }
+
+  // If user doesn't qualify for any list, check if they're close (within 3%)
+  if (predictedList === null) {
+    for (const threshold of sortedThresholds) {
+      const closingAggregate = threshold.closingAggregate;
+      if (closingAggregate === undefined) continue;
+      
+      const difference = userAggregate - closingAggregate;
+      if (difference >= -3) {
         predictedList = threshold.meritListNumber;
-        confidence = getConfidence(difference);
-        closestDifference = difference;
-      } else if (Math.abs(difference) < closestDifference) {
-        alternatives.push(predictedList);
-        predictedList = threshold.meritListNumber;
-        confidence = getConfidence(difference);
-        closestDifference = difference;
-      } else {
-        alternatives.push(threshold.meritListNumber);
+        confidence = 'Low';
+        break;
       }
-    } else if (predictedList === null && Math.abs(difference) < 3) {
-      // User is close but below threshold - might still qualify
-      alternatives.push(threshold.meritListNumber);
+    }
+  }
+
+  // Alternatives are adjacent lists (±1 from predicted)
+  const alternatives: number[] = [];
+  if (predictedList !== null) {
+    const maxList = Math.max(...sortedThresholds.map(t => t.meritListNumber));
+    
+    // One list before - might get in earlier if more seats available
+    if (predictedList > 1) {
+      alternatives.push(predictedList - 1);
+    }
+    // One list after - might get in later if competition is higher
+    if (predictedList < maxList) {
+      alternatives.push(predictedList + 1);
     }
   }
 
