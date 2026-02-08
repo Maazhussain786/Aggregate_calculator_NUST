@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 import HorizonPromo from '@/components/HorizonPromo';
 
 export const metadata: Metadata = {
-  title: 'NUST Aggregate Calculator 2025 | Free Merit & Admission Predictor',
+  title: 'NUST Aggregate Calculator | Free Merit & Admission Predictor',
   description: 'Calculate your NUST aggregate using the official formula (NET 75%, FSc 15%, Matric 10%). Check historical closing merits and predict your admission chances for SEECS, SMME, NBS, and all NUST programs.',
   alternates: {
     canonical: '/',
@@ -104,12 +104,12 @@ export default function HomePage() {
             
             {/* Heading */}
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-[var(--text-primary)] leading-tight">
-              NUST Aggregate Calculator 2025
+              NUST Aggregate Calculator
             </h1>
             
             {/* Description */}
             <p className="mt-6 text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
-              Free NUST aggregate calculator 2025. Calculate your NUST admission merit using the official formula (NET 75%, FSc 15%, Matric 10%). 
+              Free NUST aggregate calculator. Calculate your NUST admission merit using the official formula (NET 75%, FSc 15%, Matric 10%). 
               Check historical closing merits, predict admission chances, and explore merit data for all NUST programs including SEECS, SMME, NBS, and more.
             </p>
             
