@@ -115,22 +115,22 @@ export default function AdmissionPredictorPage() {
             </ul>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
-              <div className="p-4 bg-[var(--success-light)] border border-[var(--success)] rounded-xl text-center">
+              <div className="card p-4 rounded-xl text-center">
                 <div className="text-[var(--success)] font-semibold mb-1">High Chance</div>
                 <div className="text-sm text-[var(--text-secondary)]">Aggregate 2%+ above closing</div>
               </div>
-              <div className="p-4 bg-[var(--warning-light)] border border-[var(--warning)] rounded-xl text-center">
+              <div className="card p-4 rounded-xl text-center">
                 <div className="text-[var(--warning)] font-semibold mb-1">Medium Chance</div>
                 <div className="text-sm text-[var(--text-secondary)]">Within ±1% of closing</div>
               </div>
-              <div className="p-4 bg-[var(--error-light)] border border-[var(--error)] rounded-xl text-center">
+              <div className="card p-4 rounded-xl text-center">
                 <div className="text-[var(--error)] font-semibold mb-1">Low Chance</div>
                 <div className="text-sm text-[var(--text-secondary)]">More than 1% below closing</div>
               </div>
             </div>
 
-            <div className="p-4 bg-[var(--warning-light)] border border-[var(--warning)] rounded-xl mt-6">
-              <p className="text-sm text-[var(--warning)]">
+            <div className="card p-4 rounded-xl mt-6">
+              <p className="text-sm text-[var(--text-secondary)]">
                 <strong>Disclaimer:</strong> Predictions are estimates based on historical data. 
                 Actual results depend on many factors including applicant pool, seat availability, 
                 and yearly variations. Always verify with official NUST sources.

@@ -24,6 +24,9 @@ export async function POST(request: Request) {
       hscPercentage: body.hscPercentage || 0,
       sscPercentage: body.sscPercentage || 0,
       useEquivalence: body.useEquivalence || false,
+      hasALevelResult: body.hasALevelResult,
+      aLevelPercentage: body.aLevelPercentage,
+      oLevelPercentage: body.oLevelPercentage,
       equivalencePercentage: body.equivalencePercentage,
     };
 

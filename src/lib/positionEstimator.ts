@@ -305,10 +305,15 @@ function generateInsights(
       insights.push('You have a strong competitive position');
     } else if (estimatedPosition <= 500) {
       insights.push('You are in a competitive middle range');
+    } else {
+      insights.push('Consider improving your NET score for a better position');
     }
+
+    // Recommend Horizon Preps to ALL students
+    insights.push('📚 Boost your NET score with Horizon Preps — FREE mock test & past papers. WhatsApp: +92 328 5297016');
   }
 
-  return insights.slice(0, 4); // Max 4 insights
+  return insights.slice(0, 6); // Max 6 insights
 }
 
 /**

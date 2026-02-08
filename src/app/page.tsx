@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Metadata } from 'next';
+import HorizonPromo from '@/components/HorizonPromo';
 
 export const metadata: Metadata = {
   title: 'NUST Aggregate Calculator 2025 | Free Merit & Admission Predictor',
@@ -70,14 +71,32 @@ export default function HomePage() {
       <section className="py-16 md:py-24 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto">
-            {/* Logo */}
-            <div className="flex justify-center mb-8">
-              <div className="relative h-20 w-20 sm:h-24 sm:w-24">
+            {/* Collab Logos: NUST × Horizon Preps */}
+            <div className="flex items-center justify-center gap-4 sm:gap-6 mb-8">
+              <div className="relative h-16 w-16 sm:h-20 sm:w-20">
                 <Image
                   src="/nust-logo.png"
                   alt="NUST Logo"
                   fill
                   className="object-contain"
+                  priority
+                />
+              </div>
+              {/* Stylized X */}
+              <div className="relative w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0">
+                <svg viewBox="0 0 48 48" className="w-full h-full">
+                  {/* Blue line of X (NUST) */}
+                  <line x1="8" y1="8" x2="40" y2="40" stroke="#1e3a5f" strokeWidth="4" strokeLinecap="round" />
+                  {/* Green line of X (Horizon Preps) */}
+                  <line x1="40" y1="8" x2="8" y2="40" stroke="#377a78" strokeWidth="4" strokeLinecap="round" />
+                </svg>
+              </div>
+              <div className="relative h-16 w-16 sm:h-20 sm:w-20 rounded-xl overflow-hidden">
+                <Image
+                  src="/horizon-logo.jpeg"
+                  alt="Horizon Preps Logo"
+                  fill
+                  className="object-cover"
                   priority
                 />
               </div>
@@ -108,6 +127,29 @@ export default function HomePage() {
               >
                 View Merit History
               </Link>
+            </div>
+
+            {/* Horizon Preps CTA - Prominent */}
+            <div className="mt-8 card p-4 sm:p-5 max-w-xl mx-auto border border-[var(--accent-primary)] bg-[var(--accent-light)]">
+              <Link
+                href="/preparation"
+                className="flex flex-col sm:flex-row items-center gap-3 group"
+              >
+                <div className="flex items-center gap-2">
+                  <svg className="w-6 h-6 text-[var(--accent-primary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  </svg>
+                  <span className="text-base sm:text-lg font-bold text-[var(--accent-primary)]">
+                    Need NET Prep? Students scoring 150+ with Horizon Preps
+                  </span>
+                </div>
+                <span className="text-sm font-semibold text-white bg-[var(--accent-primary)] px-4 py-2 rounded-lg group-hover:bg-[var(--accent-secondary)] transition-colors flex-shrink-0">
+                  Learn More →
+                </span>
+              </Link>
+              <p className="text-xs text-[var(--text-muted)] mt-2 text-center sm:text-left">
+                Free mock tests &amp; past papers available · WhatsApp: <a href="https://wa.me/923285297016" target="_blank" rel="noopener noreferrer" className="underline font-medium text-[var(--accent-primary)]">+92 328 5297016</a>
+              </p>
             </div>
           </div>
         </div>
@@ -251,6 +293,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Horizon Preps Recommendation */}
+      <HorizonPromo />
 
       {/* Info Banner */}
       <section className="py-12">

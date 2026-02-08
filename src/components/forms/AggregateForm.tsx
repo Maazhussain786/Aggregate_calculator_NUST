@@ -33,12 +33,20 @@ export default function AggregateForm({ onResult, showResults = true }: Aggregat
   // NET Score
   const [netScore, setNetScore] = useState<number>(0);
   
-  // O/A Level - Equivalence (25% total weight)
+  // O/A Level
   const [useEquivalence, setUseEquivalence] = useState<boolean>(false);
+  const [hasALevelResult, setHasALevelResult] = useState<boolean>(true);
   const [equivalenceInputMode, setEquivalenceInputMode] = useState<InputMode>('marks');
-  const [equivalenceObtainedMarks, setEquivalenceObtainedMarks] = useState<number>(0);
-  const [equivalenceTotalMarks, setEquivalenceTotalMarks] = useState<number>(1100);
-  const [equivalencePercentage, setEquivalencePercentage] = useState<number>(0);
+  
+  // A-Level marks (when has result)
+  const [aLevelObtainedMarks, setALevelObtainedMarks] = useState<number>(0);
+  const [aLevelTotalMarks, setALevelTotalMarks] = useState<number>(1100);
+  const [aLevelPercentage, setALevelPercentage] = useState<number>(0);
+  
+  // O-Level marks
+  const [oLevelObtainedMarks, setOLevelObtainedMarks] = useState<number>(0);
+  const [oLevelTotalMarks, setOLevelTotalMarks] = useState<number>(1100);
+  const [oLevelPercentage, setOLevelPercentage] = useState<number>(0);
   
   const [errors, setErrors] = useState<string[]>([]);
   const [result, setResult] = useState<AggregateBreakdown | null>(null);
@@ -69,12 +77,19 @@ export default function AggregateForm({ onResult, showResults = true }: Aggregat
     return (sscObtainedMarks / actualSscTotal) * 100;
   }, [inputMode, sscPercentage, sscObtainedMarks, actualSscTotal]);
 
-  // Calculate equivalence percentage from marks
-  const calculatedEquivalencePercentage = useMemo(() => {
-    if (equivalenceInputMode === 'percentage') return equivalencePercentage;
-    if (equivalenceTotalMarks <= 0) return 0;
-    return (equivalenceObtainedMarks / equivalenceTotalMarks) * 100;
-  }, [equivalenceInputMode, equivalencePercentage, equivalenceObtainedMarks, equivalenceTotalMarks]);
+  // Calculate A-Level percentage from marks
+  const calculatedALevelPercentage = useMemo(() => {
+    if (equivalenceInputMode === 'percentage') return aLevelPercentage;
+    if (aLevelTotalMarks <= 0) return 0;
+    return (aLevelObtainedMarks / aLevelTotalMarks) * 100;
+  }, [equivalenceInputMode, aLevelPercentage, aLevelObtainedMarks, aLevelTotalMarks]);
+
+  // Calculate O-Level percentage from marks
+  const calculatedOLevelPercentage = useMemo(() => {
+    if (equivalenceInputMode === 'percentage') return oLevelPercentage;
+    if (oLevelTotalMarks <= 0) return 0;
+    return (oLevelObtainedMarks / oLevelTotalMarks) * 100;
+  }, [equivalenceInputMode, oLevelPercentage, oLevelObtainedMarks, oLevelTotalMarks]);
 
   const handleCalculate = useCallback(() => {
     setIsCalculating(true);
@@ -85,7 +100,9 @@ export default function AggregateForm({ onResult, showResults = true }: Aggregat
       hscPercentage: calculatedFscPercentage,
       sscPercentage: calculatedSscPercentage,
       useEquivalence,
-      equivalencePercentage: useEquivalence ? calculatedEquivalencePercentage : undefined,
+      hasALevelResult: useEquivalence ? hasALevelResult : undefined,
+      aLevelPercentage: useEquivalence && hasALevelResult ? calculatedALevelPercentage : undefined,
+      oLevelPercentage: useEquivalence ? calculatedOLevelPercentage : undefined,
     };
 
     // Validate input
@@ -112,8 +129,13 @@ export default function AggregateForm({ onResult, showResults = true }: Aggregat
     }
 
     if (useEquivalence && equivalenceInputMode === 'marks') {
-      if (equivalenceObtainedMarks > equivalenceTotalMarks) {
-        setErrors(['Equivalence obtained marks cannot exceed total marks']);
+      if (hasALevelResult && aLevelObtainedMarks > aLevelTotalMarks) {
+        setErrors(['A-Level obtained marks cannot exceed total marks']);
+        setIsCalculating(false);
+        return;
+      }
+      if (oLevelObtainedMarks > oLevelTotalMarks) {
+        setErrors(['O-Level obtained marks cannot exceed total marks']);
         setIsCalculating(false);
         return;
       }
@@ -128,7 +150,7 @@ export default function AggregateForm({ onResult, showResults = true }: Aggregat
     }
     
     setIsCalculating(false);
-  }, [netScore, calculatedFscPercentage, calculatedSscPercentage, useEquivalence, calculatedEquivalencePercentage, inputMode, fscObtainedMarks, actualFscTotal, sscObtainedMarks, actualSscTotal, equivalenceInputMode, equivalenceObtainedMarks, equivalenceTotalMarks, onResult]);
+  }, [netScore, calculatedFscPercentage, calculatedSscPercentage, useEquivalence, hasALevelResult, calculatedALevelPercentage, calculatedOLevelPercentage, inputMode, fscObtainedMarks, actualFscTotal, sscObtainedMarks, actualSscTotal, equivalenceInputMode, aLevelObtainedMarks, aLevelTotalMarks, oLevelObtainedMarks, oLevelTotalMarks, onResult]);
 
   const handleReset = useCallback(() => {
     setNetScore(0);
@@ -136,8 +158,10 @@ export default function AggregateForm({ onResult, showResults = true }: Aggregat
     setFscPercentage(0);
     setSscObtainedMarks(0);
     setSscPercentage(0);
-    setEquivalenceObtainedMarks(0);
-    setEquivalencePercentage(0);
+    setALevelObtainedMarks(0);
+    setALevelPercentage(0);
+    setOLevelObtainedMarks(0);
+    setOLevelPercentage(0);
     setResult(null);
     setErrors([]);
   }, []);
@@ -215,11 +239,21 @@ export default function AggregateForm({ onResult, showResults = true }: Aggregat
           <div className="p-4 bg-[var(--bg-secondary)] rounded-lg border border-[var(--border-color)]">
             <p className="text-xs text-[var(--text-muted)] mb-2">Formula being used:</p>
             {useEquivalence ? (
-              <p className="text-sm font-medium text-[var(--text-primary)]">
-                <span className="text-[var(--accent-primary)]">NET × 75%</span>
-                <span className="text-[var(--text-muted)]"> + </span>
-                <span className="text-[var(--success)]">O-Level Equivalence × 25%</span>
-              </p>
+              hasALevelResult ? (
+                <p className="text-sm font-medium text-[var(--text-primary)]">
+                  <span className="text-[var(--accent-primary)]">NET × 75%</span>
+                  <span className="text-[var(--text-muted)]"> + </span>
+                  <span className="text-[var(--success)]">A-Level × 15%</span>
+                  <span className="text-[var(--text-muted)]"> + </span>
+                  <span className="text-[var(--warning)]">O-Level × 10%</span>
+                </p>
+              ) : (
+                <p className="text-sm font-medium text-[var(--text-primary)]">
+                  <span className="text-[var(--accent-primary)]">NET × 75%</span>
+                  <span className="text-[var(--text-muted)]"> + </span>
+                  <span className="text-[var(--success)]">O-Level × 25%</span>
+                </p>
+              )
             ) : (
               <p className="text-sm font-medium text-[var(--text-primary)]">
                 <span className="text-[var(--accent-primary)]">NET × 75%</span>
@@ -232,89 +266,188 @@ export default function AggregateForm({ onResult, showResults = true }: Aggregat
           </div>
 
           {useEquivalence ? (
-            /* O/A Level - Only Equivalence Input */
-            <div className="space-y-4">
-              <label className="block text-sm font-semibold text-[var(--text-primary)]">
-                O-Level Equivalence (IBCC)
-              </label>
-              
-              {/* Input Mode Toggle */}
-              <div className="flex gap-3">
-                <button
-                  type="button"
-                  onClick={() => setEquivalenceInputMode('marks')}
-                  className={`flex-1 px-4 py-2.5 rounded-lg text-sm font-medium transition-all border ${
-                    equivalenceInputMode === 'marks'
-                      ? 'bg-[var(--accent-light)] text-[var(--accent-primary)] border-[var(--accent-primary)]'
-                      : 'bg-[var(--bg-input)] text-[var(--text-secondary)] border-[var(--border-color)]'
-                  }`}
-                >
-                  Marks
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setEquivalenceInputMode('percentage')}
-                  className={`flex-1 px-4 py-2.5 rounded-lg text-sm font-medium transition-all border ${
-                    equivalenceInputMode === 'percentage'
-                      ? 'bg-[var(--accent-light)] text-[var(--accent-primary)] border-[var(--accent-primary)]'
-                      : 'bg-[var(--bg-input)] text-[var(--text-secondary)] border-[var(--border-color)]'
-                  }`}
-                >
-                  Percentage
-                </button>
+            /* O/A Level Inputs */
+            <div className="space-y-6">
+              {/* Do you have A-Level Result? */}
+              <div>
+                <label className="block text-sm font-semibold text-[var(--text-primary)] mb-3">
+                  Do you have your A-Level Result?
+                </label>
+                <div className="flex gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setHasALevelResult(true)}
+                    className={`flex-1 px-4 py-2.5 rounded-lg text-sm font-medium transition-all border ${
+                      hasALevelResult
+                        ? 'bg-[var(--accent-primary)] text-white border-[var(--accent-primary)]'
+                        : 'bg-[var(--bg-input)] text-[var(--text-secondary)] border-[var(--border-color)] hover:border-[var(--accent-primary)]'
+                    }`}
+                  >
+                    Yes
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setHasALevelResult(false)}
+                    className={`flex-1 px-4 py-2.5 rounded-lg text-sm font-medium transition-all border ${
+                      !hasALevelResult
+                        ? 'bg-[var(--accent-primary)] text-white border-[var(--accent-primary)]'
+                        : 'bg-[var(--bg-input)] text-[var(--text-secondary)] border-[var(--border-color)] hover:border-[var(--accent-primary)]'
+                    }`}
+                  >
+                    No (Result Awaiting)
+                  </button>
+                </div>
               </div>
 
-              {equivalenceInputMode === 'marks' ? (
+              {/* Input Mode Toggle */}
+              <div>
+                <label className="block text-sm font-semibold text-[var(--text-primary)] mb-3">
+                  Enter marks as
+                </label>
+                <div className="flex gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setEquivalenceInputMode('marks')}
+                    className={`flex-1 px-4 py-2.5 rounded-lg text-sm font-medium transition-all border ${
+                      equivalenceInputMode === 'marks'
+                        ? 'bg-[var(--accent-light)] text-[var(--accent-primary)] border-[var(--accent-primary)]'
+                        : 'bg-[var(--bg-input)] text-[var(--text-secondary)] border-[var(--border-color)]'
+                    }`}
+                  >
+                    Marks
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setEquivalenceInputMode('percentage')}
+                    className={`flex-1 px-4 py-2.5 rounded-lg text-sm font-medium transition-all border ${
+                      equivalenceInputMode === 'percentage'
+                        ? 'bg-[var(--accent-light)] text-[var(--accent-primary)] border-[var(--accent-primary)]'
+                        : 'bg-[var(--bg-input)] text-[var(--text-secondary)] border-[var(--border-color)]'
+                    }`}
+                  >
+                    Percentage
+                  </button>
+                </div>
+              </div>
+
+              {/* A-Level Marks (only when has result) */}
+              {hasALevelResult && (
                 <div className="space-y-3">
-                  <div>
-                    <label className="block text-xs text-[var(--text-muted)] mb-2">Total Marks</label>
-                    <input
-                      type="number"
-                      min="1"
-                      value={equivalenceTotalMarks || ''}
-                      onChange={(e) => setEquivalenceTotalMarks(parseInt(e.target.value) || 0)}
-                      placeholder="Enter total marks (e.g., 1100)"
-                      className="input"
-                    />
-                  </div>
+                  <label className="block text-sm font-semibold text-[var(--text-primary)]">
+                    A-Level Equivalence Marks
+                  </label>
+                  {equivalenceInputMode === 'marks' ? (
+                    <>
+                      <div className="flex gap-3">
+                        <div className="flex-1">
+                          <label className="block text-xs text-[var(--text-muted)] mb-1.5">Obtained Marks</label>
+                          <input
+                            type="number"
+                            min="0"
+                            max={aLevelTotalMarks}
+                            value={aLevelObtainedMarks || ''}
+                            onChange={(e) => setALevelObtainedMarks(parseFloat(e.target.value) || 0)}
+                            placeholder="Obtained Marks"
+                            className="input"
+                          />
+                        </div>
+                        <div className="flex-1">
+                          <label className="block text-xs text-[var(--text-muted)] mb-1.5">Total Marks</label>
+                          <input
+                            type="number"
+                            min="1"
+                            value={aLevelTotalMarks || ''}
+                            onChange={(e) => setALevelTotalMarks(parseInt(e.target.value) || 0)}
+                            placeholder="Total (e.g. 1100)"
+                            className="input"
+                          />
+                        </div>
+                      </div>
+                      {aLevelObtainedMarks > 0 && (
+                        <p className="text-sm text-[var(--text-secondary)]">
+                          Calculated: <span className="font-semibold text-[var(--accent-primary)]">{calculatedALevelPercentage.toFixed(2)}%</span>
+                        </p>
+                      )}
+                    </>
+                  ) : (
+                    <div className="relative">
+                      <input
+                        type="number"
+                        min="0"
+                        max="100"
+                        step="0.01"
+                        value={aLevelPercentage || ''}
+                        onChange={(e) => setALevelPercentage(parseFloat(e.target.value) || 0)}
+                        placeholder="Enter A-Level equivalence percentage"
+                        className="input pr-10"
+                      />
+                      <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--text-muted)] text-sm">%</span>
+                    </div>
+                  )}
+                  <p className="text-xs text-[var(--text-muted)]">
+                    A-Level equivalence carries <strong>15%</strong> weight
+                  </p>
+                </div>
+              )}
+
+              {/* O-Level Marks (always shown for O/A Level) */}
+              <div className="space-y-3">
+                <label className="block text-sm font-semibold text-[var(--text-primary)]">
+                  O-Level Equivalence Marks
+                </label>
+                {equivalenceInputMode === 'marks' ? (
+                  <>
+                    <div className="flex gap-3">
+                      <div className="flex-1">
+                        <label className="block text-xs text-[var(--text-muted)] mb-1.5">Obtained Marks</label>
+                        <input
+                          type="number"
+                          min="0"
+                          max={oLevelTotalMarks}
+                          value={oLevelObtainedMarks || ''}
+                          onChange={(e) => setOLevelObtainedMarks(parseFloat(e.target.value) || 0)}
+                          placeholder="Obtained Marks"
+                          className="input"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <label className="block text-xs text-[var(--text-muted)] mb-1.5">Total Marks</label>
+                        <input
+                          type="number"
+                          min="1"
+                          value={oLevelTotalMarks || ''}
+                          onChange={(e) => setOLevelTotalMarks(parseInt(e.target.value) || 0)}
+                          placeholder="Total (e.g. 1100)"
+                          className="input"
+                        />
+                      </div>
+                    </div>
+                    {oLevelObtainedMarks > 0 && (
+                      <p className="text-sm text-[var(--text-secondary)]">
+                        Calculated: <span className="font-semibold text-[var(--accent-primary)]">{calculatedOLevelPercentage.toFixed(2)}%</span>
+                      </p>
+                    )}
+                  </>
+                ) : (
                   <div className="relative">
-                    <label className="block text-xs text-[var(--text-muted)] mb-2">Obtained Marks</label>
                     <input
                       type="number"
                       min="0"
-                      max={equivalenceTotalMarks}
-                      value={equivalenceObtainedMarks || ''}
-                      onChange={(e) => setEquivalenceObtainedMarks(parseFloat(e.target.value) || 0)}
-                      placeholder="Enter obtained marks"
-                      className="input pr-20"
+                      max="100"
+                      step="0.01"
+                      value={oLevelPercentage || ''}
+                      onChange={(e) => setOLevelPercentage(parseFloat(e.target.value) || 0)}
+                      placeholder="Enter O-Level equivalence percentage"
+                      className="input pr-10"
                     />
-                    <span className="absolute right-4 bottom-3 text-[var(--text-muted)] text-sm">/ {equivalenceTotalMarks}</span>
+                    <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--text-muted)] text-sm">%</span>
                   </div>
-                  {equivalenceObtainedMarks > 0 && (
-                    <p className="text-sm text-[var(--text-secondary)]">
-                      Calculated: <span className="font-semibold text-[var(--accent-primary)]">{calculatedEquivalencePercentage.toFixed(2)}%</span>
-                    </p>
-                  )}
-                </div>
-              ) : (
-                <div className="relative">
-                  <input
-                    type="number"
-                    min="0"
-                    max="100"
-                    step="0.01"
-                    value={equivalencePercentage || ''}
-                    onChange={(e) => setEquivalencePercentage(parseFloat(e.target.value) || 0)}
-                    placeholder="Enter equivalence percentage"
-                    className="input pr-10"
-                  />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--text-muted)] text-sm">%</span>
-                </div>
-              )}
-              
-              <p className="text-xs text-[var(--text-muted)]">
-                O-Level equivalence carries <strong>25%</strong> weight (no separate Matric)
-              </p>
+                )}
+                <p className="text-xs text-[var(--text-muted)]">
+                  O-Level equivalence carries <strong>{hasALevelResult ? '10%' : '25%'}</strong> weight
+                  {!hasALevelResult && ' (since A-Level result is awaiting)'}
+                </p>
+              </div>
             </div>
           ) : (
             /* FSc Student Inputs */
@@ -607,7 +740,11 @@ export default function AggregateForm({ onResult, showResults = true }: Aggregat
             </div>
             <p className="mt-2 text-[var(--text-muted)]">Final Aggregate</p>
             <p className="mt-1 text-xs text-[var(--text-muted)]">
-              ({result.isOALevel ? 'O/A Level Formula' : 'FSc Formula'})
+              ({result.isOALevel 
+                ? result.hasALevelResult 
+                  ? 'O/A Level — With A-Level Result' 
+                  : 'O/A Level — Result Awaiting'
+                : 'FSc Formula'})
             </p>
           </div>
 
@@ -631,19 +768,42 @@ export default function AggregateForm({ onResult, showResults = true }: Aggregat
               </div>
 
               {result.isOALevel ? (
-                /* O/A Level - Equivalence */
-                <div className="flex items-center justify-between p-4 bg-[var(--bg-secondary)] rounded-lg border border-[var(--border-color)]">
-                  <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-lg bg-[var(--success-light)] flex items-center justify-center">
-                      <span className="text-[var(--success)] font-bold text-xs">25%</span>
+                /* O/A Level Breakdown */
+                <>
+                  {result.hasALevelResult && result.aLevelContribution !== undefined && (
+                    <div className="flex items-center justify-between p-4 bg-[var(--bg-secondary)] rounded-lg border border-[var(--border-color)]">
+                      <div className="flex items-center gap-3">
+                        <div className="h-10 w-10 rounded-lg bg-[var(--success-light)] flex items-center justify-center">
+                          <span className="text-[var(--success)] font-bold text-xs">15%</span>
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-[var(--text-primary)]">A-Level Equivalence</p>
+                          <p className="text-xs text-[var(--text-muted)]">{calculatedALevelPercentage.toFixed(2)}%</p>
+                        </div>
+                      </div>
+                      <span className="text-lg font-bold text-[var(--success)] mono">{result.aLevelContribution}%</span>
                     </div>
-                    <div>
-                      <p className="text-sm font-medium text-[var(--text-primary)]">O-Level Equivalence</p>
-                      <p className="text-xs text-[var(--text-muted)]">{calculatedEquivalencePercentage.toFixed(2)}%</p>
+                  )}
+                  {result.oLevelContribution !== undefined && (
+                    <div className="flex items-center justify-between p-4 bg-[var(--bg-secondary)] rounded-lg border border-[var(--border-color)]">
+                      <div className="flex items-center gap-3">
+                        <div className="h-10 w-10 rounded-lg bg-[var(--warning-light)] flex items-center justify-center">
+                          <span className="text-[var(--warning)] font-bold text-xs">{result.hasALevelResult ? '10%' : '25%'}</span>
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-[var(--text-primary)]">O-Level Equivalence</p>
+                          <p className="text-xs text-[var(--text-muted)]">{calculatedOLevelPercentage.toFixed(2)}%</p>
+                        </div>
+                      </div>
+                      <span className="text-lg font-bold text-[var(--warning)] mono">{result.oLevelContribution}%</span>
                     </div>
-                  </div>
-                  <span className="text-lg font-bold text-[var(--success)] mono">{result.equivalenceContribution}%</span>
-                </div>
+                  )}
+                  {!result.hasALevelResult && (
+                    <p className="text-xs text-[var(--text-muted)] italic px-1">
+                      * A-Level result awaiting — O-Level gets 25% weightage
+                    </p>
+                  )}
+                </>
               ) : (
                 /* FSc - HSC + SSC */
                 <>

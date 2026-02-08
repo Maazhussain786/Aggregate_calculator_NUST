@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { useTheme } from '@/components/ThemeProvider';
 
 const navigation = [
@@ -11,6 +12,7 @@ const navigation = [
   { name: 'Predictor', href: '/admission-predictor' },
   { name: 'Position', href: '/position-estimator' },
   { name: 'Preferences', href: '/preference-generator' },
+  { name: 'NET Prep', href: '/preparation', highlight: true },
   { name: 'About', href: '/about' },
 ];
 
@@ -18,6 +20,7 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const { theme, toggleTheme } = useTheme();
+  const pathname = usePathname();
 
   useEffect(() => {
     // Use requestAnimationFrame to batch the mount state update
@@ -56,15 +59,22 @@ export default function Header() {
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex lg:items-center lg:gap-1">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="px-3 xl:px-4 py-2 text-sm font-medium text-[var(--text-secondary)] rounded-lg hover:text-[var(--text-primary)] hover:bg-[var(--bg-hover)] transition-all"
-              >
-                {item.name}
-              </Link>
-            ))}
+            {navigation.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={`px-3 xl:px-4 py-2 text-sm font-medium rounded-lg transition-all ${
+                    isActive
+                      ? 'text-[var(--accent-primary)] bg-[var(--accent-light)]'
+                      : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-hover)]'
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              );
+            })}
             
             {/* Theme Toggle */}
             {mounted && (
@@ -141,16 +151,23 @@ export default function Header() {
         {mobileMenuOpen && (
           <div className="lg:hidden py-4 border-t border-[var(--border-color)]">
             <div className="flex flex-col space-y-1">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="px-4 py-3 text-base font-medium text-[var(--text-secondary)] rounded-lg hover:text-[var(--text-primary)] hover:bg-[var(--bg-hover)]"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {item.name}
-                </Link>
-              ))}
+              {navigation.map((item) => {
+                const isActive = pathname === item.href;
+                return (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className={`px-4 py-3 text-base font-medium rounded-lg ${
+                      isActive
+                        ? 'text-[var(--accent-primary)] bg-[var(--accent-light)]'
+                        : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-hover)]'
+                    }`}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {item.name}
+                  </Link>
+                );
+              })}
               <Link
                 href="/aggregate-calculator"
                 className="mx-4 mt-3 px-5 py-3 text-center text-base font-semibold text-white bg-[var(--accent-primary)] rounded-lg"

@@ -8,7 +8,12 @@
  * - FSc/HSSC: 15%
  * - SSC/Matric: 10%
  * 
- * FOR O/A LEVEL STUDENTS:
+ * FOR O/A LEVEL STUDENTS (WITH A-LEVEL RESULT):
+ * - NET Score: 75%
+ * - A-Level (IBCC Equivalence): 15%
+ * - O-Level (IBCC Equivalence): 10%
+ * 
+ * FOR O/A LEVEL STUDENTS (RESULT AWAITING):
  * - NET Score: 75%
  * - O-Level Equivalence: 25%
  * 
@@ -28,7 +33,13 @@ export interface AggregateInput {
   sscPercentage: number;
   /** Whether student is O/A Level */
   useEquivalence?: boolean;
-  /** Equivalence percentage (for O/A Level students) - this covers the full 25% */
+  /** Whether student has A-Level result (only relevant if useEquivalence is true) */
+  hasALevelResult?: boolean;
+  /** A-Level equivalence percentage (for O/A Level students with A-Level result) */
+  aLevelPercentage?: number;
+  /** O-Level equivalence percentage (for O/A Level students) */
+  oLevelPercentage?: number;
+  /** @deprecated Use aLevelPercentage + oLevelPercentage instead. Kept for backward compatibility. */
   equivalencePercentage?: number;
 }
 
@@ -39,7 +50,11 @@ export interface AggregateBreakdown {
   hscContribution: number;
   /** SSC/Matric contribution (10% weight for FSc, 0 for O/A Level) */
   sscContribution: number;
-  /** Equivalence contribution (25% weight for O/A Level, 0 for FSc) */
+  /** A-Level contribution (15% weight, only when O/A Level with result) */
+  aLevelContribution?: number;
+  /** O-Level contribution (10% or 25% weight, for O/A Level) */
+  oLevelContribution?: number;
+  /** @deprecated */
   equivalenceContribution?: number;
   /** Final aggregate percentage */
   totalAggregate: number;
@@ -47,6 +62,8 @@ export interface AggregateBreakdown {
   explanation: string;
   /** Whether O/A Level formula was used */
   isOALevel: boolean;
+  /** Whether A-Level result was available (for O/A Level) */
+  hasALevelResult?: boolean;
 }
 
 export interface ValidationResult {
@@ -69,10 +86,23 @@ export const AGGREGATE_CONFIG = {
     SSC: 0.10,      // 10%
   },
   
-  /** Weightages for O/A Level students */
-  WEIGHTS_OA_LEVEL: {
+  /** Weightages for O/A Level students WITH A-Level result */
+  WEIGHTS_OA_WITH_ALEVEL: {
+    NET: 0.75,        // 75%
+    A_LEVEL: 0.15,    // 15%
+    O_LEVEL: 0.10,    // 10%
+  },
+
+  /** Weightages for O/A Level students WITHOUT A-Level result (awaiting) */
+  WEIGHTS_OA_AWAITING: {
     NET: 0.75,           // 75%
-    EQUIVALENCE: 0.25,   // 25% (replaces both HSC and SSC)
+    O_LEVEL: 0.25,       // 25% (replaces both A-Level and O-Level)
+  },
+  
+  /** @deprecated kept for backward compatibility */
+  WEIGHTS_OA_LEVEL: {
+    NET: 0.75,
+    EQUIVALENCE: 0.25,
   },
   
   /** Score boundaries */
@@ -100,14 +130,49 @@ export function validateAggregateInput(input: AggregateInput): ValidationResult 
 
   if (input.useEquivalence) {
     // O/A Level validation
-    if (input.equivalencePercentage === undefined || input.equivalencePercentage === null) {
-      errors.push('Equivalence percentage is required for O/A Level students');
-    } else {
-      if (input.equivalencePercentage < AGGREGATE_CONFIG.MIN_PERCENTAGE) {
-        errors.push('Equivalence percentage cannot be negative');
+    if (input.hasALevelResult) {
+      // Has A-Level result → need both A-Level and O-Level
+      if (input.aLevelPercentage === undefined || input.aLevelPercentage === null) {
+        errors.push('A-Level equivalence percentage is required');
+      } else {
+        if (input.aLevelPercentage < AGGREGATE_CONFIG.MIN_PERCENTAGE) {
+          errors.push('A-Level percentage cannot be negative');
+        }
+        if (input.aLevelPercentage > AGGREGATE_CONFIG.MAX_PERCENTAGE) {
+          errors.push('A-Level percentage cannot exceed 100%');
+        }
       }
-      if (input.equivalencePercentage > AGGREGATE_CONFIG.MAX_PERCENTAGE) {
-        errors.push('Equivalence percentage cannot exceed 100%');
+      if (input.oLevelPercentage === undefined || input.oLevelPercentage === null) {
+        errors.push('O-Level equivalence percentage is required');
+      } else {
+        if (input.oLevelPercentage < AGGREGATE_CONFIG.MIN_PERCENTAGE) {
+          errors.push('O-Level percentage cannot be negative');
+        }
+        if (input.oLevelPercentage > AGGREGATE_CONFIG.MAX_PERCENTAGE) {
+          errors.push('O-Level percentage cannot exceed 100%');
+        }
+      }
+    } else {
+      // Awaiting A-Level result → only O-Level at 25%
+      if (input.oLevelPercentage === undefined || input.oLevelPercentage === null) {
+        // Fallback to old equivalencePercentage field
+        if (input.equivalencePercentage === undefined || input.equivalencePercentage === null) {
+          errors.push('O-Level equivalence percentage is required');
+        } else {
+          if (input.equivalencePercentage < AGGREGATE_CONFIG.MIN_PERCENTAGE) {
+            errors.push('O-Level percentage cannot be negative');
+          }
+          if (input.equivalencePercentage > AGGREGATE_CONFIG.MAX_PERCENTAGE) {
+            errors.push('O-Level percentage cannot exceed 100%');
+          }
+        }
+      } else {
+        if (input.oLevelPercentage < AGGREGATE_CONFIG.MIN_PERCENTAGE) {
+          errors.push('O-Level percentage cannot be negative');
+        }
+        if (input.oLevelPercentage > AGGREGATE_CONFIG.MAX_PERCENTAGE) {
+          errors.push('O-Level percentage cannot exceed 100%');
+        }
       }
     }
   } else {
@@ -157,32 +222,68 @@ export function calculateAggregate(input: AggregateInput): AggregateBreakdown {
   // Convert NET score to percentage
   const netPercentage = netScoreToPercentage(input.netScore);
 
-  if (input.useEquivalence && input.equivalencePercentage !== undefined) {
-    // O/A Level formula
-    const { WEIGHTS_OA_LEVEL } = AGGREGATE_CONFIG;
-    
-    const netContribution = netPercentage * WEIGHTS_OA_LEVEL.NET;
-    const equivalenceContribution = input.equivalencePercentage * WEIGHTS_OA_LEVEL.EQUIVALENCE;
-    const totalAggregate = netContribution + equivalenceContribution;
+  if (input.useEquivalence) {
+    if (input.hasALevelResult && input.aLevelPercentage !== undefined && input.oLevelPercentage !== undefined) {
+      // O/A Level WITH A-Level result: NET 75% + A-Level 15% + O-Level 10%
+      const { WEIGHTS_OA_WITH_ALEVEL } = AGGREGATE_CONFIG;
+      
+      const netContribution = netPercentage * WEIGHTS_OA_WITH_ALEVEL.NET;
+      const aLevelContribution = input.aLevelPercentage * WEIGHTS_OA_WITH_ALEVEL.A_LEVEL;
+      const oLevelContribution = input.oLevelPercentage * WEIGHTS_OA_WITH_ALEVEL.O_LEVEL;
+      const totalAggregate = netContribution + aLevelContribution + oLevelContribution;
 
-    const explanation = generateOALevelExplanation(
-      input.netScore,
-      netPercentage,
-      input.equivalencePercentage,
-      netContribution,
-      equivalenceContribution,
-      totalAggregate
-    );
+      const explanation = generateOAWithResultExplanation(
+        input.netScore,
+        netPercentage,
+        input.aLevelPercentage,
+        input.oLevelPercentage,
+        netContribution,
+        aLevelContribution,
+        oLevelContribution,
+        totalAggregate
+      );
 
-    return {
-      netContribution: parseFloat(netContribution.toFixed(2)),
-      hscContribution: 0,
-      sscContribution: 0,
-      equivalenceContribution: parseFloat(equivalenceContribution.toFixed(2)),
-      totalAggregate: parseFloat(totalAggregate.toFixed(2)),
-      explanation,
-      isOALevel: true,
-    };
+      return {
+        netContribution: parseFloat(netContribution.toFixed(2)),
+        hscContribution: 0,
+        sscContribution: 0,
+        aLevelContribution: parseFloat(aLevelContribution.toFixed(2)),
+        oLevelContribution: parseFloat(oLevelContribution.toFixed(2)),
+        totalAggregate: parseFloat(totalAggregate.toFixed(2)),
+        explanation,
+        isOALevel: true,
+        hasALevelResult: true,
+      };
+    } else {
+      // O/A Level AWAITING A-Level result: NET 75% + O-Level 25%
+      const { WEIGHTS_OA_AWAITING } = AGGREGATE_CONFIG;
+      const oLevelPct = input.oLevelPercentage ?? input.equivalencePercentage ?? 0;
+      
+      const netContribution = netPercentage * WEIGHTS_OA_AWAITING.NET;
+      const oLevelContribution = oLevelPct * WEIGHTS_OA_AWAITING.O_LEVEL;
+      const totalAggregate = netContribution + oLevelContribution;
+
+      const explanation = generateOAAwaitingExplanation(
+        input.netScore,
+        netPercentage,
+        oLevelPct,
+        netContribution,
+        oLevelContribution,
+        totalAggregate
+      );
+
+      return {
+        netContribution: parseFloat(netContribution.toFixed(2)),
+        hscContribution: 0,
+        sscContribution: 0,
+        oLevelContribution: parseFloat(oLevelContribution.toFixed(2)),
+        equivalenceContribution: parseFloat(oLevelContribution.toFixed(2)),
+        totalAggregate: parseFloat(totalAggregate.toFixed(2)),
+        explanation,
+        isOALevel: true,
+        hasALevelResult: false,
+      };
+    }
   } else {
     // FSc formula
     const { WEIGHTS_FSC } = AGGREGATE_CONFIG;
@@ -246,28 +347,61 @@ Your NUST Aggregate (FSc Formula):
 }
 
 /**
- * Generates explanation for O/A Level students
+ * Generates explanation for O/A Level students WITH A-Level result
  */
-function generateOALevelExplanation(
+function generateOAWithResultExplanation(
   netScore: number,
   netPercentage: number,
-  equivalencePercentage: number,
+  aLevelPercentage: number,
+  oLevelPercentage: number,
   netContribution: number,
-  equivalenceContribution: number,
+  aLevelContribution: number,
+  oLevelContribution: number,
   totalAggregate: number
 ): string {
   return `
-Your NUST Aggregate (O/A Level Formula):
+Your NUST Aggregate (O/A Level Formula — With A-Level Result):
 
 📊 NET Score: ${netScore}/200 = ${netPercentage.toFixed(2)}%
    Contribution (75%): ${netPercentage.toFixed(2)} × 0.75 = ${netContribution.toFixed(2)}
 
-📚 O-Level Equivalence: ${equivalencePercentage.toFixed(2)}%
-   Contribution (25%): ${equivalencePercentage.toFixed(2)} × 0.25 = ${equivalenceContribution.toFixed(2)}
+📚 A-Level Equivalence: ${aLevelPercentage.toFixed(2)}%
+   Contribution (15%): ${aLevelPercentage.toFixed(2)} × 0.15 = ${aLevelContribution.toFixed(2)}
+
+📝 O-Level Equivalence: ${oLevelPercentage.toFixed(2)}%
+   Contribution (10%): ${oLevelPercentage.toFixed(2)} × 0.10 = ${oLevelContribution.toFixed(2)}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 🎯 Total Aggregate: ${totalAggregate.toFixed(2)}%
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  `.trim();
+}
+
+/**
+ * Generates explanation for O/A Level students WITHOUT A-Level result (awaiting)
+ */
+function generateOAAwaitingExplanation(
+  netScore: number,
+  netPercentage: number,
+  oLevelPercentage: number,
+  netContribution: number,
+  oLevelContribution: number,
+  totalAggregate: number
+): string {
+  return `
+Your NUST Aggregate (O/A Level Formula — Result Awaiting):
+
+📊 NET Score: ${netScore}/200 = ${netPercentage.toFixed(2)}%
+   Contribution (75%): ${netPercentage.toFixed(2)} × 0.75 = ${netContribution.toFixed(2)}
+
+📚 O-Level Equivalence: ${oLevelPercentage.toFixed(2)}%
+   Contribution (25%): ${oLevelPercentage.toFixed(2)} × 0.25 = ${oLevelContribution.toFixed(2)}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎯 Total Aggregate: ${totalAggregate.toFixed(2)}%
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+* Since A-Level result is awaiting, O-Level gets 25% weightage.
   `.trim();
 }
 
@@ -289,15 +423,25 @@ export function calculateRequiredNetScore(
   hscPercentage: number,
   sscPercentage: number,
   useEquivalence: boolean = false,
-  equivalencePercentage?: number
+  equivalencePercentage?: number,
+  hasALevelResult?: boolean,
+  aLevelPercentage?: number,
+  oLevelPercentage?: number
 ): { requiredNetScore: number; requiredNetPercentage: number; achievable: boolean } {
-  const { MAX_NET_SCORE, WEIGHTS_FSC, WEIGHTS_OA_LEVEL } = AGGREGATE_CONFIG;
+  const { MAX_NET_SCORE, WEIGHTS_FSC, WEIGHTS_OA_WITH_ALEVEL, WEIGHTS_OA_AWAITING } = AGGREGATE_CONFIG;
 
   let requiredNetPercentage: number;
 
-  if (useEquivalence && equivalencePercentage !== undefined) {
-    const equivalenceContribution = equivalencePercentage * WEIGHTS_OA_LEVEL.EQUIVALENCE;
-    requiredNetPercentage = (targetAggregate - equivalenceContribution) / WEIGHTS_OA_LEVEL.NET;
+  if (useEquivalence) {
+    if (hasALevelResult && aLevelPercentage !== undefined && oLevelPercentage !== undefined) {
+      const aLevelContribution = aLevelPercentage * WEIGHTS_OA_WITH_ALEVEL.A_LEVEL;
+      const oLevelContribution = oLevelPercentage * WEIGHTS_OA_WITH_ALEVEL.O_LEVEL;
+      requiredNetPercentage = (targetAggregate - aLevelContribution - oLevelContribution) / WEIGHTS_OA_WITH_ALEVEL.NET;
+    } else {
+      const oLevelPct = oLevelPercentage ?? equivalencePercentage ?? 0;
+      const oLevelContribution = oLevelPct * WEIGHTS_OA_AWAITING.O_LEVEL;
+      requiredNetPercentage = (targetAggregate - oLevelContribution) / WEIGHTS_OA_AWAITING.NET;
+    }
   } else {
     const hscContribution = hscPercentage * WEIGHTS_FSC.HSC;
     const sscContribution = sscPercentage * WEIGHTS_FSC.SSC;

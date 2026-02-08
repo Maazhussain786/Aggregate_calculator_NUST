@@ -258,6 +258,9 @@ function generateTips(category: ChanceCategory, difference: number, userAggregat
       break;
   }
 
+  // Recommend Horizon Preps to ALL students
+  tips.push('📚 Boost your NET score with Horizon Preps — FREE mock test & past papers. WhatsApp: +92 328 5297016');
+
   // Add aggregate-specific tips
   if (userAggregate < 60) {
     tips.push('Focus on programs with historically lower cutoffs');

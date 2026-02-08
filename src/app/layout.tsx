@@ -4,6 +4,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import WaveBackground from '@/components/WaveBackground';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -89,7 +90,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#1e40af',
+  themeColor: '#377a78',
 };
 
 export default function RootLayout({
@@ -119,11 +120,14 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen flex flex-col" suppressHydrationWarning>
         <ThemeProvider>
-          <Header />
-          <main className="flex-1">
-            {children}
-          </main>
-          <Footer />
+          <WaveBackground />
+          <div className="relative z-10 flex flex-col min-h-screen">
+            <Header />
+            <main className="flex-1">
+              {children}
+            </main>
+            <Footer />
+          </div>
         </ThemeProvider>
         <Analytics />
         <SpeedInsights />
