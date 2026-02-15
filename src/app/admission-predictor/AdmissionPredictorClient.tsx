@@ -116,6 +116,13 @@ export default function AdmissionPredictorClient({ programs, latestMeritData, al
     setErrors([]);
   }, []);
 
+  const handleBackToProgramSelection = useCallback(() => {
+    setStep(2);
+    setSelectedProgram(null);
+    setChancePrediction(null);
+    setMeritListPrediction(null);
+  }, []);
+
   // Auto-scroll to results when step changes
   useEffect(() => {
     if ((step === 2 || step === 3) && resultsRef.current) {
@@ -358,12 +365,20 @@ export default function AdmissionPredictorClient({ programs, latestMeritData, al
               <p className="text-sm text-[var(--text-muted)]">Your Aggregate</p>
               <p className="text-[var(--accent-primary)] font-mono text-lg">{aggregateResult?.totalAggregate}%</p>
             </div>
-            <button
-              onClick={handleReset}
-              className="btn btn-secondary text-sm"
-            >
-              Start Over
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={handleBackToProgramSelection}
+                className="btn btn-primary text-sm"
+              >
+                Try Another Program
+              </button>
+              <button
+                onClick={handleReset}
+                className="btn btn-secondary text-sm"
+              >
+                Start Over
+              </button>
+            </div>
           </div>
 
           {/* Predictions */}
