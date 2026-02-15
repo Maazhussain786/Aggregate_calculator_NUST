@@ -40,6 +40,9 @@ export async function POST(request: Request) {
     }
 
     // Get all merit data for this program from the latest year
+    // Note: ACF (nbs-bsaf), BBA (nbs-bba), and Tourism (nbs-bsth) share the same Business NET.
+    // Their aggregate-to-position curve is the same, but closing positions differ per program.
+    // ACF aggregate data has been corrected to match BBA's curve.
     const programMeritHistory = sampleData.meritHistory.filter(m => m.programId === programId);
     const latestYear = Math.max(...programMeritHistory.map(m => m.year));
     const latestYearHistory = programMeritHistory

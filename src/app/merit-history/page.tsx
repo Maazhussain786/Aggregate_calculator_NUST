@@ -1,6 +1,10 @@
 import type { Metadata } from 'next';
+import fs from 'fs';
+import path from 'path';
 import MeritHistoryClient from './MeritHistoryClient';
+import MeritPdfDownload from '@/components/MeritPdfDownload';
 import sampleData from '@/data/sampleMeritData.json';
+import type { MeritListPage } from '@/lib/meritPdfGenerator';
 
 export const metadata: Metadata = {
   title: 'NUST Merit History & Closing Merits | All Programs',
@@ -44,8 +48,100 @@ function transformData() {
   return { programs, meritHistory };
 }
 
+/**
+ * Parse a merit CSV (5 cols: Discipline,School,List_Number,Merit_Position,Aggregate)
+ * into structured pages grouped by list number.
+ */
+function parseCompleteMeritCSV(filename: string): MeritListPage[] {
+  try {
+    const csvPath = path.join(process.cwd(), filename);
+    if (!fs.existsSync(csvPath)) return [];
+    const csvContent = fs.readFileSync(csvPath, 'utf-8');
+    const lines = csvContent.trim().split('\n');
+
+    const rows = lines.slice(1).map((line) => {
+      const parts = line.split(',');
+      return {
+        discipline: parts[0]?.trim() ?? '',
+        school: parts[1]?.trim() ?? '',
+        listNumber: parts[2]?.trim() ?? '',
+        meritPosition: parseInt(parts[3]?.trim() ?? '0', 10),
+        aggregate: parseFloat(parts[4]?.trim() ?? '0'),
+      };
+    });
+
+    const listOrder = ['1','2','3','4','5','6','7','8','9','10','11','Final'];
+    return listOrder
+      .map((ln) => ({
+        listNumber: ln,
+        programs: rows
+          .filter((r) => r.listNumber === ln)
+          .map((r) => ({
+            discipline: r.discipline,
+            school: r.school,
+            meritPosition: r.meritPosition,
+            aggregate: r.aggregate,
+          }))
+          .sort((a, b) => a.discipline.localeCompare(b.discipline)),
+      }))
+      .filter((ml) => ml.programs.length > 0);
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Parse a 2024-format CSV (6 cols: Category,Discipline,School,List_Number,Merit_Position,Aggregate)
+ */
+function parseMeritCSV2024(filename: string): MeritListPage[] {
+  try {
+    const csvPath = path.join(process.cwd(), filename);
+    if (!fs.existsSync(csvPath)) return [];
+    const csvContent = fs.readFileSync(csvPath, 'utf-8');
+    const lines = csvContent.trim().split('\n');
+
+    const rows = lines.slice(1).map((line) => {
+      const parts = line.split(',');
+      return {
+        discipline: parts[1]?.trim() ?? '',
+        school: parts[2]?.trim() ?? '',
+        listNumber: parts[3]?.trim() ?? '',
+        meritPosition: parseInt(parts[4]?.trim() ?? '0', 10),
+        aggregate: parseFloat(parts[5]?.trim() ?? '0'),
+      };
+    });
+
+    const listOrder = ['1','2','3','4','5','6','7','8','9','10','11','Final'];
+    return listOrder
+      .map((ln) => ({
+        listNumber: ln,
+        programs: rows
+          .filter((r) => r.listNumber === ln)
+          .map((r) => ({
+            discipline: r.discipline,
+            school: r.school,
+            meritPosition: r.meritPosition,
+            aggregate: r.aggregate,
+          }))
+          .sort((a, b) => a.discipline.localeCompare(b.discipline)),
+      }))
+      .filter((ml) => ml.programs.length > 0);
+  } catch {
+    return [];
+  }
+}
+
 export default function MeritHistoryPage() {
   const { programs, meritHistory } = transformData();
+
+  // Build available years for the PDF download filter
+  const data2025 = parseCompleteMeritCSV('NUST_Merit_List_2025_Final_Format.csv');
+  const data2024 = parseMeritCSV2024('nust_merit_list_2024_with_aggregates.csv');
+
+  const availableYears = [
+    ...(data2025.length > 0 ? [{ year: 2025, lists: data2025 }] : []),
+    ...(data2024.length > 0 ? [{ year: 2024, lists: data2024 }] : []),
+  ];
 
   return (
     <div className="animate-fade-in">
@@ -59,6 +155,7 @@ export default function MeritHistoryPage() {
             Explore historical closing aggregates and merit positions for all NUST programs. 
             Track trends and make informed decisions.
           </p>
+
         </div>
       </section>
 
@@ -71,6 +168,15 @@ export default function MeritHistoryPage() {
           />
         </div>
       </section>
+
+      {/* PDF Download */}
+      {availableYears.length > 0 && (
+        <section className="pb-12">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <MeritPdfDownload availableYears={availableYears} />
+          </div>
+        </section>
+      )}
 
       {/* Info Section */}
       <section className="py-16 bg-[var(--bg-primary)] border-t border-[var(--border-color)]">
@@ -138,6 +244,7 @@ export default function MeritHistoryPage() {
           </div>
         </div>
       </section>
+
     </div>
   );
 }

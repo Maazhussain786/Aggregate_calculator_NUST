@@ -49,6 +49,36 @@ export interface PositionEstimateResult {
 // Configuration
 // ============================================
 
+/**
+ * Programs that share the same NET type and merit list.
+ * These programs have the same aggregate-to-position relationship.
+ * The "reference" program is the canonical source for aggregate data.
+ * 
+ * Business NET: BBA, BS Accounting & Finance, BS Tourism & Hospitality
+ * all share the same NET-Business merit list, so a given aggregate
+ * maps to the same merit position across all three programs.
+ */
+export const SHARED_NET_PROGRAMS: Record<string, { referenceProgram: string; programs: string[] }> = {
+  'business-net': {
+    referenceProgram: 'nbs-bba',
+    programs: ['nbs-bba', 'nbs-bsaf', 'nbs-bsth'],
+  },
+};
+
+/**
+ * Get the reference program ID for a given program.
+ * If the program shares a NET with others, returns the reference program ID.
+ * Otherwise returns the program's own ID.
+ */
+export function getReferenceProgram(programId: string): string {
+  for (const group of Object.values(SHARED_NET_PROGRAMS)) {
+    if (group.programs.includes(programId)) {
+      return group.referenceProgram;
+    }
+  }
+  return programId;
+}
+
 export const POSITION_ESTIMATOR_CONFIG = {
   /** Margin of error percentage for range calculation */
   MARGIN_OF_ERROR: 0.15, // 15% margin
