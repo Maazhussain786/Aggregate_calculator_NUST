@@ -20,30 +20,31 @@ A comprehensive, free tool to calculate NUST admission aggregate, check historic
 - **Type Safety**: TypeScript
 - **Deployment**: Vercel (recommended)
 
-## 📦 Installation
+## 📦 Quick Start
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/nust-aggregate-calculator.git
-cd nust-aggregate-calculator
+git clone https://github.com/Maazhussain786/Aggregate_calculator_NUST.git
+cd Aggregate_calculator_NUST
 
 # Install dependencies
 npm install
 
-# Set up environment variables
-cp .env.example .env.local
-# Edit .env.local with your values
-
-# Set up database
-npm run db:generate
-npm run db:push
-npm run db:seed
-
-# Run development server
+# Run development server (no database needed!)
 npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+**Note:** The app works without a database - it uses JSON data files. See [COLLABORATOR_SETUP.md](./COLLABORATOR_SETUP.md) for detailed setup options.
+
+## 👥 For Collaborators
+
+**New to the project?** See [COLLABORATOR_SETUP.md](./COLLABORATOR_SETUP.md) for:
+- Complete setup instructions
+- Database configuration options
+- SSL connection troubleshooting
+- Common issues & solutions
 
 ## 🚀 Deployment
 
@@ -75,6 +76,8 @@ This is an **unofficial tool** and is not affiliated with, endorsed by, or offic
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
+
+**First time contributing?** Read [COLLABORATOR_SETUP.md](./COLLABORATOR_SETUP.md) for setup instructions.
 
 ## 📧 Contact
 
