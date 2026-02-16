@@ -101,6 +101,22 @@ POSTGRES_URL="postgres://user:pass@host/db?sslmode=require"
 DATABASE_URL="${POSTGRES_URL}"
 ```
 
+#### For Azure PostgreSQL:
+```bash
+# Azure requires SSL by default
+# Get connection string from Azure Portal → Your Database → Connection Strings
+
+# Format 1 (Recommended):
+DATABASE_URL="postgresql://username@servername:password@servername.postgres.database.azure.com:5432/dbname?sslmode=require"
+
+# Format 2 (If format 1 doesn't work):
+DATABASE_URL="postgresql://username%40servername:password@servername.postgres.database.azure.com:5432/dbname?ssl=true"
+
+# Note: Azure usernames include @servername suffix
+# Example: If username is "myuser" and server is "myserver", use:
+# username@myserver or username%40myserver (URL encoded)
+```
+
 #### Full PostgreSQL Setup:
 
 **Step 1:** Get a free PostgreSQL database:
@@ -108,6 +124,7 @@ DATABASE_URL="${POSTGRES_URL}"
 - [Neon](https://neon.tech) - Free tier
 - [Railway](https://railway.app) - Free trial
 - [Vercel Postgres](https://vercel.com/storage/postgres) - Free tier
+- [Azure PostgreSQL](https://azure.microsoft.com/en-us/products/postgresql) - Free tier available
 
 **Step 2:** Update `.env.local`:
 ```bash
@@ -140,7 +157,216 @@ npm run dev
 
 ---
 
-## 🔧 Common Issues & Solutions
+## � Azure PostgreSQL Setup (Step-by-Step)
+
+If your team is using **Azure PostgreSQL**, follow these specific instructions:
+
+### 1️⃣ Create Azure PostgreSQL Database
+
+**Option A: Azure Portal (Web Interface)**
+1. Go to [Azure Portal](https://portal.azure.com)
+2. Click **"Create a resource"** → Search **"Azure Database for PostgreSQL"**
+3. Choose **"Flexible Server"** (recommended) or **"Single Server"**
+4. Fill in:
+   - **Server name**: `your-nust-db` (example)
+   - **Admin username**: `nustadmin` (example)
+   - **Password**: Create a strong password
+   - **Location**: Choose nearest region
+   - **Pricing tier**: Basic (cheapest) or Free tier if available
+5. Click **"Review + Create"** → **"Create"**
+6. Wait 5-10 minutes for deployment
+
+**Option B: Azure CLI**
+```bash
+# Login to Azure
+az login
+
+# Create resource group
+az group create --name nust-calculator-rg --location eastus
+
+# Create PostgreSQL server
+az postgres flexible-server create \
+  --resource-group nust-calculator-rg \
+  --name your-nust-db \
+  --admin-user nustadmin \
+  --admin-password 'YourStrongPassword123!' \
+  --sku-name Standard_B1ms \
+  --tier Burstable \
+  --version 15
+```
+
+### 2️⃣ Configure Firewall Rules
+
+Azure blocks all connections by default. You need to allow access:
+
+**In Azure Portal:**
+1. Go to your PostgreSQL server
+2. Click **"Networking"** (left sidebar)
+3. Under **"Firewall rules"**, add:
+   - **Rule name**: `AllowMyIP`
+   - **Start IP**: Your IP address (Azure can detect it automatically)
+   - **End IP**: Same as start IP
+4. For development, you can temporarily check **"Allow public access from any Azure service"**
+5. Click **"Save"**
+
+**Using Azure CLI:**
+```bash
+# Allow your current IP
+az postgres flexible-server firewall-rule create \
+  --resource-group nust-calculator-rg \
+  --name your-nust-db \
+  --rule-name AllowMyIP \
+  --start-ip-address YOUR_IP \
+  --end-ip-address YOUR_IP
+
+# Or allow all IPs (NOT recommended for production)
+az postgres flexible-server firewall-rule create \
+  --resource-group nust-calculator-rg \
+  --name your-nust-db \
+  --rule-name AllowAll \
+  --start-ip-address 0.0.0.0 \
+  --end-ip-address 255.255.255.255
+```
+
+### 3️⃣ Get Connection String
+
+**In Azure Portal:**
+1. Go to your PostgreSQL server
+2. Click **"Connect"** (left sidebar) or **"Connection strings"**
+3. Copy the connection string
+4. It will look like:
+```
+Server=your-nust-db.postgres.database.azure.com;Database=postgres;Port=5432;User Id=nustadmin;Password={your_password};Ssl Mode=Require;
+```
+
+### 4️⃣ Convert to Prisma Format
+
+Azure gives you a .NET-style connection string. Convert it to PostgreSQL URL format:
+
+**Azure format:**
+```
+Server=your-nust-db.postgres.database.azure.com;Database=postgres;Port=5432;User Id=nustadmin;Password=YourPass123;Ssl Mode=Require;
+```
+
+**Convert to Prisma format:**
+```bash
+# Format: postgresql://username@servername:password@host:port/database?sslmode=require
+
+# Your .env.local should have:
+DATABASE_URL="postgresql://nustadmin@your-nust-db:YourPass123@your-nust-db.postgres.database.azure.com:5432/postgres?sslmode=require"
+
+# Or with URL-encoded @ symbol:
+DATABASE_URL="postgresql://nustadmin%40your-nust-db:YourPass123@your-nust-db.postgres.database.azure.com:5432/postgres?sslmode=require"
+```
+
+**Important Notes:**
+- Azure username format: `username@servername`
+- Use `%40` instead of `@` in the username part (URL encoding)
+- Always include `?sslmode=require` at the end
+- Default database is usually `postgres`
+
+### 5️⃣ Update Project Files
+
+**Update `prisma/schema.prisma`:**
+```prisma
+datasource db {
+  provider = "postgresql"  // Change from "sqlite"
+  url      = env("DATABASE_URL")
+}
+```
+
+**Create `.env.local`:**
+```bash
+# Copy your Azure connection string here
+DATABASE_URL="postgresql://nustadmin%40your-nust-db:YourPass123@your-nust-db.postgres.database.azure.com:5432/postgres?sslmode=require"
+```
+
+### 6️⃣ Initialize Database
+
+```bash
+# Generate Prisma Client
+npm run db:generate
+
+# Create tables in Azure database
+npm run db:push
+
+# Seed with sample data
+npm run db:seed
+
+# Start development server
+npm run dev
+```
+
+### 7️⃣ Verify Connection
+
+```bash
+# Test database connection
+npx prisma studio
+
+# If it opens without errors, you're connected! ✅
+```
+
+### 🔧 Azure-Specific Troubleshooting
+
+**❌ Error: "SSL connection required"**
+```bash
+# Solution: Add ?sslmode=require
+DATABASE_URL="...?sslmode=require"
+```
+
+**❌ Error: "Connection timeout" or "Cannot reach server"**
+```bash
+# Solution: Check firewall rules in Azure Portal
+# Make sure your IP is allowed
+```
+
+**❌ Error: "Authentication failed"**
+```bash
+# Solution: Azure username includes @servername
+# Correct: nustadmin@your-nust-db
+# URL encode the @: nustadmin%40your-nust-db
+```
+
+**❌ Error: "Database does not exist"**
+```bash
+# Solution: Azure creates 'postgres' database by default
+# Use postgres as database name, or create a new one:
+az postgres flexible-server db create \
+  --resource-group nust-calculator-rg \
+  --server-name your-nust-db \
+  --database-name nust_calculator
+```
+
+**❌ Error: "Too many connections"**
+```bash
+# Solution: Azure Basic tier has connection limits
+# Close unused connections or upgrade tier
+# Or use connection pooling
+```
+
+### 💰 Cost Considerations
+
+- **Free Tier**: Available for 12 months (new Azure accounts)
+- **Basic Tier**: ~$25-50/month
+- **Burstable Tier**: ~$15-30/month (cheapest for small projects)
+- **Tip**: Stop/Start your database when not in use to save costs
+
+### 🔗 Share Connection String with Team
+
+**For team members:**
+1. Share the connection string securely (NOT in GitHub!)
+2. Each member should add it to their local `.env.local` file
+3. All team members can connect to the same Azure database
+4. Make sure to add their IPs to Azure firewall rules
+
+**Alternative: Everyone uses JSON data during development**
+- Keep Azure database for production/testing only
+- Developers work with JSON data locally (no database needed)
+- Much faster setup for new contributors!
+
+---
+
+## �🔧 Common Issues & Solutions
 
 ### ❌ Problem: "SSL connection required"
 
