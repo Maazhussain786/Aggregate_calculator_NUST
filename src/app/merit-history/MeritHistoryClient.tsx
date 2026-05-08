@@ -80,12 +80,12 @@ export default function MeritHistoryClient({ programs, meritHistory }: MeritHist
       });
   }, [meritHistory, selectedProgram, selectedYear]);
 
-  // Chart data - also filter to 1st, 3rd, and Final
+  // Chart data - show first and final lists only
   const chartData = useMemo(() => {
     if (!selectedProgram) return [];
     return meritHistory
       .filter(m => m.programId === selectedProgram.id)
-      .filter(m => m.meritListNumber === 1 || m.meritListNumber === 3 || m.meritListNumber === null)
+      .filter(m => m.meritListNumber === 1 || m.meritListNumber === null)
       .map(m => ({
         year: m.year,
         closingAggregate: m.closingAggregate,
@@ -204,6 +204,10 @@ export default function MeritHistoryClient({ programs, meritHistory }: MeritHist
             <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-4">
               Merit Trend: {selectedProgram.name}
             </h2>
+            <p className="text-sm text-[var(--text-muted)] mb-4">
+              Each year shows two points: first merit list and final merit list. The next point starts the
+              following year with the first merit list.
+            </p>
             <MeritTrendChart
               data={chartData}
               programName={selectedProgram.name}

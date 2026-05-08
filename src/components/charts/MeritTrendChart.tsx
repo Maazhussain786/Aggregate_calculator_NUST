@@ -64,7 +64,11 @@ export default function MeritTrendChart({
   const processedData = useMemo(() => {
     const filtered = data
       .filter(d => !d.meritListNumber || d.meritListNumber === 1)
-      .sort((a, b) => a.year - b.year);
+      .sort((a, b) => {
+        if (a.year !== b.year) return a.year - b.year;
+        const getOrder = (value: number | null | undefined) => value === 1 ? 0 : 1;
+        return getOrder(a.meritListNumber) - getOrder(b.meritListNumber);
+      });
     
     return {
       labels: filtered.map(d => d.year.toString()),
