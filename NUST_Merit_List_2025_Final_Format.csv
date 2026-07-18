@@ -11,65 +11,65 @@ BBA,NBS,9,763,69.70
 BBA,NBS,10,768,69.68
 BBA,NBS,11,771,69.66
 BBA,NBS,Final,773,69.65
-BE Aerospace Engineering,CAE,1,939,74.4
+BE Aerospace Engineering,CAE,1,939,74.40
 BE Aerospace Engineering,CAE,2,1626,69.76
-BE Aerospace Engineering,CAE,3,2181,68.2
-BE Aerospace Engineering,CAE,4,2263,67.97
-BE Aerospace Engineering,CAE,5,2263,67.97
-BE Aerospace Engineering,CAE,6,2309,67.84
-BE Aerospace Engineering,CAE,7,2462,67.42
-BE Aerospace Engineering,CAE,8,2462,67.42
-BE Aerospace Engineering,CAE,9,2462,67.42
-BE Aerospace Engineering,CAE,10,2470,67.4
-BE Aerospace Engineering,CAE,11,2470,67.4
+BE Aerospace Engineering,CAE,3,2181,68.91
+BE Aerospace Engineering,CAE,4,2263,68.79
+BE Aerospace Engineering,CAE,5,2263,68.79
+BE Aerospace Engineering,CAE,6,2309,68.72
+BE Aerospace Engineering,CAE,7,2462,68.48
+BE Aerospace Engineering,CAE,8,2462,68.48
+BE Aerospace Engineering,CAE,9,2462,68.48
+BE Aerospace Engineering,CAE,10,2470,68.47
+BE Aerospace Engineering,CAE,11,2470,68.47
 BE Aerospace Engineering,CAE,Final,2470,68.47
 BE Aerospace Engineering,SMME,1,892,74.74
 BE Aerospace Engineering,SMME,2,1769,69.36
 BE Aerospace Engineering,SMME,3,2028,68.63
 BE Aerospace Engineering,SMME,4,2118,68.38
-BE Aerospace Engineering,SMME,5,2195,68.16
-BE Aerospace Engineering,SMME,6,2246,68.02
-BE Aerospace Engineering,SMME,7,2333,67.78
-BE Aerospace Engineering,SMME,8,2333,67.78
-BE Aerospace Engineering,SMME,9,2410,67.56
-BE Aerospace Engineering,SMME,10,2493,67.36
-BE Aerospace Engineering,SMME,11,2526,67.28
+BE Aerospace Engineering,SMME,5,2195,68.37
+BE Aerospace Engineering,SMME,6,2246,68.36
+BE Aerospace Engineering,SMME,7,2333,68.35
+BE Aerospace Engineering,SMME,8,2333,68.35
+BE Aerospace Engineering,SMME,9,2410,68.34
+BE Aerospace Engineering,SMME,10,2493,68.33
+BE Aerospace Engineering,SMME,11,2526,68.32
 BE Aerospace Engineering,SMME,Final,2526,68.32
 BE Avionics Engineering,CAE,1,1222,72.38
 BE Avionics Engineering,CAE,2,2346,67.74
-BE Avionics Engineering,CAE,3,2731,66.84
-BE Avionics Engineering,CAE,4,2845,66.45
-BE Avionics Engineering,CAE,5,2845,66.45
-BE Avionics Engineering,CAE,6,2845,66.45
-BE Avionics Engineering,CAE,7,2845,66.45
-BE Avionics Engineering,CAE,8,2845,66.45
-BE Avionics Engineering,CAE,9,2845,66.45
-BE Avionics Engineering,CAE,10,2879,66.33
-BE Avionics Engineering,CAE,11,2922,66.18
-BE Avionics Engineering,CAE,Final,2922,67.2
-BE Chemical Engineering,SCME,1,2030,54.75
-BE Chemical Engineering,SCME,2,3424,55.6
-BE Chemical Engineering,SCME,3,4278,56.39
-BE Chemical Engineering,SCME,4,4728,56.81
-BE Chemical Engineering,SCME,5,4925,56.99
-BE Chemical Engineering,SCME,6,4950,57.01
-BE Chemical Engineering,SCME,7,4953,57.02
-BE Chemical Engineering,SCME,8,5089,57.14
-BE Chemical Engineering,SCME,9,5142,57.19
-BE Chemical Engineering,SCME,10,5246,57.29
-BE Chemical Engineering,SCME,11,5284,57.32
+BE Avionics Engineering,CAE,3,2731,67.38
+BE Avionics Engineering,CAE,4,2845,67.27
+BE Avionics Engineering,CAE,5,2845,67.27
+BE Avionics Engineering,CAE,6,2845,67.27
+BE Avionics Engineering,CAE,7,2845,67.27
+BE Avionics Engineering,CAE,8,2845,67.27
+BE Avionics Engineering,CAE,9,2845,67.27
+BE Avionics Engineering,CAE,10,2879,67.24
+BE Avionics Engineering,CAE,11,2922,67.20
+BE Avionics Engineering,CAE,Final,2922,67.20
+BE Chemical Engineering,SCME,1,2030,69.91
+BE Chemical Engineering,SCME,2,3424,65.92
+BE Chemical Engineering,SCME,3,4278,64.09
+BE Chemical Engineering,SCME,4,4728,63.15
+BE Chemical Engineering,SCME,5,4925,62.68
+BE Chemical Engineering,SCME,6,4950,62.62
+BE Chemical Engineering,SCME,7,4953,62.62
+BE Chemical Engineering,SCME,8,5089,62.29
+BE Chemical Engineering,SCME,9,5142,62.17
+BE Chemical Engineering,SCME,10,5246,61.95
+BE Chemical Engineering,SCME,11,5284,61.87
 BE Chemical Engineering,SCME,Final,5377,61.69
 BE Civil Engineering,MCE,1,5772,59.82
 BE Civil Engineering,MCE,2,5933,59.58
 BE Civil Engineering,MCE,3,6561,56.76
 BE Civil Engineering,MCE,4,7423,54.82
-BE Civil Engineering,MCE,5,8082,54.7
-BE Civil Engineering,MCE,6,8552,53.48
-BE Civil Engineering,MCE,7,8961,53.43
-BE Civil Engineering,MCE,8,8918,53.44
-BE Civil Engineering,MCE,9,8918,53.44
-BE Civil Engineering,MCE,10,9067,53.42
-BE Civil Engineering,MCE,11,9254,53.37
+BE Civil Engineering,MCE,5,8082,54.81
+BE Civil Engineering,MCE,6,8552,54.80
+BE Civil Engineering,MCE,7,8961,54.80
+BE Civil Engineering,MCE,8,8918,54.80
+BE Civil Engineering,MCE,9,8918,54.80
+BE Civil Engineering,MCE,10,9067,54.80
+BE Civil Engineering,MCE,11,9254,54.80
 BE Civil Engineering,MCE,Final,9604,54.79
 BE Civil Engineering,NBC,1,7440,54.95
 BE Civil Engineering,NBC,2,7886,55.89
@@ -92,8 +92,8 @@ BE Civil Engineering,NICE,6,4830,62.12
 BE Civil Engineering,NICE,7,4900,62
 BE Civil Engineering,NICE,8,5006,61.77
 BE Civil Engineering,NICE,9,5023,61.72
-BE Civil Engineering,NICE,10,5057,61.63
-BE Civil Engineering,NICE,11,5229,61.15
+BE Civil Engineering,NICE,10,5057,61.71
+BE Civil Engineering,NICE,11,5229,61.67
 BE Civil Engineering,NICE,Final,5407,61.63
 BE Computer Engineering,CEME,1,1072,75.05
 BE Computer Engineering,CEME,2,2101,71.39
@@ -129,7 +129,7 @@ BE Electrical Engineering,CEME,7,4532,62.67
 BE Electrical Engineering,CEME,8,4562,62.62
 BE Electrical Engineering,CEME,9,4745,62.28
 BE Electrical Engineering,CEME,10,4837,62.11
-BE Electrical Engineering,CEME,11,4991,61.81
+BE Electrical Engineering,CEME,11,4991,62.10
 BE Electrical Engineering,CEME,Final,5179,62.08
 BE Electrical Engineering,MCS,1,3432,64.72
 BE Electrical Engineering,MCS,2,4532,62.67
@@ -139,45 +139,45 @@ BE Electrical Engineering,MCS,5,5850,59.7
 BE Electrical Engineering,MCS,6,5859,59.69
 BE Electrical Engineering,MCS,7,5929,59.58
 BE Electrical Engineering,MCS,8,6150,58.65
-BE Electrical Engineering,MCS,9,6365,57.22
-BE Electrical Engineering,MCS,10,6797,56.21
-BE Electrical Engineering,MCS,11,7233,55.2
+BE Electrical Engineering,MCS,9,6365,58.55
+BE Electrical Engineering,MCS,10,6797,58.36
+BE Electrical Engineering,MCS,11,7233,58.16
 BE Electrical Engineering,MCS,Final,7488,58.04
 BE Electrical Engineering,PNEC,1,3637,64.34
 BE Electrical Engineering,PNEC,2,4896,62.01
 BE Electrical Engineering,PNEC,3,5805,59.77
-BE Electrical Engineering,PNEC,4,6485,56.94
-BE Electrical Engineering,PNEC,5,6798,56.21
-BE Electrical Engineering,PNEC,6,7035,55.66
-BE Electrical Engineering,PNEC,7,7128,55.44
-BE Electrical Engineering,PNEC,8,7317,55
-BE Electrical Engineering,PNEC,9,7566,55.88
-BE Electrical Engineering,PNEC,10,7709,56.86
-BE Electrical Engineering,PNEC,11,7874,55.96
+BE Electrical Engineering,PNEC,4,6485,58.97
+BE Electrical Engineering,PNEC,5,6798,58.61
+BE Electrical Engineering,PNEC,6,7035,58.33
+BE Electrical Engineering,PNEC,7,7128,58.22
+BE Electrical Engineering,PNEC,8,7317,58.00
+BE Electrical Engineering,PNEC,9,7566,57.71
+BE Electrical Engineering,PNEC,10,7709,57.54
+BE Electrical Engineering,PNEC,11,7874,57.35
 BE Electrical Engineering,PNEC,Final,8008,57.19
 BE Electrical Engineering,SEECS,1,691,76.18
 BE Electrical Engineering,SEECS,2,1356,71.42
-BE Electrical Engineering,SEECS,3,1575,69.91
-BE Electrical Engineering,SEECS,4,1658,69.67
-BE Electrical Engineering,SEECS,5,1703,69.55
-BE Electrical Engineering,SEECS,6,1703,69.55
-BE Electrical Engineering,SEECS,7,1703,69.55
-BE Electrical Engineering,SEECS,8,1737,69.45
-BE Electrical Engineering,SEECS,9,1745,69.43
-BE Electrical Engineering,SEECS,10,1774,69.35
-BE Electrical Engineering,SEECS,11,1821,69.22
+BE Electrical Engineering,SEECS,3,1575,71.05
+BE Electrical Engineering,SEECS,4,1658,70.91
+BE Electrical Engineering,SEECS,5,1703,70.83
+BE Electrical Engineering,SEECS,6,1703,70.83
+BE Electrical Engineering,SEECS,7,1703,70.83
+BE Electrical Engineering,SEECS,8,1737,70.77
+BE Electrical Engineering,SEECS,9,1745,70.76
+BE Electrical Engineering,SEECS,10,1774,70.71
+BE Electrical Engineering,SEECS,11,1821,70.63
 BE Electrical Engineering,SEECS,Final,1821,70.63
-BE Environmental Engineering,IESE,1,2259,54.52
-BE Environmental Engineering,IESE,2,3493,55.66
-BE Environmental Engineering,IESE,3,4465,56.56
-BE Environmental Engineering,IESE,4,5399,57.43
-BE Environmental Engineering,IESE,5,5717,57.73
-BE Environmental Engineering,IESE,6,5906,57.9
-BE Environmental Engineering,IESE,7,5929,57.92
-BE Environmental Engineering,IESE,8,6060,58.04
-BE Environmental Engineering,IESE,9,6187,58.16
-BE Environmental Engineering,IESE,10,6488,58.44
-BE Environmental Engineering,IESE,11,6799,58.73
+BE Environmental Engineering,IESE,1,2259,69.13
+BE Environmental Engineering,IESE,2,3493,65.76
+BE Environmental Engineering,IESE,3,4465,63.77
+BE Environmental Engineering,IESE,4,5399,61.65
+BE Environmental Engineering,IESE,5,5717,61.08
+BE Environmental Engineering,IESE,6,5906,60.75
+BE Environmental Engineering,IESE,7,5929,60.71
+BE Environmental Engineering,IESE,8,6060,60.48
+BE Environmental Engineering,IESE,9,6187,60.26
+BE Environmental Engineering,IESE,10,6488,59.73
+BE Environmental Engineering,IESE,11,6799,59.20
 BE Environmental Engineering,IESE,Final,6915,59.01
 BE Geoinformatics,IGIS,1,2028,68.63
 BE Geoinformatics,IGIS,2,3261,65.02
@@ -187,21 +187,21 @@ BE Geoinformatics,IGIS,5,5792,59.79
 BE Geoinformatics,IGIS,6,5986,59.49
 BE Geoinformatics,IGIS,7,6025,59.43
 BE Geoinformatics,IGIS,8,6043,59.41
-BE Geoinformatics,IGIS,9,6074,59.36
-BE Geoinformatics,IGIS,10,6414,57.1
-BE Geoinformatics,IGIS,11,6564,56.75
+BE Geoinformatics,IGIS,9,6074,59.41
+BE Geoinformatics,IGIS,10,6414,59.38
+BE Geoinformatics,IGIS,11,6564,59.37
 BE Geoinformatics,IGIS,Final,6699,59.36
 BE Material Engineering,SCME,1,2778,66.69
 BE Material Engineering,SCME,2,4077,63.52
 BE Material Engineering,SCME,3,4908,61.99
 BE Material Engineering,SCME,4,5640,60.03
 BE Material Engineering,SCME,5,6037,59.42
-BE Material Engineering,SCME,6,6336,57.28
-BE Material Engineering,SCME,7,6573,56.73
-BE Material Engineering,SCME,8,6674,56.5
-BE Material Engineering,SCME,9,6800,56.2
-BE Material Engineering,SCME,10,6983,55.78
-BE Material Engineering,SCME,11,7325,54.98
+BE Material Engineering,SCME,6,6336,59.13
+BE Material Engineering,SCME,7,6573,58.91
+BE Material Engineering,SCME,8,6674,58.81
+BE Material Engineering,SCME,9,6800,58.69
+BE Material Engineering,SCME,10,6983,58.52
+BE Material Engineering,SCME,11,7325,58.19
 BE Material Engineering,SCME,Final,7501,58.02
 BE Mechanical Engineering,CEME,1,2980,65.97
 BE Mechanical Engineering,CEME,2,3900,63.85
@@ -211,57 +211,57 @@ BE Mechanical Engineering,CEME,5,4751,62.27
 BE Mechanical Engineering,CEME,6,4907,61.99
 BE Mechanical Engineering,CEME,7,4952,61.91
 BE Mechanical Engineering,CEME,8,5053,61.64
-BE Mechanical Engineering,CEME,9,5076,61.57
-BE Mechanical Engineering,CEME,10,5114,61.47
-BE Mechanical Engineering,CEME,11,5333,60.87
+BE Mechanical Engineering,CEME,9,5076,61.64
+BE Mechanical Engineering,CEME,10,5114,61.63
+BE Mechanical Engineering,CEME,11,5333,61.61
 BE Mechanical Engineering,CEME,Final,5422,61.6
 BE Mechanical Engineering,PNEC,1,3847,63.95
-BE Mechanical Engineering,PNEC,2,4957,61.9
+BE Mechanical Engineering,PNEC,2,4957,61.90
 BE Mechanical Engineering,PNEC,3,5822,59.75
-BE Mechanical Engineering,PNEC,4,6360,57.23
-BE Mechanical Engineering,PNEC,5,6621,56.62
-BE Mechanical Engineering,PNEC,6,6626,56.61
-BE Mechanical Engineering,PNEC,7,6633,56.59
-BE Mechanical Engineering,PNEC,8,6669,56.51
-BE Mechanical Engineering,PNEC,9,6670,56.51
-BE Mechanical Engineering,PNEC,10,6888,56
-BE Mechanical Engineering,PNEC,11,7047,55.63
+BE Mechanical Engineering,PNEC,4,6360,59.40
+BE Mechanical Engineering,PNEC,5,6621,59.23
+BE Mechanical Engineering,PNEC,6,6626,59.22
+BE Mechanical Engineering,PNEC,7,6633,59.22
+BE Mechanical Engineering,PNEC,8,6669,59.19
+BE Mechanical Engineering,PNEC,9,6670,59.19
+BE Mechanical Engineering,PNEC,10,6888,59.05
+BE Mechanical Engineering,PNEC,11,7047,59.05
 BE Mechanical Engineering,PNEC,Final,6888,59.05
 BE Mechanical Engineering,SMME,1,1012,73.88
 BE Mechanical Engineering,SMME,2,1713,69.52
 BE Mechanical Engineering,SMME,3,1874,69.07
 BE Mechanical Engineering,SMME,4,1946,68.86
 BE Mechanical Engineering,SMME,5,1959,68.83
-BE Mechanical Engineering,SMME,6,2012,68.68
-BE Mechanical Engineering,SMME,7,2012,68.68
-BE Mechanical Engineering,SMME,8,2021,68.65
-BE Mechanical Engineering,SMME,9,2126,68.36
-BE Mechanical Engineering,SMME,10,2264,67.97
-BE Mechanical Engineering,SMME,11,2328,67.79
-BE Mechanical Engineering,SMME,Final,2355,68.8
+BE Mechanical Engineering,SMME,6,2012,68.83
+BE Mechanical Engineering,SMME,7,2012,68.83
+BE Mechanical Engineering,SMME,8,2021,68.83
+BE Mechanical Engineering,SMME,9,2126,68.82
+BE Mechanical Engineering,SMME,10,2264,68.81
+BE Mechanical Engineering,SMME,11,2328,68.80
+BE Mechanical Engineering,SMME,Final,2355,68.80
 BE Mechatronics Engineering,CEME,1,1929,68.91
 BE Mechatronics Engineering,CEME,2,2837,66.48
-BE Mechatronics Engineering,CEME,3,3337,64.9
+BE Mechatronics Engineering,CEME,3,3337,64.90
 BE Mechatronics Engineering,CEME,4,3589,64.43
 BE Mechatronics Engineering,CEME,5,3638,64.34
 BE Mechatronics Engineering,CEME,6,3654,64.31
-BE Mechatronics Engineering,CEME,7,3812,64.01
-BE Mechatronics Engineering,CEME,8,4008,63.65
-BE Mechatronics Engineering,CEME,9,4020,63.63
-BE Mechatronics Engineering,CEME,10,4034,63.6
-BE Mechatronics Engineering,CEME,11,4091,63.49
+BE Mechatronics Engineering,CEME,7,3812,64.30
+BE Mechatronics Engineering,CEME,8,4008,64.30
+BE Mechatronics Engineering,CEME,9,4020,64.30
+BE Mechatronics Engineering,CEME,10,4034,64.30
+BE Mechatronics Engineering,CEME,11,4091,64.29
 BE Mechatronics Engineering,CEME,Final,4144,64.29
-BE Naval Architecture,PNEC,1,5430,-154.88
-BE Naval Architecture,PNEC,2,7322,-233.9
-BE Naval Architecture,PNEC,3,7890,-257.63
-BE Naval Architecture,PNEC,4,8342,-276.5
-BE Naval Architecture,PNEC,5,8799,-295.59
-BE Naval Architecture,PNEC,6,9648,-331.05
-BE Naval Architecture,PNEC,7,10560,-369.14
-BE Naval Architecture,PNEC,8,11554,-410.65
-BE Naval Architecture,PNEC,9,12512,-450.66
-BE Naval Architecture,PNEC,10,13467,-490.55
-BE Naval Architecture,PNEC,11,13959,-511.1
+BE Naval Architecture,PNEC,1,5430,59.02
+BE Naval Architecture,PNEC,2,7322,55.76
+BE Naval Architecture,PNEC,3,7890,54.82
+BE Naval Architecture,PNEC,4,8342,54.12
+BE Naval Architecture,PNEC,5,8799,53.44
+BE Naval Architecture,PNEC,6,9648,52.19
+BE Naval Architecture,PNEC,7,10560,51.34
+BE Naval Architecture,PNEC,8,11554,50.41
+BE Naval Architecture,PNEC,9,12512,49.52
+BE Naval Architecture,PNEC,10,13467,48.63
+BE Naval Architecture,PNEC,11,13959,48.17
 BE Naval Architecture,PNEC,Final,14420,47.7
 BE Software Engineering,MCS,1,819,76.51
 BE Software Engineering,MCS,2,1991,71.7
@@ -311,17 +311,17 @@ BS Agriculture,ASAB,9,1396,65.2
 BS Agriculture,ASAB,10,1477,63.63
 BS Agriculture,ASAB,11,1599,59.93
 BS Agriculture,ASAB,Final,1646,56.28
-BS Architecture,SADA,1,62,69.48
-BS Architecture,SADA,2,118,67.05
-BS Architecture,SADA,3,118,67.05
-BS Architecture,SADA,4,118,67.05
-BS Architecture,SADA,5,118,67.05
-BS Architecture,SADA,6,123,66.83
-BS Architecture,SADA,7,123,66.83
-BS Architecture,SADA,8,123,66.83
-BS Architecture,SADA,9,125,66.74
-BS Architecture,SADA,10,126,66.7
-BS Architecture,SADA,11,126,66.7
+BS Architecture,SADA,1,62,72.75
+BS Architecture,SADA,2,118,70.59
+BS Architecture,SADA,3,118,70.59
+BS Architecture,SADA,4,118,70.59
+BS Architecture,SADA,5,118,70.59
+BS Architecture,SADA,6,123,70.40
+BS Architecture,SADA,7,123,70.40
+BS Architecture,SADA,8,123,70.40
+BS Architecture,SADA,9,125,70.32
+BS Architecture,SADA,10,126,70.28
+BS Architecture,SADA,11,126,70.28
 BS Architecture,SADA,Final,126,70.28
 BS Artificial Intelligence,NBC,1,1214,74.54
 BS Artificial Intelligence,NBC,2,1960,71.79
@@ -332,8 +332,8 @@ BS Artificial Intelligence,NBC,6,7889,59.56
 BS Artificial Intelligence,NBC,7,9606,56.69
 BS Artificial Intelligence,NBC,8,11181,54.06
 BS Artificial Intelligence,NBC,9,12658,51.59
-BS Artificial Intelligence,NBC,10,14071,49.23
-BS Artificial Intelligence,NBC,11,14308,48.83
+BS Artificial Intelligence,NBC,10,14071,50.55
+BS Artificial Intelligence,NBC,11,14308,50.38
 BS Artificial Intelligence,NBC,Final,14410,50.3
 BS Artificial Intelligence,SEECS,1,298,79.45
 BS Artificial Intelligence,SEECS,2,486,78.87
@@ -392,8 +392,8 @@ BS Computer Science,NBC,6,7230,60.41
 BS Computer Science,NBC,7,9000,57.7
 BS Computer Science,NBC,8,10566,55.09
 BS Computer Science,NBC,9,12296,52.2
-BS Computer Science,NBC,10,13652,49.93
-BS Computer Science,NBC,11,13908,49.5
+BS Computer Science,NBC,10,13652,50.99
+BS Computer Science,NBC,11,13908,50.77
 BS Computer Science,NBC,Final,14263,50.45
 BS Computer Science,PNEC,1,622,77.85
 BS Computer Science,PNEC,2,1142,74.8
@@ -455,17 +455,17 @@ BS Food Science,ASAB,9,866,68.11
 BS Food Science,ASAB,10,866,68.11
 BS Food Science,ASAB,11,866,68.11
 BS Food Science,ASAB,Final,866,62.97
-BS Industrial Design,SADA,1,119,67
-BS Industrial Design,SADA,2,187,64.09
-BS Industrial Design,SADA,3,200,63.54
-BS Industrial Design,SADA,4,209,63.17
-BS Industrial Design,SADA,5,211,63.09
-BS Industrial Design,SADA,6,219,62.75
-BS Industrial Design,SADA,7,224,62.54
-BS Industrial Design,SADA,8,226,62.46
-BS Industrial Design,SADA,9,226,62.46
-BS Industrial Design,SADA,10,228,62.38
-BS Industrial Design,SADA,11,231,62.25
+BS Industrial Design,SADA,1,119,70.55
+BS Industrial Design,SADA,2,187,67.92
+BS Industrial Design,SADA,3,200,67.42
+BS Industrial Design,SADA,4,209,67.07
+BS Industrial Design,SADA,5,211,66.99
+BS Industrial Design,SADA,6,219,66.68
+BS Industrial Design,SADA,7,224,66.49
+BS Industrial Design,SADA,8,226,66.41
+BS Industrial Design,SADA,9,226,66.41
+BS Industrial Design,SADA,10,228,66.34
+BS Industrial Design,SADA,11,231,66.22
 BS Industrial Design,SADA,Final,231,66.22
 BS Information Security,MCS,1,1351,74.02
 BS Information Security,MCS,2,2381,70.6
