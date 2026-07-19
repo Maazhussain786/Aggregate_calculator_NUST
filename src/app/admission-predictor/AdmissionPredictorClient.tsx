@@ -32,7 +32,9 @@ export default function AdmissionPredictorClient({ programs, latestMeritData, al
     hscPercentage: 0,
     sscPercentage: 0,
     useEquivalence: false,
-    equivalencePercentage: undefined,
+    hasALevelResult: true,
+    aLevelPercentage: undefined,
+    oLevelPercentage: undefined,
   });
   const [errors, setErrors] = useState<string[]>([]);
   const [aggregateResult, setAggregateResult] = useState<AggregateBreakdown | null>(null);
@@ -107,7 +109,9 @@ export default function AdmissionPredictorClient({ programs, latestMeritData, al
       hscPercentage: 0,
       sscPercentage: 0,
       useEquivalence: false,
-      equivalencePercentage: undefined,
+      hasALevelResult: true,
+      aLevelPercentage: undefined,
+      oLevelPercentage: undefined,
     });
     setAggregateResult(null);
     setSelectedProgram(null);
@@ -213,61 +217,122 @@ export default function AdmissionPredictorClient({ programs, latestMeritData, al
               </div>
             </div>
 
-            {/* HSC/Equivalence */}
+            {/* O/A Level inputs vs FSc inputs */}
             {formData.useEquivalence ? (
-              <div>
-                <label htmlFor="equivalencePercentage" className="block text-sm font-medium text-[var(--text-primary)] mb-2">
-                  Equivalence Percentage
-                </label>
-                <input
-                  type="number"
-                  id="equivalencePercentage"
-                  min="0"
-                  max="100"
-                  step="0.01"
-                  value={formData.equivalencePercentage || ''}
-                  onChange={(e) => handleInputChange('equivalencePercentage', parseFloat(e.target.value) || 0)}
-                  placeholder="Enter equivalence percentage"
-                  className="input"
-                />
-              </div>
-            ) : (
-              <div>
-                <label htmlFor="hscPercentage" className="block text-sm font-medium text-[var(--text-primary)] mb-2">
-                  FSc / HSSC Percentage
-                </label>
-                <input
-                  type="number"
-                  id="hscPercentage"
-                  min="0"
-                  max="100"
-                  step="0.01"
-                  value={formData.hscPercentage || ''}
-                  onChange={(e) => handleInputChange('hscPercentage', parseFloat(e.target.value) || 0)}
-                  placeholder="Enter FSc/HSSC percentage"
-                  className="input"
-                />
-              </div>
-            )}
+              <>
+                {/* Do you have your A-Level result? */}
+                <div>
+                  <label className="block text-sm font-medium text-[var(--text-primary)] mb-3">
+                    Do you have your A-Level Result?
+                  </label>
+                  <div className="flex gap-3">
+                    <button
+                      type="button"
+                      onClick={() => handleInputChange('hasALevelResult', true)}
+                      className={`flex-1 px-4 py-3 rounded-lg text-sm font-medium transition-all border ${
+                        formData.hasALevelResult
+                          ? 'bg-[var(--accent-primary)] text-white border-[var(--accent-primary)]'
+                          : 'bg-[var(--bg-input)] text-[var(--text-secondary)] border-[var(--border-color)] hover:border-[var(--accent-primary)]'
+                      }`}
+                    >
+                      Yes (Gap Year / Result Available)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleInputChange('hasALevelResult', false)}
+                      className={`flex-1 px-4 py-3 rounded-lg text-sm font-medium transition-all border ${
+                        !formData.hasALevelResult
+                          ? 'bg-[var(--accent-primary)] text-white border-[var(--accent-primary)]'
+                          : 'bg-[var(--bg-input)] text-[var(--text-secondary)] border-[var(--border-color)] hover:border-[var(--accent-primary)]'
+                      }`}
+                    >
+                      No (Result Awaiting)
+                    </button>
+                  </div>
+                </div>
 
-            {/* SSC */}
-            {!formData.useEquivalence && (
-              <div>
-                <label htmlFor="sscPercentage" className="block text-sm font-medium text-[var(--text-primary)] mb-2">
-                  SSC / Matric Percentage
-                </label>
-                <input
-                  type="number"
-                  id="sscPercentage"
-                  min="0"
-                  max="100"
-                  step="0.01"
-                  value={formData.sscPercentage || ''}
-                  onChange={(e) => handleInputChange('sscPercentage', parseFloat(e.target.value) || 0)}
-                  placeholder="Enter Matric/SSC percentage"
-                  className="input"
-                />
-              </div>
+                {/* A-Level equivalence (only when result is available) */}
+                {formData.hasALevelResult && (
+                  <div>
+                    <label htmlFor="aLevelPercentage" className="block text-sm font-medium text-[var(--text-primary)] mb-2">
+                      A-Level Equivalence Percentage <span className="text-[var(--text-muted)]">(15% weight)</span>
+                    </label>
+                    <input
+                      type="number"
+                      id="aLevelPercentage"
+                      min="0"
+                      max="100"
+                      step="0.01"
+                      value={formData.aLevelPercentage || ''}
+                      onChange={(e) => handleInputChange('aLevelPercentage', parseFloat(e.target.value) || 0)}
+                      placeholder="Enter A-Level equivalence percentage"
+                      className="input"
+                    />
+                  </div>
+                )}
+
+                {/* O-Level equivalence (always shown for O/A Level) */}
+                <div>
+                  <label htmlFor="oLevelPercentage" className="block text-sm font-medium text-[var(--text-primary)] mb-2">
+                    O-Level Equivalence Percentage{' '}
+                    <span className="text-[var(--text-muted)]">({formData.hasALevelResult ? '10%' : '25%'} weight)</span>
+                  </label>
+                  <input
+                    type="number"
+                    id="oLevelPercentage"
+                    min="0"
+                    max="100"
+                    step="0.01"
+                    value={formData.oLevelPercentage || ''}
+                    onChange={(e) => handleInputChange('oLevelPercentage', parseFloat(e.target.value) || 0)}
+                    placeholder="Enter O-Level equivalence percentage"
+                    className="input"
+                  />
+                  {!formData.hasALevelResult && (
+                    <p className="mt-1.5 text-xs text-[var(--text-muted)]">
+                      Since your A-Level result is awaiting, O-Level equivalence carries the full 25% weight.
+                    </p>
+                  )}
+                </div>
+              </>
+            ) : (
+              <>
+                {/* FSc / HSSC Percentage */}
+                <div>
+                  <label htmlFor="hscPercentage" className="block text-sm font-medium text-[var(--text-primary)] mb-2">
+                    FSc / HSSC Percentage
+                  </label>
+                  <input
+                    type="number"
+                    id="hscPercentage"
+                    min="0"
+                    max="100"
+                    step="0.01"
+                    value={formData.hscPercentage || ''}
+                    onChange={(e) => handleInputChange('hscPercentage', parseFloat(e.target.value) || 0)}
+                    placeholder="Enter FSc/HSSC percentage"
+                    className="input"
+                  />
+                </div>
+
+                {/* SSC / Matric Percentage */}
+                <div>
+                  <label htmlFor="sscPercentage" className="block text-sm font-medium text-[var(--text-primary)] mb-2">
+                    SSC / Matric Percentage
+                  </label>
+                  <input
+                    type="number"
+                    id="sscPercentage"
+                    min="0"
+                    max="100"
+                    step="0.01"
+                    value={formData.sscPercentage || ''}
+                    onChange={(e) => handleInputChange('sscPercentage', parseFloat(e.target.value) || 0)}
+                    placeholder="Enter Matric/SSC percentage"
+                    className="input"
+                  />
+                </div>
+              </>
             )}
           </div>
 
