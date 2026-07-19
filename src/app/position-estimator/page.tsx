@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import PositionEstimatorClient, { type NETType } from './PositionEstimatorClient';
+import PositionEstimatorClient, { type NETType, type ProgramOption } from './PositionEstimatorClient';
 import sampleData from '@/data/sampleMeritData.json';
 
 export const metadata: Metadata = {
@@ -47,9 +47,18 @@ function getDisciplineToNETType(disciplineGroup: string, school: string): NETTyp
   return 'engineering';
 }
 
-// Transform sample data for position estimation by NET type
+// Transform sample data into per-program position curves.
+//
+// Closing merit position is a PER-PROGRAM rank (each program's merit list has its
+// own depth), so we build one aggregate->position curve per program rather than
+// pooling every program in a NET type onto a single (non-monotonic) curve.
 function transformData() {
-  // Get position data from merit history grouped by NET type
+  const programById: Record<string, (typeof sampleData.programs)[number]> = {};
+  sampleData.programs.forEach(p => {
+    programById[p.id] = p;
+  });
+
+  // Latest year available for each program
   const latestYear: Record<string, number> = {};
   sampleData.meritHistory.forEach(m => {
     if (!latestYear[m.programId] || m.year > latestYear[m.programId]) {
@@ -57,41 +66,43 @@ function transformData() {
     }
   });
 
-  // Create a map of program to NET type
-  const programToNETType: Record<string, NETType> = {};
-  sampleData.programs.forEach(p => {
-    programToNETType[p.id] = getDisciplineToNETType(p.disciplineGroup, p.school);
+  // Collect each program's own closing points (latest year, valid values only)
+  const pointsByProgram: Record<string, ProgramOption['points']> = {};
+  sampleData.meritHistory.forEach(m => {
+    if (m.year !== latestYear[m.programId]) return;
+    if (m.closingAggregate === null || m.closingMeritPosition === null) return;
+    (pointsByProgram[m.programId] ||= []).push({
+      aggregate: m.closingAggregate,
+      position: m.closingMeritPosition,
+      meritListNumber: m.meritListNumber,
+    });
   });
 
-  // Aggregate position data by NET type
-  const positionData = sampleData.meritHistory.reduce((acc, m) => {
-    const netType = programToNETType[m.programId];
-    if (!netType) return acc;
-    
-    if (m.year === latestYear[m.programId] && m.closingAggregate !== null && m.closingMeritPosition !== null) {
-      if (!acc[netType]) {
-        acc[netType] = [];
-      }
-      acc[netType].push({
-        aggregate: m.closingAggregate,
-        position: m.closingMeritPosition,
-        meritListNumber: m.meritListNumber,
-      });
-    }
-    return acc;
-  }, {} as Record<NETType, Array<{ aggregate: number; position: number; meritListNumber: number | null }>>);
+  const programs: ProgramOption[] = Object.keys(pointsByProgram)
+    .map(programId => {
+      const p = programById[programId];
+      return {
+        programId,
+        programName: p.name,
+        school: p.school,
+        campus: p.campus,
+        netType: getDisciplineToNETType(p.disciplineGroup, p.school),
+        year: latestYear[programId],
+        // Sort by aggregate descending (best/earliest list first)
+        points: pointsByProgram[programId].sort((a, b) => b.aggregate - a.aggregate),
+      };
+    })
+    // Group same disciplines together, then by institute, for an easy-to-scan picker
+    .sort(
+      (a, b) =>
+        a.programName.localeCompare(b.programName) || a.school.localeCompare(b.school)
+    );
 
-  // Sort and deduplicate data points for each NET type
-  Object.keys(positionData).forEach(netType => {
-    // Sort by aggregate descending
-    positionData[netType as NETType].sort((a, b) => b.aggregate - a.aggregate);
-  });
-
-  return { positionData };
+  return { programs };
 }
 
 export default function PositionEstimatorPage() {
-  const { positionData } = transformData();
+  const { programs } = transformData();
 
   return (
     <div className="animate-fade-in">
@@ -102,8 +113,9 @@ export default function PositionEstimatorPage() {
             Merit Position Estimator
           </h1>
           <p className="text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
-            Estimate your likely merit position based on your NET type. 
-            NUST maintains separate merit lists for Engineering, Business, Applied Sciences, Architecture, and Natural Sciences.
+            Estimate your likely closing merit position for a specific NUST program.
+            Every program keeps its own merit list, so your position depends on the exact
+            discipline and institute you choose — not just your NET type.
           </p>
         </div>
       </section>
@@ -111,8 +123,8 @@ export default function PositionEstimatorPage() {
       {/* Main Content */}
       <section className="pb-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <PositionEstimatorClient 
-            positionData={positionData}
+          <PositionEstimatorClient
+            programs={programs}
           />
         </div>
       </section>
@@ -126,8 +138,11 @@ export default function PositionEstimatorPage() {
           
           <div className="space-y-6 text-[var(--text-secondary)]">
             <p>
-              NUST uses different entry tests (NETs) for different disciplines, and each NET type 
-              has its own merit list. Your position is the same for all programs within your NET category:
+              NUST uses different entry tests (NETs) for different disciplines. Your NET type
+              determines the test composition below, but each individual program closes at its
+              own merit position — a small, high-demand program fills up far earlier than a large
+              one, even within the same NET type. That is why this tool estimates your position
+              for the specific program you select:
             </p>
             
             <div className="grid md:grid-cols-2 gap-4">

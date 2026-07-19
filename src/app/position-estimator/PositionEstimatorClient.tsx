@@ -1,11 +1,23 @@
 'use client';
 
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { calculateAggregate, validateAggregateInput, type AggregateInput, type AggregateBreakdown } from '@/lib/calcAggregate';
 import { estimatePosition, type PositionEstimateResult, type PositionDataPoint } from '@/lib/positionEstimator';
 
 // NET Types based on official NUST admission policy
 export type NETType = 'engineering' | 'business' | 'applied-sciences' | 'architecture' | 'natural-sciences';
+
+// A single selectable program with its own closing-position curve.
+// Closing merit position is per-program, so each program carries its own data points.
+export interface ProgramOption {
+  programId: string;
+  programName: string;
+  school: string;
+  campus: string;
+  netType: NETType;
+  year: number;
+  points: PositionDataPoint[];
+}
 
 export interface NETTypeInfo {
   id: NETType;
@@ -107,12 +119,12 @@ export const NET_TYPES: NETTypeInfo[] = [
 ];
 
 interface PositionEstimatorClientProps {
-  positionData: Record<NETType, PositionDataPoint[]>;
+  programs: ProgramOption[];
 }
 
-export default function PositionEstimatorClient({ positionData }: PositionEstimatorClientProps) {
+export default function PositionEstimatorClient({ programs }: PositionEstimatorClientProps) {
   const resultsRef = useRef<HTMLDivElement>(null);
-  
+
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [inputMode, setInputMode] = useState<'calculate' | 'direct'>('calculate');
   const [directAggregate, setDirectAggregate] = useState<number>(0);
@@ -121,12 +133,33 @@ export default function PositionEstimatorClient({ positionData }: PositionEstima
     hscPercentage: 0,
     sscPercentage: 0,
     useEquivalence: false,
-    equivalencePercentage: undefined,
+    hasALevelResult: true,
+    aLevelPercentage: undefined,
+    oLevelPercentage: undefined,
   });
   const [errors, setErrors] = useState<string[]>([]);
   const [aggregateResult, setAggregateResult] = useState<AggregateBreakdown | null>(null);
   const [selectedNETType, setSelectedNETType] = useState<NETTypeInfo | null>(null);
+  const [selectedProgram, setSelectedProgram] = useState<ProgramOption | null>(null);
+  const [programQuery, setProgramQuery] = useState('');
   const [positionEstimate, setPositionEstimate] = useState<PositionEstimateResult | null>(null);
+
+  // Number of programs with data in each NET type (for the selector badges)
+  const programCountByNet = useMemo(() => {
+    return programs.reduce((acc, p) => {
+      acc[p.netType] = (acc[p.netType] || 0) + 1;
+      return acc;
+    }, {} as Record<NETType, number>);
+  }, [programs]);
+
+  // Programs in the selected NET type, filtered by the search box
+  const programsInNet = useMemo(() => {
+    if (!selectedNETType) return [];
+    const q = programQuery.trim().toLowerCase();
+    return programs
+      .filter(p => p.netType === selectedNETType.id)
+      .filter(p => !q || p.programName.toLowerCase().includes(q) || p.school.toLowerCase().includes(q));
+  }, [programs, selectedNETType, programQuery]);
 
   const handleInputChange = useCallback((field: keyof AggregateInput, value: number | boolean | undefined) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -165,23 +198,28 @@ export default function PositionEstimatorClient({ positionData }: PositionEstima
 
   const handleSelectNETType = useCallback((netType: NETTypeInfo) => {
     setSelectedNETType(netType);
+    // Reset the program choice whenever the NET type changes
+    setSelectedProgram(null);
+    setProgramQuery('');
+  }, []);
+
+  const handleSelectProgram = useCallback((program: ProgramOption) => {
+    setSelectedProgram(program);
   }, []);
 
   const handleEstimate = useCallback(() => {
-    if (!aggregateResult || !selectedNETType) return;
-
-    const netTypePositionData = positionData[selectedNETType.id] || [];
+    if (!aggregateResult || !selectedProgram) return;
 
     const estimate = estimatePosition({
       userAggregate: aggregateResult.totalAggregate,
-      programId: selectedNETType.id,
-      programName: selectedNETType.fullName,
-      historicalData: netTypePositionData,
+      programId: selectedProgram.programId,
+      programName: `${selectedProgram.programName} — ${selectedProgram.school}`,
+      historicalData: selectedProgram.points,
     });
 
     setPositionEstimate(estimate);
     setStep(3);
-  }, [aggregateResult, selectedNETType, positionData]);
+  }, [aggregateResult, selectedProgram]);
 
   const handleReset = useCallback(() => {
     setStep(1);
@@ -190,11 +228,15 @@ export default function PositionEstimatorClient({ positionData }: PositionEstima
       hscPercentage: 0,
       sscPercentage: 0,
       useEquivalence: false,
-      equivalencePercentage: undefined,
+      hasALevelResult: true,
+      aLevelPercentage: undefined,
+      oLevelPercentage: undefined,
     });
     setDirectAggregate(0);
     setAggregateResult(null);
     setSelectedNETType(null);
+    setSelectedProgram(null);
+    setProgramQuery('');
     setPositionEstimate(null);
     setErrors([]);
   }, []);
@@ -344,61 +386,122 @@ export default function PositionEstimatorClient({ positionData }: PositionEstima
                   </div>
                 </div>
 
-                {/* HSC/Equivalence */}
+                {/* O/A Level inputs vs FSc inputs */}
                 {formData.useEquivalence ? (
-                  <div>
-                    <label htmlFor="equivalencePercentage" className="block text-sm font-medium text-[var(--text-primary)] mb-2">
-                      Equivalence Percentage
-                    </label>
-                    <input
-                      type="number"
-                      id="equivalencePercentage"
-                      min="0"
-                      max="100"
-                      step="0.01"
-                      value={formData.equivalencePercentage || ''}
-                      onChange={(e) => handleInputChange('equivalencePercentage', parseFloat(e.target.value) || 0)}
-                      placeholder="Enter equivalence percentage"
-                      className="input"
-                    />
-                  </div>
-                ) : (
-                  <div>
-                    <label htmlFor="hscPercentage" className="block text-sm font-medium text-[var(--text-primary)] mb-2">
-                      FSc / HSSC Percentage
-                    </label>
-                    <input
-                      type="number"
-                      id="hscPercentage"
-                      min="0"
-                      max="100"
-                      step="0.01"
-                      value={formData.hscPercentage || ''}
-                      onChange={(e) => handleInputChange('hscPercentage', parseFloat(e.target.value) || 0)}
-                      placeholder="Enter FSc/HSSC percentage"
-                      className="input"
-                    />
-                  </div>
-                )}
+                  <>
+                    {/* Do you have your A-Level result? */}
+                    <div>
+                      <label className="block text-sm font-medium text-[var(--text-primary)] mb-3">
+                        Do you have your A-Level Result?
+                      </label>
+                      <div className="flex gap-3">
+                        <button
+                          type="button"
+                          onClick={() => handleInputChange('hasALevelResult', true)}
+                          className={`flex-1 px-4 py-3 rounded-lg text-sm font-medium transition-all border ${
+                            formData.hasALevelResult
+                              ? 'bg-[var(--accent-primary)] text-white border-[var(--accent-primary)]'
+                              : 'bg-[var(--bg-input)] text-[var(--text-secondary)] border-[var(--border-color)] hover:border-[var(--accent-primary)]'
+                          }`}
+                        >
+                          Yes (Gap Year / Result Available)
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleInputChange('hasALevelResult', false)}
+                          className={`flex-1 px-4 py-3 rounded-lg text-sm font-medium transition-all border ${
+                            !formData.hasALevelResult
+                              ? 'bg-[var(--accent-primary)] text-white border-[var(--accent-primary)]'
+                              : 'bg-[var(--bg-input)] text-[var(--text-secondary)] border-[var(--border-color)] hover:border-[var(--accent-primary)]'
+                          }`}
+                        >
+                          No (Result Awaiting)
+                        </button>
+                      </div>
+                    </div>
 
-                {/* SSC */}
-                {!formData.useEquivalence && (
-                  <div>
-                    <label htmlFor="sscPercentage" className="block text-sm font-medium text-[var(--text-primary)] mb-2">
-                      SSC / Matric Percentage
-                    </label>
-                    <input
-                      type="number"
-                      id="sscPercentage"
-                      min="0"
-                      max="100"
-                      step="0.01"
-                      value={formData.sscPercentage || ''}
-                      onChange={(e) => handleInputChange('sscPercentage', parseFloat(e.target.value) || 0)}
-                      placeholder="Enter Matric/SSC percentage"
-                      className="input"
-                    />
-                  </div>
+                    {/* A-Level equivalence (only when result is available) */}
+                    {formData.hasALevelResult && (
+                      <div>
+                        <label htmlFor="aLevelPercentage" className="block text-sm font-medium text-[var(--text-primary)] mb-2">
+                          A-Level Equivalence Percentage <span className="text-[var(--text-muted)]">(15% weight)</span>
+                        </label>
+                        <input
+                          type="number"
+                          id="aLevelPercentage"
+                          min="0"
+                          max="100"
+                          step="0.01"
+                          value={formData.aLevelPercentage || ''}
+                          onChange={(e) => handleInputChange('aLevelPercentage', parseFloat(e.target.value) || 0)}
+                          placeholder="Enter A-Level equivalence percentage"
+                          className="input"
+                        />
+                      </div>
+                    )}
+
+                    {/* O-Level equivalence (always shown for O/A Level) */}
+                    <div>
+                      <label htmlFor="oLevelPercentage" className="block text-sm font-medium text-[var(--text-primary)] mb-2">
+                        O-Level Equivalence Percentage{' '}
+                        <span className="text-[var(--text-muted)]">({formData.hasALevelResult ? '10%' : '25%'} weight)</span>
+                      </label>
+                      <input
+                        type="number"
+                        id="oLevelPercentage"
+                        min="0"
+                        max="100"
+                        step="0.01"
+                        value={formData.oLevelPercentage || ''}
+                        onChange={(e) => handleInputChange('oLevelPercentage', parseFloat(e.target.value) || 0)}
+                        placeholder="Enter O-Level equivalence percentage"
+                        className="input"
+                      />
+                      {!formData.hasALevelResult && (
+                        <p className="mt-1.5 text-xs text-[var(--text-muted)]">
+                          Since your A-Level result is awaiting, O-Level equivalence carries the full 25% weight.
+                        </p>
+                      )}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {/* FSc / HSSC Percentage */}
+                    <div>
+                      <label htmlFor="hscPercentage" className="block text-sm font-medium text-[var(--text-primary)] mb-2">
+                        FSc / HSSC Percentage
+                      </label>
+                      <input
+                        type="number"
+                        id="hscPercentage"
+                        min="0"
+                        max="100"
+                        step="0.01"
+                        value={formData.hscPercentage || ''}
+                        onChange={(e) => handleInputChange('hscPercentage', parseFloat(e.target.value) || 0)}
+                        placeholder="Enter FSc/HSSC percentage"
+                        className="input"
+                      />
+                    </div>
+
+                    {/* SSC / Matric Percentage */}
+                    <div>
+                      <label htmlFor="sscPercentage" className="block text-sm font-medium text-[var(--text-primary)] mb-2">
+                        SSC / Matric Percentage
+                      </label>
+                      <input
+                        type="number"
+                        id="sscPercentage"
+                        min="0"
+                        max="100"
+                        step="0.01"
+                        value={formData.sscPercentage || ''}
+                        onChange={(e) => handleInputChange('sscPercentage', parseFloat(e.target.value) || 0)}
+                        placeholder="Enter Matric/SSC percentage"
+                        className="input"
+                      />
+                    </div>
+                  </>
                 )}
               </div>
             )}
@@ -445,9 +548,10 @@ export default function PositionEstimatorClient({ positionData }: PositionEstima
             <div className="card p-6 md:p-8">
               <h2 className="text-xl font-semibold text-[var(--text-primary)] mb-2">Select Your NET Type</h2>
               <p className="text-sm text-[var(--text-muted)] mb-6">
-                NUST has separate merit lists for each NET type. Your position will be the same for all programs within a NET category.
+                Pick the entry test for your field. This filters the program list below — each
+                program closes at its own merit position, so you&apos;ll choose your exact program next.
               </p>
-              
+
               <div className="grid gap-4">
                 {NET_TYPES.map((netType) => (
                   <button
@@ -463,8 +567,8 @@ export default function PositionEstimatorClient({ positionData }: PositionEstima
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
                           <h3 className={`font-semibold ${
-                            selectedNETType?.id === netType.id 
-                              ? 'text-[var(--accent-primary)]' 
+                            selectedNETType?.id === netType.id
+                              ? 'text-[var(--accent-primary)]'
                               : 'text-[var(--text-primary)]'
                           }`}>
                             {netType.name}
@@ -474,12 +578,12 @@ export default function PositionEstimatorClient({ positionData }: PositionEstima
                           )}
                         </div>
                         <p className="text-sm text-[var(--text-secondary)] mt-1">{netType.description}</p>
-                        
+
                         {/* Test Composition */}
                         <div className="flex flex-wrap gap-2 mt-3">
                           {netType.subjects.map((subject, idx) => (
-                            <span 
-                              key={idx} 
+                            <span
+                              key={idx}
                               className="text-xs px-2 py-1 rounded bg-[var(--bg-input)] text-[var(--text-muted)]"
                             >
                               {subject.name}: {subject.weight}
@@ -487,12 +591,12 @@ export default function PositionEstimatorClient({ positionData }: PositionEstima
                           ))}
                         </div>
                       </div>
-                      
-                      {positionData[netType.id] && positionData[netType.id].length > 0 && (
+
+                      {programCountByNet[netType.id] > 0 && (
                         <div className="text-right ml-4">
-                          <p className="text-xs text-[var(--text-muted)]">Data</p>
+                          <p className="text-xs text-[var(--text-muted)]">Programs</p>
                           <p className="text-[var(--success)] font-mono text-sm">
-                            {positionData[netType.id].length} pts
+                            {programCountByNet[netType.id]}
                           </p>
                         </div>
                       )}
@@ -501,42 +605,91 @@ export default function PositionEstimatorClient({ positionData }: PositionEstima
                 ))}
               </div>
 
+              {/* Program Picker (per-program, since closing MP differs by program) */}
               {selectedNETType && (
-                <div className="mt-6 p-4 bg-[var(--bg-secondary)] rounded-lg border border-[var(--border-color)]">
-                  <h4 className="text-sm font-semibold text-[var(--text-primary)] mb-3">
-                    Programs in {selectedNETType.name}:
+                <div className="mt-6">
+                  <h4 className="text-sm font-semibold text-[var(--text-primary)] mb-2">
+                    Select Your Program
                   </h4>
-                  <ul className="text-sm text-[var(--text-secondary)] space-y-1">
-                    {selectedNETType.programs.map((program, idx) => (
-                      <li key={idx} className="flex items-start gap-2">
-                        <span className="text-[var(--accent-primary)]">•</span>
-                        {program}
-                      </li>
-                    ))}
-                  </ul>
+                  <p className="text-xs text-[var(--text-muted)] mb-3">
+                    The same discipline can close at very different positions across institutes,
+                    so pick the exact program and campus you&apos;re applying to.
+                  </p>
+
+                  <input
+                    type="text"
+                    value={programQuery}
+                    onChange={(e) => setProgramQuery(e.target.value)}
+                    placeholder="Search program or institute (e.g. Electrical, SEECS)"
+                    className="input mb-3"
+                  />
+
+                  {programsInNet.length === 0 ? (
+                    <p className="text-sm text-[var(--text-muted)] p-4 bg-[var(--bg-secondary)] rounded-lg border border-[var(--border-color)]">
+                      No programs match your search.
+                    </p>
+                  ) : (
+                    <div className="max-h-96 overflow-y-auto pr-1 grid gap-2">
+                      {programsInNet.map((program) => {
+                        const isSelected = selectedProgram?.programId === program.programId;
+                        return (
+                          <button
+                            key={program.programId}
+                            onClick={() => handleSelectProgram(program)}
+                            className={`text-left p-3 rounded-lg border transition-all ${
+                              isSelected
+                                ? 'border-[var(--accent-primary)] bg-[var(--accent-primary)]/5'
+                                : 'border-[var(--border-color)] hover:border-[var(--accent-primary)]/50 bg-[var(--bg-secondary)]'
+                            }`}
+                          >
+                            <div className="flex items-center justify-between gap-3">
+                              <div className="min-w-0">
+                                <p className={`text-sm font-medium truncate ${
+                                  isSelected ? 'text-[var(--accent-primary)]' : 'text-[var(--text-primary)]'
+                                }`}>
+                                  {isSelected && <span className="mr-1">✓</span>}
+                                  {program.programName}
+                                </p>
+                                <p className="text-xs text-[var(--text-muted)] mt-0.5">
+                                  {program.school}
+                                  {program.campus ? ` • ${program.campus}` : ''}
+                                </p>
+                              </div>
+                              <span className="text-xs text-[var(--text-muted)] whitespace-nowrap">
+                                {program.year} data
+                              </span>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
               )}
 
               <button
                 type="button"
                 onClick={handleEstimate}
-                disabled={!selectedNETType}
+                disabled={!selectedProgram}
                 className="w-full mt-6 btn btn-primary py-4 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Estimate My Position
+                {selectedProgram ? 'Estimate My Position' : 'Select a program to continue'}
               </button>
             </div>
           </div>
         )}
 
         {/* Step 3: Results */}
-        {step === 3 && positionEstimate && selectedNETType && (
+        {step === 3 && positionEstimate && selectedNETType && selectedProgram && (
           <div className="space-y-6">
             {/* Summary Bar */}
             <div className="card p-4 flex flex-wrap items-center justify-between gap-4">
-              <div>
-                <p className="text-sm text-[var(--text-muted)]">NET Type</p>
-                <p className="text-[var(--text-primary)] font-medium">{selectedNETType.name}</p>
+              <div className="min-w-0">
+                <p className="text-sm text-[var(--text-muted)]">Program</p>
+                <p className="text-[var(--text-primary)] font-medium truncate">
+                  {selectedProgram.programName}
+                  <span className="text-[var(--text-muted)] font-normal"> — {selectedProgram.school}</span>
+                </p>
               </div>
               <div>
                 <p className="text-sm text-[var(--text-muted)]">Your Aggregate</p>
@@ -553,7 +706,10 @@ export default function PositionEstimatorClient({ positionData }: PositionEstima
             {/* Position Estimate Card */}
             <div className="card p-6 md:p-8">
               <h3 className="text-lg font-bold text-[var(--text-primary)] mb-1">Estimated Merit Position</h3>
-              <p className="text-sm text-[var(--text-muted)] mb-6">{selectedNETType.fullName}</p>
+              <p className="text-sm text-[var(--text-muted)] mb-6">
+                {selectedProgram.programName} — {selectedProgram.school}
+                {selectedProgram.campus ? ` (${selectedProgram.campus})` : ''}
+              </p>
 
               {/* Main Position Display */}
               <div className="text-center py-8 bg-[var(--bg-secondary)] rounded-xl">
@@ -574,13 +730,15 @@ export default function PositionEstimatorClient({ positionData }: PositionEstima
                 </div>
               </div>
 
-              {/* Applicable Programs Info */}
+              {/* Program-specific note */}
               <div className="mt-6 p-4 bg-[var(--accent-primary)]/5 border border-[var(--accent-primary)]/20 rounded-lg">
                 <h4 className="text-sm font-semibold text-[var(--accent-primary)] mb-2">
-                  ✓ This position applies to all {selectedNETType.name} programs
+                  Estimate for {selectedProgram.programName} at {selectedProgram.school}
                 </h4>
                 <p className="text-sm text-[var(--text-secondary)]">
-                  Since NUST uses a single merit list per NET type, your estimated position is the same for all programs in this category.
+                  This position is specific to this program&apos;s {selectedProgram.year} merit list.
+                  Other programs in {selectedNETType.name} — even the same discipline at a different
+                  institute — close at different positions, so estimate each one separately.
                 </p>
               </div>
 
