@@ -1,23 +1,13 @@
 'use client';
 
-import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { calculateAggregate, validateAggregateInput, type AggregateInput, type AggregateBreakdown } from '@/lib/calcAggregate';
 import { estimatePosition, type PositionEstimateResult, type PositionDataPoint } from '@/lib/positionEstimator';
 
+export type { PositionDataPoint };
+
 // NET Types based on official NUST admission policy
 export type NETType = 'engineering' | 'business' | 'applied-sciences' | 'architecture' | 'natural-sciences';
-
-// A single selectable program with its own closing-position curve.
-// Closing merit position is per-program, so each program carries its own data points.
-export interface ProgramOption {
-  programId: string;
-  programName: string;
-  school: string;
-  campus: string;
-  netType: NETType;
-  year: number;
-  points: PositionDataPoint[];
-}
 
 export interface NETTypeInfo {
   id: NETType;
@@ -119,10 +109,10 @@ export const NET_TYPES: NETTypeInfo[] = [
 ];
 
 interface PositionEstimatorClientProps {
-  programs: ProgramOption[];
+  positionData: Record<NETType, PositionDataPoint[]>;
 }
 
-export default function PositionEstimatorClient({ programs }: PositionEstimatorClientProps) {
+export default function PositionEstimatorClient({ positionData }: PositionEstimatorClientProps) {
   const resultsRef = useRef<HTMLDivElement>(null);
 
   const [step, setStep] = useState<1 | 2 | 3>(1);
@@ -140,26 +130,7 @@ export default function PositionEstimatorClient({ programs }: PositionEstimatorC
   const [errors, setErrors] = useState<string[]>([]);
   const [aggregateResult, setAggregateResult] = useState<AggregateBreakdown | null>(null);
   const [selectedNETType, setSelectedNETType] = useState<NETTypeInfo | null>(null);
-  const [selectedProgram, setSelectedProgram] = useState<ProgramOption | null>(null);
-  const [programQuery, setProgramQuery] = useState('');
   const [positionEstimate, setPositionEstimate] = useState<PositionEstimateResult | null>(null);
-
-  // Number of programs with data in each NET type (for the selector badges)
-  const programCountByNet = useMemo(() => {
-    return programs.reduce((acc, p) => {
-      acc[p.netType] = (acc[p.netType] || 0) + 1;
-      return acc;
-    }, {} as Record<NETType, number>);
-  }, [programs]);
-
-  // Programs in the selected NET type, filtered by the search box
-  const programsInNet = useMemo(() => {
-    if (!selectedNETType) return [];
-    const q = programQuery.trim().toLowerCase();
-    return programs
-      .filter(p => p.netType === selectedNETType.id)
-      .filter(p => !q || p.programName.toLowerCase().includes(q) || p.school.toLowerCase().includes(q));
-  }, [programs, selectedNETType, programQuery]);
 
   const handleInputChange = useCallback((field: keyof AggregateInput, value: number | boolean | undefined) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -198,28 +169,21 @@ export default function PositionEstimatorClient({ programs }: PositionEstimatorC
 
   const handleSelectNETType = useCallback((netType: NETTypeInfo) => {
     setSelectedNETType(netType);
-    // Reset the program choice whenever the NET type changes
-    setSelectedProgram(null);
-    setProgramQuery('');
-  }, []);
-
-  const handleSelectProgram = useCallback((program: ProgramOption) => {
-    setSelectedProgram(program);
   }, []);
 
   const handleEstimate = useCallback(() => {
-    if (!aggregateResult || !selectedProgram) return;
+    if (!aggregateResult || !selectedNETType) return;
 
     const estimate = estimatePosition({
       userAggregate: aggregateResult.totalAggregate,
-      programId: selectedProgram.programId,
-      programName: `${selectedProgram.programName} — ${selectedProgram.school}`,
-      historicalData: selectedProgram.points,
+      programId: selectedNETType.id,
+      programName: selectedNETType.name,
+      historicalData: positionData[selectedNETType.id] || [],
     });
 
     setPositionEstimate(estimate);
     setStep(3);
-  }, [aggregateResult, selectedProgram]);
+  }, [aggregateResult, selectedNETType, positionData]);
 
   const handleReset = useCallback(() => {
     setStep(1);
@@ -235,8 +199,6 @@ export default function PositionEstimatorClient({ programs }: PositionEstimatorC
     setDirectAggregate(0);
     setAggregateResult(null);
     setSelectedNETType(null);
-    setSelectedProgram(null);
-    setProgramQuery('');
     setPositionEstimate(null);
     setErrors([]);
   }, []);
@@ -548,8 +510,8 @@ export default function PositionEstimatorClient({ programs }: PositionEstimatorC
             <div className="card p-6 md:p-8">
               <h2 className="text-xl font-semibold text-[var(--text-primary)] mb-2">Select Your NET Type</h2>
               <p className="text-sm text-[var(--text-muted)] mb-6">
-                Pick the entry test for your field. This filters the program list below — each
-                program closes at its own merit position, so you&apos;ll choose your exact program next.
+                Pick the entry test for your field. NUST ranks you within your NET pool, so this
+                position applies to every program that shares the same NET.
               </p>
 
               <div className="grid gap-4">
@@ -592,11 +554,11 @@ export default function PositionEstimatorClient({ programs }: PositionEstimatorC
                         </div>
                       </div>
 
-                      {programCountByNet[netType.id] > 0 && (
+                      {positionData[netType.id]?.length > 0 && (
                         <div className="text-right ml-4">
-                          <p className="text-xs text-[var(--text-muted)]">Programs</p>
+                          <p className="text-xs text-[var(--text-muted)]">Data Points</p>
                           <p className="text-[var(--success)] font-mono text-sm">
-                            {programCountByNet[netType.id]}
+                            {positionData[netType.id].length}
                           </p>
                         </div>
                       )}
@@ -605,90 +567,27 @@ export default function PositionEstimatorClient({ programs }: PositionEstimatorC
                 ))}
               </div>
 
-              {/* Program Picker (per-program, since closing MP differs by program) */}
-              {selectedNETType && (
-                <div className="mt-6">
-                  <h4 className="text-sm font-semibold text-[var(--text-primary)] mb-2">
-                    Select Your Program
-                  </h4>
-                  <p className="text-xs text-[var(--text-muted)] mb-3">
-                    The same discipline can close at very different positions across institutes,
-                    so pick the exact program and campus you&apos;re applying to.
-                  </p>
-
-                  <input
-                    type="text"
-                    value={programQuery}
-                    onChange={(e) => setProgramQuery(e.target.value)}
-                    placeholder="Search program or institute (e.g. Electrical, SEECS)"
-                    className="input mb-3"
-                  />
-
-                  {programsInNet.length === 0 ? (
-                    <p className="text-sm text-[var(--text-muted)] p-4 bg-[var(--bg-secondary)] rounded-lg border border-[var(--border-color)]">
-                      No programs match your search.
-                    </p>
-                  ) : (
-                    <div className="max-h-96 overflow-y-auto pr-1 grid gap-2">
-                      {programsInNet.map((program) => {
-                        const isSelected = selectedProgram?.programId === program.programId;
-                        return (
-                          <button
-                            key={program.programId}
-                            onClick={() => handleSelectProgram(program)}
-                            className={`text-left p-3 rounded-lg border transition-all ${
-                              isSelected
-                                ? 'border-[var(--accent-primary)] bg-[var(--accent-primary)]/5'
-                                : 'border-[var(--border-color)] hover:border-[var(--accent-primary)]/50 bg-[var(--bg-secondary)]'
-                            }`}
-                          >
-                            <div className="flex items-center justify-between gap-3">
-                              <div className="min-w-0">
-                                <p className={`text-sm font-medium truncate ${
-                                  isSelected ? 'text-[var(--accent-primary)]' : 'text-[var(--text-primary)]'
-                                }`}>
-                                  {isSelected && <span className="mr-1">✓</span>}
-                                  {program.programName}
-                                </p>
-                                <p className="text-xs text-[var(--text-muted)] mt-0.5">
-                                  {program.school}
-                                  {program.campus ? ` • ${program.campus}` : ''}
-                                </p>
-                              </div>
-                              <span className="text-xs text-[var(--text-muted)] whitespace-nowrap">
-                                {program.year} data
-                              </span>
-                            </div>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
-              )}
-
               <button
                 type="button"
                 onClick={handleEstimate}
-                disabled={!selectedProgram}
+                disabled={!selectedNETType}
                 className="w-full mt-6 btn btn-primary py-4 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {selectedProgram ? 'Estimate My Position' : 'Select a program to continue'}
+                {selectedNETType ? 'Estimate My Position' : 'Select a NET type to continue'}
               </button>
             </div>
           </div>
         )}
 
         {/* Step 3: Results */}
-        {step === 3 && positionEstimate && selectedNETType && selectedProgram && (
+        {step === 3 && positionEstimate && selectedNETType && (
           <div className="space-y-6">
             {/* Summary Bar */}
             <div className="card p-4 flex flex-wrap items-center justify-between gap-4">
               <div className="min-w-0">
-                <p className="text-sm text-[var(--text-muted)]">Program</p>
+                <p className="text-sm text-[var(--text-muted)]">NET Type</p>
                 <p className="text-[var(--text-primary)] font-medium truncate">
-                  {selectedProgram.programName}
-                  <span className="text-[var(--text-muted)] font-normal"> — {selectedProgram.school}</span>
+                  {selectedNETType.name}
                 </p>
               </div>
               <div>
@@ -706,10 +605,7 @@ export default function PositionEstimatorClient({ programs }: PositionEstimatorC
             {/* Position Estimate Card */}
             <div className="card p-6 md:p-8">
               <h3 className="text-lg font-bold text-[var(--text-primary)] mb-1">Estimated Merit Position</h3>
-              <p className="text-sm text-[var(--text-muted)] mb-6">
-                {selectedProgram.programName} — {selectedProgram.school}
-                {selectedProgram.campus ? ` (${selectedProgram.campus})` : ''}
-              </p>
+              <p className="text-sm text-[var(--text-muted)] mb-6">{selectedNETType.fullName}</p>
 
               {/* Main Position Display */}
               <div className="text-center py-8 bg-[var(--bg-secondary)] rounded-xl">
@@ -730,15 +626,15 @@ export default function PositionEstimatorClient({ programs }: PositionEstimatorC
                 </div>
               </div>
 
-              {/* Program-specific note */}
+              {/* Applies-to note */}
               <div className="mt-6 p-4 bg-[var(--accent-primary)]/5 border border-[var(--accent-primary)]/20 rounded-lg">
                 <h4 className="text-sm font-semibold text-[var(--accent-primary)] mb-2">
-                  Estimate for {selectedProgram.programName} at {selectedProgram.school}
+                  Applies to all {selectedNETType.name} programs
                 </h4>
                 <p className="text-sm text-[var(--text-secondary)]">
-                  This position is specific to this program&apos;s {selectedProgram.year} merit list.
-                  Other programs in {selectedNETType.name} — even the same discipline at a different
-                  institute — close at different positions, so estimate each one separately.
+                  NUST ranks you once within the {selectedNETType.name} pool, so this is your
+                  position for every program taking this test. Which program you actually get
+                  depends on how deep each one&apos;s merit list runs and your preference order.
                 </p>
               </div>
 
