@@ -2,15 +2,30 @@
 
 import { useState, useMemo, useRef, useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import type { PeerRow } from '@/components/charts/PeerComparisonChart';
 
-// Dynamic import for chart to avoid SSR issues
-const MeritTrendChart = dynamic(() => import('@/components/charts/MeritTrendChart'), {
-  ssr: false,
-  loading: () => (
-    <div className="h-[300px] card flex items-center justify-center">
+// Dynamic imports for charts to avoid SSR issues
+function chartLoader(height: number) {
+  const ChartLoading = () => (
+    <div className="flex items-center justify-center" style={{ height }}>
       <div className="text-[var(--text-muted)]">Loading chart...</div>
     </div>
-  ),
+  );
+  return ChartLoading;
+}
+
+const MeritProgressionChart = dynamic(
+  () => import('@/components/charts/MeritProgressionChart'),
+  { ssr: false, loading: chartLoader(340) }
+);
+
+const PeerComparisonChart = dynamic(
+  () => import('@/components/charts/PeerComparisonChart'),
+  { ssr: false, loading: chartLoader(400) }
+);
+
+const MeritStatTiles = dynamic(() => import('@/components/charts/MeritStatTiles'), {
+  ssr: false,
 });
 
 interface Program {
@@ -80,19 +95,62 @@ export default function MeritHistoryClient({ programs, meritHistory }: MeritHist
       });
   }, [meritHistory, selectedProgram, selectedYear]);
 
-  // Chart data - show first and final lists only
-  const chartData = useMemo(() => {
+  // Every published list for this program, scoped by the year filter.
+  const programEntries = useMemo(() => {
     if (!selectedProgram) return [];
     return meritHistory
       .filter(m => m.programId === selectedProgram.id)
-      .filter(m => m.meritListNumber === 1 || m.meritListNumber === null)
-      .map(m => ({
-        year: m.year,
-        closingAggregate: m.closingAggregate,
-        closingPosition: m.closingMeritPosition,
-        meritListNumber: m.meritListNumber,
-      }));
-  }, [meritHistory, selectedProgram]);
+      .filter(m => !selectedYear || m.year === parseInt(selectedYear));
+  }, [meritHistory, selectedProgram, selectedYear]);
+
+  // The most recent year that has a final list, used for the peer comparison.
+  const comparisonYear = useMemo(() => {
+    const withFinal = meritHistory.filter(
+      m => m.meritListNumber === null && m.closingAggregate !== null
+    );
+    const candidates = selectedYear
+      ? withFinal.filter(m => m.year === parseInt(selectedYear))
+      : withFinal;
+    return candidates.length ? Math.max(...candidates.map(m => m.year)) : null;
+  }, [meritHistory, selectedYear]);
+
+  // Final closing aggregate per program for the comparison year.
+  const peerRows = useMemo(() => {
+    if (comparisonYear === null) return [];
+    return meritHistory
+      .filter(
+        m =>
+          m.year === comparisonYear &&
+          m.meritListNumber === null &&
+          m.closingAggregate !== null
+      )
+      .map(m => {
+        const program = programs.find(p => p.id === m.programId);
+        return program
+          ? {
+              id: program.id,
+              name: program.name,
+              school: program.school,
+              campus: program.campus,
+              aggregate: m.closingAggregate as number,
+            }
+          : null;
+      })
+      .filter((r): r is PeerRow => r !== null);
+  }, [meritHistory, programs, comparisonYear]);
+
+  const schoolPeerRows = useMemo(
+    () => (selectedProgram ? peerRows.filter(r => r.school === selectedProgram.school) : []),
+    [peerRows, selectedProgram]
+  );
+
+  // Rank across all of NUST by the comparison year's final closing aggregate.
+  const nustRank = useMemo(() => {
+    if (!selectedProgram) return undefined;
+    const sorted = [...peerRows].sort((a, b) => b.aggregate - a.aggregate);
+    const index = sorted.findIndex(r => r.id === selectedProgram.id);
+    return index === -1 ? undefined : index + 1;
+  }, [peerRows, selectedProgram]);
 
   // Auto-scroll to results when a program is selected
   useEffect(() => {
@@ -199,23 +257,49 @@ export default function MeritHistoryClient({ programs, meritHistory }: MeritHist
       {/* Selected Program Details */}
       {selectedProgram && (
         <div ref={resultsRef}>
-          {/* Chart */}
+          {/* Headline numbers */}
+          <MeritStatTiles
+            entries={programEntries}
+            nustRank={nustRank}
+            nustTotal={peerRows.length}
+          />
+
+          {/* How far merit falls across the lists */}
           <div className="card p-6 mb-6">
-            <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-4">
-              Merit Trend: {selectedProgram.name}
+            <h2 className="text-lg font-semibold text-[var(--text-primary)]">
+              How far merit falls across the lists
             </h2>
-            <p className="text-sm text-[var(--text-muted)] mb-4">
-              Each year shows two points: first merit list and final merit list. The next point starts the
-              following year with the first merit list.
+            <p className="text-sm text-[var(--text-muted)] mt-1 mb-2">
+              Cutoffs drop with every list NUST publishes. Each line is one admission year, so
+              you can see both how deep the lists went and whether the program got harder
+              year over year.
             </p>
-            <MeritTrendChart
-              data={chartData}
-              programName={selectedProgram.name}
-              showAggregate={true}
-              showPosition={false}
-              height={350}
+            <MeritProgressionChart
+              entries={programEntries}
+              yearOrder={[...years].sort((a, b) => a - b)}
+              height={340}
             />
           </div>
+
+          {/* Where this program sits against its peers */}
+          {selectedProgram && peerRows.length > 1 && comparisonYear !== null && (
+            <div className="card p-6 mb-6">
+              <h2 className="text-lg font-semibold text-[var(--text-primary)]">
+                Where {selectedProgram.name} sits against other programs
+              </h2>
+              <p className="text-sm text-[var(--text-muted)] mt-1 mb-4">
+                Final closing aggregate for {comparisonYear}, ranked. This program is
+                highlighted; every other program is shown for context.
+              </p>
+              <PeerComparisonChart
+                schoolRows={schoolPeerRows}
+                allRows={peerRows}
+                selectedId={selectedProgram.id}
+                schoolName={selectedProgram.school}
+                year={comparisonYear}
+              />
+            </div>
+          )}
 
           {/* Merit Table */}
           <div className="card p-6">
