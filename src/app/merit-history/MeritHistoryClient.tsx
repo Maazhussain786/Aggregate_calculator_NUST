@@ -256,57 +256,13 @@ export default function MeritHistoryClient({ programs, meritHistory }: MeritHist
 
       {/* Selected Program Details */}
       {selectedProgram && (
-        <div ref={resultsRef}>
-          {/* Headline numbers */}
-          <MeritStatTiles
-            entries={programEntries}
-            nustRank={nustRank}
-            nustTotal={peerRows.length}
-          />
-
-          {/* How far merit falls across the lists */}
-          <div className="card p-6 mb-6">
-            <h2 className="text-lg font-semibold text-[var(--text-primary)]">
-              How far merit falls across the lists
-            </h2>
-            <p className="text-sm text-[var(--text-muted)] mt-1 mb-2">
-              Cutoffs drop with every list NUST publishes. Each line is one admission year, so
-              you can see both how deep the lists went and whether the program got harder
-              year over year.
-            </p>
-            <MeritProgressionChart
-              entries={programEntries}
-              yearOrder={[...years].sort((a, b) => a - b)}
-              height={340}
-            />
-          </div>
-
-          {/* Where this program sits against its peers */}
-          {selectedProgram && peerRows.length > 1 && comparisonYear !== null && (
-            <div className="card p-6 mb-6">
-              <h2 className="text-lg font-semibold text-[var(--text-primary)]">
-                Where {selectedProgram.name} sits against other programs
-              </h2>
-              <p className="text-sm text-[var(--text-muted)] mt-1 mb-4">
-                Final closing aggregate for {comparisonYear}, ranked. This program is
-                highlighted; every other program is shown for context.
-              </p>
-              <PeerComparisonChart
-                schoolRows={schoolPeerRows}
-                allRows={peerRows}
-                selectedId={selectedProgram.id}
-                schoolName={selectedProgram.school}
-                year={comparisonYear}
-              />
-            </div>
-          )}
-
-          {/* Merit Table */}
+        <div ref={resultsRef} className="space-y-6">
+          {/* Merit Table — the published figures come first */}
           <div className="card p-6">
             <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-4">
               Historical Data: {selectedProgram.name}
             </h2>
-            
+
             {programMeritHistory.length === 0 ? (
               <div className="text-center py-8 text-[var(--text-muted)]">
                 No merit history data available for this program.
@@ -325,7 +281,7 @@ export default function MeritHistoryClient({ programs, meritHistory }: MeritHist
                   </thead>
                   <tbody>
                     {programMeritHistory.map((entry, index) => (
-                      <tr 
+                      <tr
                         key={`${entry.programId}-${entry.year}-${entry.meritListNumber}`}
                         className={`border-b border-[var(--border-color)] ${index % 2 === 0 ? 'bg-[var(--bg-secondary)]' : ''}`}
                       >
@@ -351,6 +307,50 @@ export default function MeritHistoryClient({ programs, meritHistory }: MeritHist
               </div>
             )}
           </div>
+
+          {/* Headline numbers */}
+          <MeritStatTiles
+            entries={programEntries}
+            nustRank={nustRank}
+            nustTotal={peerRows.length}
+          />
+
+          {/* How far merit falls across the lists */}
+          <div className="card p-6">
+            <h2 className="text-lg font-semibold text-[var(--text-primary)]">
+              How far merit falls across the lists
+            </h2>
+            <p className="text-sm text-[var(--text-muted)] mt-1 mb-2">
+              Cutoffs drop with every list NUST publishes. Each line is one admission year, so
+              you can see both how deep the lists went and whether the program got harder
+              year over year.
+            </p>
+            <MeritProgressionChart
+              entries={programEntries}
+              yearOrder={[...years].sort((a, b) => a - b)}
+              height={340}
+            />
+          </div>
+
+          {/* Where this program sits against its peers */}
+          {selectedProgram && peerRows.length > 1 && comparisonYear !== null && (
+            <div className="card p-6">
+              <h2 className="text-lg font-semibold text-[var(--text-primary)]">
+                Where {selectedProgram.name} sits against other programs
+              </h2>
+              <p className="text-sm text-[var(--text-muted)] mt-1 mb-4">
+                Final closing aggregate for {comparisonYear}, ranked. This program is
+                highlighted; every other program is shown for context.
+              </p>
+              <PeerComparisonChart
+                schoolRows={schoolPeerRows}
+                allRows={peerRows}
+                selectedId={selectedProgram.id}
+                schoolName={selectedProgram.school}
+                year={comparisonYear}
+              />
+            </div>
+          )}
 
           {/* Program Info */}
           <div className="card p-6">

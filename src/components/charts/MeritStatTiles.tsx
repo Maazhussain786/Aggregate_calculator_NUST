@@ -82,7 +82,7 @@ export default function MeritStatTiles({ entries, nustRank, nustTotal }: Props) 
   const drop = finalAgg !== null && firstAgg !== null ? firstAgg - finalAgg : null;
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
       <Tile
         label={`Final list cutoff (${latest})`}
         value={finalAgg !== null ? `${finalAgg.toFixed(2)}%` : '—'}
