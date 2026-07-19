@@ -1,5 +1,9 @@
 import type { Metadata } from 'next';
-import PositionEstimatorClient, { type NETType, type PositionDataPoint } from './PositionEstimatorClient';
+import PositionEstimatorClient, {
+  type NETType,
+  type PositionDataPoint,
+  type SeparateProgram,
+} from './PositionEstimatorClient';
 import sampleData from '@/data/sampleMeritData.json';
 
 export const metadata: Metadata = {
@@ -51,6 +55,7 @@ function getDisciplineToNETType(disciplineGroup: string, school: string): NETTyp
 // ranking within the shared NET pool. LLB closes around #100-#264 and
 // Bioinformatics around #60-#383 while the rest of their NET is in the
 // thousands at the same aggregate, so pooling them would distort the curve.
+// They are kept out of the pool and offered as their own curve instead.
 const SEPARATELY_NUMBERED_PROGRAMS = new Set(['nls-llb', 'sines-bsbi']);
 
 /**
@@ -130,11 +135,46 @@ function transformData() {
     );
   });
 
-  return { positionData };
+  // Each separately-numbered program gets its own curve from its own lists,
+  // so an LLB or Bioinformatics applicant is not handed their NET pool's rank.
+  const separatePrograms: SeparateProgram[] = [...SEPARATELY_NUMBERED_PROGRAMS]
+    .map(programId => {
+      const program = sampleData.programs.find(p => p.id === programId);
+      if (!program) return null;
+
+      const points = sampleData.meritHistory
+        .filter(
+          m =>
+            m.programId === programId &&
+            m.year === latestYear[programId] &&
+            m.closingAggregate !== null &&
+            m.closingMeritPosition !== null
+        )
+        .map(m => ({
+          aggregate: m.closingAggregate as number,
+          position: m.closingMeritPosition as number,
+          meritListNumber: m.meritListNumber,
+        }))
+        .sort((a, b) => b.aggregate - a.aggregate || a.position - b.position);
+
+      if (points.length === 0) return null;
+
+      return {
+        programId,
+        programName: program.name,
+        school: program.school,
+        netType: netTypeByProgram[programId],
+        year: latestYear[programId],
+        points: fitMonotonic(points),
+      };
+    })
+    .filter((p): p is SeparateProgram => p !== null);
+
+  return { positionData, separatePrograms };
 }
 
 export default function PositionEstimatorPage() {
-  const { positionData } = transformData();
+  const { positionData, separatePrograms } = transformData();
 
   return (
     <div className="animate-fade-in">
@@ -157,6 +197,7 @@ export default function PositionEstimatorPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <PositionEstimatorClient
             positionData={positionData}
+            separatePrograms={separatePrograms}
           />
         </div>
       </section>

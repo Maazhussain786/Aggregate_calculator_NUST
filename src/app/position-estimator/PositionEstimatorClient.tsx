@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { calculateAggregate, validateAggregateInput, type AggregateInput, type AggregateBreakdown } from '@/lib/calcAggregate';
 import { estimatePosition, type PositionEstimateResult, type PositionDataPoint } from '@/lib/positionEstimator';
 
@@ -8,6 +8,19 @@ export type { PositionDataPoint };
 
 // NET Types based on official NUST admission policy
 export type NETType = 'engineering' | 'business' | 'applied-sciences' | 'architecture' | 'natural-sciences';
+
+/**
+ * A program that publishes its own merit list instead of ranking within the
+ * shared NET pool, so it carries its own aggregate->position curve.
+ */
+export interface SeparateProgram {
+  programId: string;
+  programName: string;
+  school: string;
+  netType: NETType;
+  year: number;
+  points: PositionDataPoint[];
+}
 
 export interface NETTypeInfo {
   id: NETType;
@@ -110,9 +123,13 @@ export const NET_TYPES: NETTypeInfo[] = [
 
 interface PositionEstimatorClientProps {
   positionData: Record<NETType, PositionDataPoint[]>;
+  separatePrograms: SeparateProgram[];
 }
 
-export default function PositionEstimatorClient({ positionData }: PositionEstimatorClientProps) {
+export default function PositionEstimatorClient({
+  positionData,
+  separatePrograms,
+}: PositionEstimatorClientProps) {
   const resultsRef = useRef<HTMLDivElement>(null);
 
   const [step, setStep] = useState<1 | 2 | 3>(1);
@@ -130,7 +147,15 @@ export default function PositionEstimatorClient({ positionData }: PositionEstima
   const [errors, setErrors] = useState<string[]>([]);
   const [aggregateResult, setAggregateResult] = useState<AggregateBreakdown | null>(null);
   const [selectedNETType, setSelectedNETType] = useState<NETTypeInfo | null>(null);
+  // null = the shared NET pool; otherwise a program with its own merit list
+  const [selectedSeparate, setSelectedSeparate] = useState<SeparateProgram | null>(null);
   const [positionEstimate, setPositionEstimate] = useState<PositionEstimateResult | null>(null);
+
+  // Programs in this NET type that publish their own merit list
+  const separateInNet = useMemo(
+    () => (selectedNETType ? separatePrograms.filter(p => p.netType === selectedNETType.id) : []),
+    [separatePrograms, selectedNETType]
+  );
 
   const handleInputChange = useCallback((field: keyof AggregateInput, value: number | boolean | undefined) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -169,6 +194,8 @@ export default function PositionEstimatorClient({ positionData }: PositionEstima
 
   const handleSelectNETType = useCallback((netType: NETTypeInfo) => {
     setSelectedNETType(netType);
+    // Fall back to the shared pool whenever the NET type changes
+    setSelectedSeparate(null);
   }, []);
 
   const handleEstimate = useCallback(() => {
@@ -176,14 +203,18 @@ export default function PositionEstimatorClient({ positionData }: PositionEstima
 
     const estimate = estimatePosition({
       userAggregate: aggregateResult.totalAggregate,
-      programId: selectedNETType.id,
-      programName: selectedNETType.name,
-      historicalData: positionData[selectedNETType.id] || [],
+      programId: selectedSeparate?.programId ?? selectedNETType.id,
+      programName: selectedSeparate
+        ? `${selectedSeparate.programName} (${selectedSeparate.school})`
+        : selectedNETType.name,
+      historicalData: selectedSeparate
+        ? selectedSeparate.points
+        : positionData[selectedNETType.id] || [],
     });
 
     setPositionEstimate(estimate);
     setStep(3);
-  }, [aggregateResult, selectedNETType, positionData]);
+  }, [aggregateResult, selectedNETType, selectedSeparate, positionData]);
 
   const handleReset = useCallback(() => {
     setStep(1);
@@ -199,6 +230,7 @@ export default function PositionEstimatorClient({ positionData }: PositionEstima
     setDirectAggregate(0);
     setAggregateResult(null);
     setSelectedNETType(null);
+    setSelectedSeparate(null);
     setPositionEstimate(null);
     setErrors([]);
   }, []);
@@ -567,6 +599,67 @@ export default function PositionEstimatorClient({ positionData }: PositionEstima
                 ))}
               </div>
 
+              {/* A few programs run their own merit list instead of the NET pool */}
+              {separateInNet.length > 0 && (
+                <div className="mt-6">
+                  <h4 className="text-sm font-semibold text-[var(--text-primary)] mb-2">
+                    Which program are you applying to?
+                  </h4>
+                  <p className="text-xs text-[var(--text-muted)] mb-3">
+                    Most {selectedNETType?.name} programs share one merit list, but the ones
+                    below publish their own — pick yours so the estimate uses the right list.
+                  </p>
+
+                  <div className="grid gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedSeparate(null)}
+                      className={`text-left p-3 rounded-lg border transition-all ${
+                        selectedSeparate === null
+                          ? 'border-[var(--accent-primary)] bg-[var(--accent-primary)]/5'
+                          : 'border-[var(--border-color)] hover:border-[var(--accent-primary)]/50 bg-[var(--bg-secondary)]'
+                      }`}
+                    >
+                      <p className={`text-sm font-medium ${
+                        selectedSeparate === null ? 'text-[var(--accent-primary)]' : 'text-[var(--text-primary)]'
+                      }`}>
+                        {selectedSeparate === null && <span className="mr-1">✓</span>}
+                        Any other {selectedNETType?.name} program
+                      </p>
+                      <p className="text-xs text-[var(--text-muted)] mt-0.5">
+                        Shared merit list — one position across all these programs
+                      </p>
+                    </button>
+
+                    {separateInNet.map((program) => {
+                      const isSelected = selectedSeparate?.programId === program.programId;
+                      return (
+                        <button
+                          key={program.programId}
+                          type="button"
+                          onClick={() => setSelectedSeparate(program)}
+                          className={`text-left p-3 rounded-lg border transition-all ${
+                            isSelected
+                              ? 'border-[var(--accent-primary)] bg-[var(--accent-primary)]/5'
+                              : 'border-[var(--border-color)] hover:border-[var(--accent-primary)]/50 bg-[var(--bg-secondary)]'
+                          }`}
+                        >
+                          <p className={`text-sm font-medium ${
+                            isSelected ? 'text-[var(--accent-primary)]' : 'text-[var(--text-primary)]'
+                          }`}>
+                            {isSelected && <span className="mr-1">✓</span>}
+                            {program.programName} ({program.school})
+                          </p>
+                          <p className="text-xs text-[var(--text-muted)] mt-0.5">
+                            Own merit list — separately numbered from the {selectedNETType?.name} pool
+                          </p>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
               <button
                 type="button"
                 onClick={handleEstimate}
@@ -585,9 +678,13 @@ export default function PositionEstimatorClient({ positionData }: PositionEstima
             {/* Summary Bar */}
             <div className="card p-4 flex flex-wrap items-center justify-between gap-4">
               <div className="min-w-0">
-                <p className="text-sm text-[var(--text-muted)]">NET Type</p>
+                <p className="text-sm text-[var(--text-muted)]">
+                  {selectedSeparate ? 'Program' : 'NET Type'}
+                </p>
                 <p className="text-[var(--text-primary)] font-medium truncate">
-                  {selectedNETType.name}
+                  {selectedSeparate
+                    ? `${selectedSeparate.programName} (${selectedSeparate.school})`
+                    : selectedNETType.name}
                 </p>
               </div>
               <div>
@@ -605,7 +702,11 @@ export default function PositionEstimatorClient({ positionData }: PositionEstima
             {/* Position Estimate Card */}
             <div className="card p-6 md:p-8">
               <h3 className="text-lg font-bold text-[var(--text-primary)] mb-1">Estimated Merit Position</h3>
-              <p className="text-sm text-[var(--text-muted)] mb-6">{selectedNETType.fullName}</p>
+              <p className="text-sm text-[var(--text-muted)] mb-6">
+                {selectedSeparate
+                  ? `${selectedSeparate.programName} — ${selectedSeparate.school} (${selectedSeparate.year} merit list)`
+                  : selectedNETType.fullName}
+              </p>
 
               {/* Main Position Display */}
               <div className="text-center py-8 bg-[var(--bg-secondary)] rounded-xl">
@@ -628,14 +729,37 @@ export default function PositionEstimatorClient({ positionData }: PositionEstima
 
               {/* Applies-to note */}
               <div className="mt-6 p-4 bg-[var(--accent-primary)]/5 border border-[var(--accent-primary)]/20 rounded-lg">
-                <h4 className="text-sm font-semibold text-[var(--accent-primary)] mb-2">
-                  Applies to all {selectedNETType.name} programs
-                </h4>
-                <p className="text-sm text-[var(--text-secondary)]">
-                  NUST ranks you once within the {selectedNETType.name} pool, so this is your
-                  position for every program taking this test. Which program you actually get
-                  depends on how deep each one&apos;s merit list runs and your preference order.
-                </p>
+                {selectedSeparate ? (
+                  <>
+                    <h4 className="text-sm font-semibold text-[var(--accent-primary)] mb-2">
+                      Specific to {selectedSeparate.programName}
+                    </h4>
+                    <p className="text-sm text-[var(--text-secondary)]">
+                      {selectedSeparate.programName} is numbered on its own merit list rather
+                      than the {selectedNETType.name} pool, so this position only applies here.
+                      It is not comparable to the position you would get for other{' '}
+                      {selectedNETType.name} programs.
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <h4 className="text-sm font-semibold text-[var(--accent-primary)] mb-2">
+                      Applies to all {selectedNETType.name} programs
+                    </h4>
+                    <p className="text-sm text-[var(--text-secondary)]">
+                      NUST ranks you once within the {selectedNETType.name} pool, so this is your
+                      position for every program taking this test. Which program you actually get
+                      depends on how deep each one&apos;s merit list runs and your preference order.
+                      {separateInNet.length > 0 && (
+                        <>
+                          {' '}The exception is{' '}
+                          {separateInNet.map(p => p.programName).join(' and ')} — pick it in Step 2
+                          for its own estimate.
+                        </>
+                      )}
+                    </p>
+                  </>
+                )}
               </div>
 
               {/* Position Visualization */}
