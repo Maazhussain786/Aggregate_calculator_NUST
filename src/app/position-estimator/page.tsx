@@ -5,6 +5,11 @@ import PositionEstimatorClient, {
   type SeparateProgram,
 } from './PositionEstimatorClient';
 import sampleData from '@/data/sampleMeritData.json';
+import {
+  latestAggregateYearByProgram,
+  netPoolFor,
+  SEPARATELY_NUMBERED_PROGRAMS,
+} from '@/lib/meritData';
 
 export const metadata: Metadata = {
   title: 'NUST Merit Position Estimator | Predict Your Rank by NET Type',
@@ -23,40 +28,6 @@ export const metadata: Metadata = {
     canonical: '/position-estimator',
   },
 };
-
-// Map discipline groups to NET types
-function getDisciplineToNETType(disciplineGroup: string, school: string): NETType {
-  // Business schools
-  if (school === 'NBS' || school === 'S3H' || school === 'JSPPL' || school === 'NLS') {
-    return 'business';
-  }
-  
-  // Architecture
-  if (school === 'SADA') {
-    return 'architecture';
-  }
-  
-  // Applied Sciences (Pre-Medical based)
-  if (disciplineGroup === 'Applied Sciences' || 
-      (school === 'ASAB')) {
-    return 'applied-sciences';
-  }
-  
-  // Natural Sciences (SNS)
-  if (school === 'SNS') {
-    return 'natural-sciences';
-  }
-  
-  // Default: Engineering & Computing
-  return 'engineering';
-}
-
-// Programs that publish their own separately-numbered merit list rather than
-// ranking within the shared NET pool. LLB closes around #100-#264 and
-// Bioinformatics around #60-#383 while the rest of their NET is in the
-// thousands at the same aggregate, so pooling them would distort the curve.
-// They are kept out of the pool and offered as their own curve instead.
-const SEPARATELY_NUMBERED_PROGRAMS = new Set(['nls-llb', 'sines-bsbi']);
 
 /**
  * Isotonic regression (pool-adjacent-violators).
@@ -98,17 +69,13 @@ function fitMonotonic(points: PositionDataPoint[]): PositionDataPoint[] {
 // the same merit position for every program sharing that NET — Engineering
 // applicants all sit on one curve, Business applicants on another.
 function transformData() {
-  // Latest year available for each program
-  const latestYear: Record<string, number> = {};
-  sampleData.meritHistory.forEach(m => {
-    if (!latestYear[m.programId] || m.year > latestYear[m.programId]) {
-      latestYear[m.programId] = m.year;
-    }
-  });
+  // Latest year with published aggregates for each program — a position-only
+  // list (2026's 1st) carries no curve, so it must not shadow 2025.
+  const latestYear = latestAggregateYearByProgram();
 
   const netTypeByProgram: Record<string, NETType> = {};
   sampleData.programs.forEach(p => {
-    netTypeByProgram[p.id] = getDisciplineToNETType(p.disciplineGroup, p.school);
+    netTypeByProgram[p.id] = netPoolFor(p.disciplineGroup, p.school);
   });
 
   // Pool every program's closing points onto its NET type's curve

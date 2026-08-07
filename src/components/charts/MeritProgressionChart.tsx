@@ -107,7 +107,7 @@ export default function MeritProgressionChart({ entries, yearOrder, height = 340
   );
 
   const chartData = useMemo(() => {
-    const datasets = years.map((year) => {
+    const datasets = years.flatMap((year) => {
       const slot = Math.max(0, yearOrder.indexOf(year));
       const colour = t.series[slot % t.series.length];
       const data = STAGES.map(({ key }) => {
@@ -116,7 +116,11 @@ export default function MeritProgressionChart({ entries, yearOrder, height = 340
         return metric === 'aggregate' ? hit.closingAggregate : hit.closingMeritPosition;
       });
 
-      return {
+      // A year with nothing to plot for this metric — 2026 publishes positions
+      // before aggregates — would otherwise sit in the legend drawing nothing.
+      if (data.every((v) => v === null)) return [];
+
+      return [{
         label: String(year),
         data,
         borderColor: colour,
@@ -130,11 +134,13 @@ export default function MeritProgressionChart({ entries, yearOrder, height = 340
         pointBorderColor: t.surface,
         pointBorderWidth: 2,
         pointHitRadius: 20,
-      };
+      }];
     });
 
     return { labels: STAGES.map((s) => s.label), datasets };
   }, [entries, years, yearOrder, metric, t]);
+
+  const seriesCount = chartData.datasets.length;
 
   const options = useMemo<ChartOptions<'line'>>(
     () => ({
@@ -145,7 +151,7 @@ export default function MeritProgressionChart({ entries, yearOrder, height = 340
       interaction: { mode: 'index', intersect: false },
       plugins: {
         legend: {
-          display: years.length > 1,
+          display: seriesCount > 1,
           position: 'top',
           align: 'end',
           labels: {
@@ -199,16 +205,8 @@ export default function MeritProgressionChart({ entries, yearOrder, height = 340
         },
       },
     }),
-    [t, metric, years.length]
+    [t, metric, seriesCount]
   );
-
-  if (entries.length === 0) {
-    return (
-      <div className="flex items-center justify-center text-[var(--text-muted)]" style={{ height }}>
-        No historical data available for this program.
-      </div>
-    );
-  }
 
   return (
     <div>
@@ -238,8 +236,18 @@ export default function MeritProgressionChart({ entries, yearOrder, height = 340
           ))}
         </div>
       </div>
+      {/* The toggle stays available even with nothing to draw, so a metric the
+          program has no data for is never a dead end. */}
       <div style={{ height }}>
-        <Line data={chartData} options={options} />
+        {seriesCount === 0 ? (
+          <div className="flex h-full items-center justify-center text-center text-[var(--text-muted)] px-4">
+            {metric === 'aggregate'
+              ? 'No closing aggregates published for this program yet.'
+              : 'No merit positions published for this program yet.'}
+          </div>
+        ) : (
+          <Line data={chartData} options={options} />
+        )}
       </div>
     </div>
   );

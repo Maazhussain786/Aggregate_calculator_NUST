@@ -8,6 +8,7 @@ import { useTheme } from '@/components/ThemeProvider';
 
 const navigation = [
   { name: 'Calculator', href: '/aggregate-calculator' },
+  { name: '2026 List', href: '/merit-list-2026' },
   { name: 'Merit History', href: '/merit-history' },
   { name: 'Predictor', href: '/admission-predictor' },
   { name: 'Position', href: '/position-estimator' },
@@ -57,15 +58,16 @@ export default function Header() {
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex lg:items-center lg:gap-1">
+          {/* Desktop Navigation — eight links plus the logo and CTA need xl to
+              sit on one row without wrapping */}
+          <div className="hidden xl:flex xl:items-center xl:gap-1">
             {navigation.map((item) => {
               const isActive = pathname === item.href;
               return (
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`px-3 xl:px-4 py-2 text-sm font-medium rounded-lg transition-all ${
+                  className={`px-2.5 xl:px-3 py-2 text-sm font-medium rounded-lg transition-all whitespace-nowrap ${
                     isActive
                       ? 'text-[var(--accent-primary)] bg-[var(--accent-light)]'
                       : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-hover)]'
@@ -97,14 +99,14 @@ export default function Header() {
 
             <Link
               href="/aggregate-calculator"
-              className="ml-3 px-5 py-2.5 text-sm font-semibold text-white bg-[var(--accent-primary)] rounded-lg hover:bg-[var(--accent-secondary)] transition-all shadow-sm"
+              className="ml-3 px-5 py-2.5 text-sm font-semibold text-white bg-[var(--accent-primary)] rounded-lg hover:bg-[var(--accent-secondary)] transition-all shadow-sm whitespace-nowrap"
             >
               Calculate Now
             </Link>
           </div>
 
           {/* Mobile: Theme toggle + Menu button */}
-          <div className="flex items-center gap-2 lg:hidden">
+          <div className="flex items-center gap-2 xl:hidden">
             {mounted && (
               <button
                 onClick={toggleTheme}
@@ -149,7 +151,7 @@ export default function Header() {
 
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
-          <div className="lg:hidden py-4 border-t border-[var(--border-color)]">
+          <div className="xl:hidden py-4 border-t border-[var(--border-color)]">
             <div className="flex flex-col space-y-1">
               {navigation.map((item) => {
                 const isActive = pathname === item.href;

@@ -7,9 +7,11 @@ import sampleData from '@/data/sampleMeritData.json';
 import type { MeritListPage } from '@/lib/meritPdfGenerator';
 
 export const metadata: Metadata = {
-  title: 'NUST Merit History & Closing Merits | All Programs',
-  description: 'Explore NUST historical merit data, closing aggregates, and merit positions for all programs. SEECS, SMME, NBS, and more. Year-wise trends from 2020-2024.',
+  title: 'NUST Merit List 2026 & Merit History | All Programs',
+  description: 'NUST 2026 1st merit list closing positions for every program, plus historical closing aggregates and merit positions from 2024 and 2025. SEECS, SMME, NBS, CEME, PNEC and more.',
   keywords: [
+    'NUST merit list 2026',
+    'NUST 1st merit list 2026',
     'NUST merit history',
     'NUST closing merit',
     'NUST cutoff',

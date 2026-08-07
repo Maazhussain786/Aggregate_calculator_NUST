@@ -3,6 +3,7 @@ import { predictChance } from '@/lib/chancePredictor';
 import { predictMeritList, generateThresholdsFromHistory, generateEstimatedThresholds, type MeritListThreshold } from '@/lib/meritListPredictor';
 import { getNetScoreRecommendation } from '@/lib/netScoreRecommender';
 import sampleData from '@/data/sampleMeritData.json';
+import { meritEntriesWithAggregate } from '@/lib/meritData';
 
 /**
  * POST /api/predict
@@ -43,7 +44,9 @@ export async function POST(request: Request) {
     // Note: ACF (nbs-bsaf), BBA (nbs-bba), and Tourism (nbs-bsth) share the same Business NET.
     // Their aggregate-to-position curve is the same, but closing positions differ per program.
     // ACF aggregate data has been corrected to match BBA's curve.
-    const programMeritHistory = sampleData.meritHistory.filter(m => m.programId === programId);
+    // Position-only lists (2026's 1st) are skipped — the prediction is driven by
+    // closing aggregates, so it uses the newest year that publishes them.
+    const programMeritHistory = meritEntriesWithAggregate.filter(m => m.programId === programId);
     const latestYear = Math.max(...programMeritHistory.map(m => m.year));
     const latestYearHistory = programMeritHistory
       .filter(m => m.year === latestYear)

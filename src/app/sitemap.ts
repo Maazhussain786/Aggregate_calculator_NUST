@@ -10,6 +10,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const routes = [
     { path: '', priority: 1.0, changeFreq: 'weekly' }, // Homepage
     { path: '/aggregate-calculator', priority: 0.9, changeFreq: 'weekly' }, // Main feature
+    { path: '/merit-list-2026', priority: 0.9, changeFreq: 'weekly' }, // Current admission cycle
     { path: '/merit-history', priority: 0.9, changeFreq: 'weekly' }, // Important content
     { path: '/admission-predictor', priority: 0.8, changeFreq: 'monthly' },
     { path: '/position-estimator', priority: 0.8, changeFreq: 'monthly' },

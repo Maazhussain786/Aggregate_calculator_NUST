@@ -4,6 +4,7 @@ import Image from 'next/image';
 const footerLinks = {
   tools: [
     { name: 'Aggregate Calculator', href: '/aggregate-calculator' },
+    { name: 'Merit List 2026', href: '/merit-list-2026' },
     { name: 'Merit History', href: '/merit-history' },
     { name: 'Admission Predictor', href: '/admission-predictor' },
     { name: 'Preference Generator', href: '/preference-generator' },

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import AdmissionPredictorClient from './AdmissionPredictorClient';
 import sampleData from '@/data/sampleMeritData.json';
+import { latestAggregateYearByProgram, meritEntriesWithAggregate } from '@/lib/meritData';
 
 export const metadata: Metadata = {
   title: 'NUST Admission Predictor | Check Your Chances',
@@ -31,10 +32,11 @@ function transformData() {
     seats: p.seats,
   }));
 
-  // Get latest year data for each program (for display purposes)
-  const latestMeritData = sampleData.meritHistory.reduce((acc, m) => {
+  // Predictions are aggregate-based, so they read from the latest year that has
+  // published aggregates — never from a position-only list such as 2026's 1st.
+  const latestMeritData = meritEntriesWithAggregate.reduce((acc, m) => {
     const key = m.programId;
-    if (!acc[key] || m.year > acc[key].year || 
+    if (!acc[key] || m.year > acc[key].year ||
         (m.year === acc[key].year && (!m.meritListNumber || m.meritListNumber === 1))) {
       acc[key] = m;
     }
@@ -42,14 +44,9 @@ function transformData() {
   }, {} as Record<string, typeof sampleData.meritHistory[0]>);
 
   // Get all merit history for the latest year per program (for predictions)
-  const latestYear: Record<string, number> = {};
-  sampleData.meritHistory.forEach(m => {
-    if (!latestYear[m.programId] || m.year > latestYear[m.programId]) {
-      latestYear[m.programId] = m.year;
-    }
-  });
+  const latestYear = latestAggregateYearByProgram();
 
-  const allMeritHistory = sampleData.meritHistory.reduce((acc, m) => {
+  const allMeritHistory = meritEntriesWithAggregate.reduce((acc, m) => {
     if (m.year === latestYear[m.programId]) {
       if (!acc[m.programId]) {
         acc[m.programId] = [];

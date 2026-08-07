@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo, useRef, useEffect } from 'react';
+import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import type { PeerRow } from '@/components/charts/PeerComparisonChart';
 
@@ -95,6 +96,53 @@ export default function MeritHistoryClient({ programs, meritHistory }: MeritHist
       });
   }, [meritHistory, selectedProgram, selectedYear]);
 
+  // The newest cycle in the dataset, and whether NUST has published its
+  // aggregates yet. A fresh cycle ships closing positions first, so the site
+  // has to be able to show a year that is position-only.
+  const latestYear = useMemo(
+    () => (meritHistory.length ? Math.max(...meritHistory.map(m => m.year)) : null),
+    [meritHistory]
+  );
+
+  const latestCycle = useMemo(() => {
+    if (latestYear === null) return null;
+    const rows = meritHistory.filter(m => m.year === latestYear);
+    const lists = [...new Set(rows.map(r => r.meritListNumber))];
+    return {
+      year: latestYear,
+      // Only the 1st list so far means the cycle is still running.
+      isOngoing: !lists.includes(null),
+      awaitingAggregates: rows.every(r => r.closingAggregate === null),
+      programCount: new Set(rows.map(r => r.programId)).size,
+      listLabel: lists.includes(null)
+        ? 'Final list'
+        : `${Math.min(...(lists.filter((l): l is number => l !== null)))}${getOrdinalSuffix(
+            Math.min(...(lists.filter((l): l is number => l !== null)))
+          )} merit list`,
+    };
+  }, [meritHistory, latestYear]);
+
+  // The selected program's row in that newest cycle, plus the same list a year
+  // earlier so the two closing positions can be compared directly.
+  const latestCycleRow = useMemo(() => {
+    if (!selectedProgram || latestYear === null) return null;
+    const rows = meritHistory.filter(
+      m => m.programId === selectedProgram.id && m.year === latestYear
+    );
+    if (rows.length === 0) return null;
+    // Newest cycle, earliest list published for it.
+    const current = [...rows].sort(
+      (a, b) => (a.meritListNumber ?? 999) - (b.meritListNumber ?? 999)
+    )[0];
+    const previous = meritHistory.find(
+      m =>
+        m.programId === selectedProgram.id &&
+        m.year === latestYear - 1 &&
+        m.meritListNumber === current.meritListNumber
+    );
+    return { current, previous: previous ?? null };
+  }, [meritHistory, selectedProgram, latestYear]);
+
   // Every published list for this program, scoped by the year filter.
   const programEntries = useMemo(() => {
     if (!selectedProgram) return [];
@@ -163,6 +211,36 @@ export default function MeritHistoryClient({ programs, meritHistory }: MeritHist
 
   return (
     <div className="space-y-6">
+      {/* Newest cycle announcement */}
+      {latestCycle?.isOngoing && (
+        <div className="rounded-xl border border-[var(--accent-primary)] bg-[var(--accent-light)] p-5">
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="px-2.5 py-1 rounded-full bg-[var(--accent-primary)] text-white text-xs font-semibold tracking-wide uppercase">
+              New
+            </span>
+            <h2 className="text-lg font-semibold text-[var(--text-primary)]">
+              {latestCycle.year} {latestCycle.listLabel} is out
+            </h2>
+          </div>
+          <p className="text-sm text-[var(--text-secondary)] mt-2">
+            Closing merit positions for {latestCycle.programCount} programs are published.{' '}
+            {latestCycle.awaitingAggregates && (
+              <>
+                NUST has not released the matching closing aggregates for this list yet, so those
+                columns show <span className="font-mono">—</span> until it does.
+              </>
+            )}
+          </p>
+          <Link
+            href="/merit-list-2026"
+            className="inline-flex items-center gap-1.5 mt-3 text-sm font-semibold text-[var(--accent-primary)] hover:opacity-80"
+          >
+            See all {latestCycle.programCount} programs in one list
+            <span aria-hidden="true">→</span>
+          </Link>
+        </div>
+      )}
+
       {/* Filters */}
       <div className="card p-6">
         <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-4">Filter Programs</h2>
@@ -257,6 +335,90 @@ export default function MeritHistoryClient({ programs, meritHistory }: MeritHist
       {/* Selected Program Details */}
       {selectedProgram && (
         <div ref={resultsRef} className="space-y-6">
+          {/* Newest cycle spotlight — a running cycle sits above the archive so
+              it is not buried under years of finished data */}
+          {latestCycle?.isOngoing &&
+            latestCycleRow &&
+            latestCycleRow.current.year === latestCycle.year &&
+            (!selectedYear || parseInt(selectedYear) === latestCycle.year) && (
+              // .card sets its own border, so the accent has to be applied inline to win
+              <div className="card p-6" style={{ borderColor: 'var(--accent-primary)' }}>
+                <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-5">
+                  <span className="px-2 py-0.5 rounded-md bg-[var(--accent-light)] text-[var(--accent-primary)] text-xs font-semibold">
+                    {latestCycle.year}
+                  </span>
+                  <h2 className="text-lg font-semibold text-[var(--text-primary)]">
+                    {latestCycleRow.current.meritListNumber
+                      ? `${latestCycleRow.current.meritListNumber}${getOrdinalSuffix(
+                          latestCycleRow.current.meritListNumber
+                        )} merit list`
+                      : 'Final merit list'}
+                  </h2>
+                  <span className="text-sm text-[var(--text-muted)]">
+                    {selectedProgram.name} • {selectedProgram.school}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] p-4">
+                    <p className="text-xs text-[var(--text-muted)] mb-1">Closing merit position</p>
+                    <p className="text-3xl font-semibold font-mono text-[var(--warning)] leading-tight">
+                      {latestCycleRow.current.closingMeritPosition?.toLocaleString() ?? '—'}
+                    </p>
+                    <p className="mt-1.5">
+                      {latestCycleRow.current.closingMeritPosition !== null &&
+                      latestCycleRow.previous?.closingMeritPosition != null ? (
+                        <PositionDelta
+                          current={latestCycleRow.current.closingMeritPosition}
+                          previous={latestCycleRow.previous.closingMeritPosition}
+                          previousYear={latestCycleRow.previous.year}
+                        />
+                      ) : (
+                        <span className="text-xs text-[var(--text-muted)]">
+                          last position called on this list
+                        </span>
+                      )}
+                    </p>
+                  </div>
+
+                  <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] p-4">
+                    <p className="text-xs text-[var(--text-muted)] mb-1">Closing aggregate</p>
+                    <p className="text-3xl font-semibold font-mono text-[var(--text-muted)] leading-tight">
+                      {latestCycleRow.current.closingAggregate !== null
+                        ? `${latestCycleRow.current.closingAggregate.toFixed(2)}%`
+                        : '—'}
+                    </p>
+                    <p className="mt-1.5 text-xs text-[var(--text-muted)]">
+                      {latestCycleRow.current.closingAggregate !== null
+                        ? 'lowest aggregate called'
+                        : 'not published by NUST yet'}
+                    </p>
+                  </div>
+
+                  <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] p-4">
+                    <p className="text-xs text-[var(--text-muted)] mb-1">
+                      Same list, {latestCycle.year - 1}
+                    </p>
+                    <p className="text-3xl font-semibold font-mono text-[var(--text-secondary)] leading-tight">
+                      {latestCycleRow.previous?.closingMeritPosition?.toLocaleString() ?? '—'}
+                    </p>
+                    <p className="mt-1.5 text-xs text-[var(--text-muted)]">
+                      {latestCycleRow.previous
+                        ? `position at the same stage of ${latestCycle.year - 1}`
+                        : `no ${latestCycle.year - 1} data for this list`}
+                    </p>
+                  </div>
+                </div>
+
+                {latestCycleRow.current.closingAggregate === null && (
+                  <p className="text-sm text-[var(--text-muted)] mt-4">
+                    Positions on this list are official. The aggregate behind the cutoff follows
+                    once NUST publishes it — until then, compare positions rather than percentages.
+                  </p>
+                )}
+              </div>
+            )}
+
           {/* Merit Table — the published figures come first */}
           <div className="card p-6">
             <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-4">
@@ -285,14 +447,30 @@ export default function MeritHistoryClient({ programs, meritHistory }: MeritHist
                         key={`${entry.programId}-${entry.year}-${entry.meritListNumber}`}
                         className={`border-b border-[var(--border-color)] ${index % 2 === 0 ? 'bg-[var(--bg-secondary)]' : ''}`}
                       >
-                        <td className="py-3 px-4 text-[var(--text-primary)] font-medium">{entry.year}</td>
+                        <td className="py-3 px-4 text-[var(--text-primary)] font-medium">
+                          <span className="inline-flex items-center gap-2">
+                            {entry.year}
+                            {latestCycle?.isOngoing && entry.year === latestCycle.year && (
+                              <span className="px-1.5 py-0.5 rounded bg-[var(--accent-light)] text-[var(--accent-primary)] text-[10px] font-semibold uppercase tracking-wide">
+                                New
+                              </span>
+                            )}
+                          </span>
+                        </td>
                         <td className="py-3 px-4 text-[var(--text-secondary)]">
                           {entry.meritListNumber ? `${entry.meritListNumber}${getOrdinalSuffix(entry.meritListNumber)} List` : 'Final'}
                         </td>
                         <td className="py-3 px-4 text-right">
-                          <span className="font-mono text-[var(--success)]">
-                            {entry.closingAggregate?.toFixed(2) ?? '-'}%
-                          </span>
+                          {/* A list can be published before its aggregate is */}
+                          {entry.closingAggregate !== null ? (
+                            <span className="font-mono text-[var(--success)]">
+                              {entry.closingAggregate.toFixed(2)}%
+                            </span>
+                          ) : (
+                            <span className="font-mono text-[var(--text-muted)]" title="Not published by NUST yet">
+                              —
+                            </span>
+                          )}
                         </td>
                         <td className="py-3 px-4 text-right font-mono text-[var(--warning)]">
                           {entry.closingMeritPosition ?? '-'}
@@ -332,25 +510,28 @@ export default function MeritHistoryClient({ programs, meritHistory }: MeritHist
             />
           </div>
 
-          {/* Where this program sits against its peers */}
-          {selectedProgram && peerRows.length > 1 && comparisonYear !== null && (
-            <div className="card p-6">
-              <h2 className="text-lg font-semibold text-[var(--text-primary)]">
-                Where {selectedProgram.name} sits against other programs
-              </h2>
-              <p className="text-sm text-[var(--text-muted)] mt-1 mb-4">
-                Final closing aggregate for {comparisonYear}, ranked. This program is
-                highlighted; every other program is shown for context.
-              </p>
-              <PeerComparisonChart
-                schoolRows={schoolPeerRows}
-                allRows={peerRows}
-                selectedId={selectedProgram.id}
-                schoolName={selectedProgram.school}
-                year={comparisonYear}
-              />
-            </div>
-          )}
+          {/* Where this program sits against its peers — only meaningful when
+              this program is itself in the comparison year's final figures */}
+          {peerRows.length > 1 &&
+            comparisonYear !== null &&
+            peerRows.some(r => r.id === selectedProgram.id) && (
+              <div className="card p-6">
+                <h2 className="text-lg font-semibold text-[var(--text-primary)]">
+                  Where {selectedProgram.name} sits against other programs
+                </h2>
+                <p className="text-sm text-[var(--text-muted)] mt-1 mb-4">
+                  Final closing aggregate for {comparisonYear}, ranked. This program is
+                  highlighted; every other program is shown for context.
+                </p>
+                <PeerComparisonChart
+                  schoolRows={schoolPeerRows}
+                  allRows={peerRows}
+                  selectedId={selectedProgram.id}
+                  schoolName={selectedProgram.school}
+                  year={comparisonYear}
+                />
+              </div>
+            )}
 
           {/* Program Info */}
           <div className="card p-6">
@@ -399,6 +580,42 @@ export default function MeritHistoryClient({ programs, meritHistory }: MeritHist
         </div>
       )}
     </div>
+  );
+}
+
+/**
+ * Compares two closing merit positions from the same list stage. A larger
+ * number means the list reached further down the merit order, which is the
+ * good outcome for an applicant — so "deeper" is styled the same way a falling
+ * aggregate cutoff is.
+ */
+function PositionDelta({
+  current,
+  previous,
+  previousYear,
+}: {
+  current: number;
+  previous: number;
+  previousYear: number;
+}) {
+  const delta = current - previous;
+  if (delta === 0) {
+    return (
+      <span className="text-xs text-[var(--text-muted)]">
+        exactly where it closed in {previousYear}
+      </span>
+    );
+  }
+  const deeper = delta > 0;
+  return (
+    <span
+      className={`text-xs font-medium ${
+        deeper ? 'text-[var(--success)]' : 'text-[var(--warning)]'
+      }`}
+    >
+      {deeper ? '▼' : '▲'} {Math.abs(delta).toLocaleString()}{' '}
+      {deeper ? 'positions deeper than' : 'positions tighter than'} {previousYear}
+    </span>
   );
 }
 
