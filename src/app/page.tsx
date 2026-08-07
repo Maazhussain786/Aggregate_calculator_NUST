@@ -329,11 +329,12 @@ export default function HomePage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="card p-6 md:p-8 border-l-4 border-l-[var(--accent-primary)]">
             <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">
-              Updated for 2025 Admissions
+              Updated for 2026 Admissions
             </h3>
             <p className="text-[var(--text-secondary)] text-sm leading-relaxed">
-              This calculator uses the official NUST aggregate formula. Historical merit data is available 
-              for reference. Always verify information with official NUST sources before making decisions.
+              This calculator uses the official NUST aggregate formula, and the 2026 1st merit list is
+              already in. Historical merit data is available for reference. Always verify information
+              with official NUST sources before making decisions.
             </p>
           </div>
         </div>
@@ -348,13 +349,13 @@ export default function HomePage() {
             '@type': 'WebApplication',
             name: 'NUST Aggregate Calculator',
             alternateName: 'NUST Merit Calculator',
-            description: 'Free NUST aggregate calculator 2025. Calculate your NUST admission merit using the official formula (NET 75%, FSc 15%, Matric 10%). Check historical closing merits and predict admission chances for all NUST programs.',
+            description: 'Free NUST aggregate calculator. Calculate your NUST admission merit using the official formula (NET 75%, FSc 15%, Matric 10%). Check historical closing merits and predict admission chances for all NUST programs.',
             url: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
             applicationCategory: 'EducationalApplication',
             operatingSystem: 'Any',
             browserRequirements: 'Requires JavaScript. Requires HTML5.',
             softwareVersion: '1.0',
-            releaseNotes: 'Updated for NUST 2025 admissions with latest merit data',
+            releaseNotes: 'Updated for NUST 2026 admissions with latest merit data',
             author: {
               '@type': 'Person',
               name: 'Maaz Hussain',

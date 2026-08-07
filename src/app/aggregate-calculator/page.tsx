@@ -2,11 +2,11 @@ import type { Metadata } from 'next';
 import AggregateForm from '@/components/forms/AggregateForm';
 
 export const metadata: Metadata = {
-  title: 'NUST Aggregate Calculator 2025 | Free NUST Merit Calculator - Official Formula',
-  description: 'Free NUST aggregate calculator 2025. Calculate your NUST merit using official formula: NET (75%) + FSc/HSSC (15%) + Matric (10%). Supports marks and percentage input. Updated for 2025 admissions.',
+  title: 'NUST Aggregate Calculator | Free NUST Merit Calculator - Official Formula',
+  description: 'Free NUST aggregate calculator. Calculate your NUST merit using official formula: NET (75%) + FSc/HSSC (15%) + Matric (10%). Supports marks and percentage input.',
   keywords: [
     'NUST aggregate calculator',
-    'NUST aggregate calculator 2025',
+    'NUST aggregate calculator 2026',
     'NUST merit calculator',
     'NUST aggregate formula',
     'calculate NUST aggregate',
@@ -14,8 +14,8 @@ export const metadata: Metadata = {
     'NUST merit score calculator',
     'NUST admission calculator',
     'NUST aggregate percentage',
-    'NUST 2025 aggregate',
-    'NUST aggregate formula 2025',
+    'NUST 2026 aggregate',
+    'NUST aggregate formula 2026',
     'how to calculate NUST aggregate',
     'NUST aggregate calculation',
   ],
