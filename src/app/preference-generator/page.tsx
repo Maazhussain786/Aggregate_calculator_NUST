@@ -33,8 +33,8 @@ function transformData() {
 
   // Get the Final merit list data (meritListNumber: null) for the latest year
   // Final list represents the actual closing aggregate after all merit lists.
-  // Only rows with a published aggregate count — a position-only list such as
-  // 2026's 1st would otherwise win on year and leave every program blank.
+  // Only rows with a published aggregate count — a position-only list, as every
+  // 2026 one is, would otherwise win on year and leave every program blank.
   const latestMeritData = meritEntriesWithAggregate.reduce((acc, m) => {
     const key = m.programId;
     const existing = acc[key];

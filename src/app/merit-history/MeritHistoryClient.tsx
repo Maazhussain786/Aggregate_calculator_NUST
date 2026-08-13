@@ -4,6 +4,7 @@ import { useState, useMemo, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import type { PeerRow } from '@/components/charts/PeerComparisonChart';
+import { ordinal } from '@/lib/ordinal';
 
 // Dynamic imports for charts to avoid SSR issues
 function chartLoader(height: number) {
@@ -80,22 +81,6 @@ export default function MeritHistoryClient({ programs, meritHistory }: MeritHist
     });
   }, [programs, selectedCampus, selectedSchool]);
 
-  // Get merit history for selected program - filter to show only 1st, 3rd, and Final lists
-  const programMeritHistory = useMemo(() => {
-    if (!selectedProgram) return [];
-    return meritHistory
-      .filter(m => m.programId === selectedProgram.id)
-      .filter(m => !selectedYear || m.year === parseInt(selectedYear))
-      // Filter to only show 1st, 3rd, and Final lists
-      .filter(m => m.meritListNumber === 1 || m.meritListNumber === 3 || m.meritListNumber === null)
-      .sort((a, b) => {
-        if (a.year !== b.year) return b.year - a.year;
-        // Sort: 1st, 3rd, Final (null)
-        const getOrder = (num: number | null) => num === null ? 999 : num;
-        return getOrder(a.meritListNumber) - getOrder(b.meritListNumber);
-      });
-  }, [meritHistory, selectedProgram, selectedYear]);
-
   // The newest cycle in the dataset, and whether NUST has published its
   // aggregates yet. A fresh cycle ships closing positions first, so the site
   // has to be able to show a year that is position-only.
@@ -104,43 +89,102 @@ export default function MeritHistoryClient({ programs, meritHistory }: MeritHist
     [meritHistory]
   );
 
+  // Finished years are summarised by their 1st, 3rd and Final lists — the
+  // milestones the archive is keyed on. The cycle still running is shown list
+  // by list instead, because each one it publishes is live news.
+  const programMeritHistory = useMemo(() => {
+    if (!selectedProgram) return [];
+    return meritHistory
+      .filter(m => m.programId === selectedProgram.id)
+      .filter(m => !selectedYear || m.year === parseInt(selectedYear))
+      .filter(
+        m =>
+          m.year === latestYear ||
+          m.meritListNumber === 1 ||
+          m.meritListNumber === 3 ||
+          m.meritListNumber === null
+      )
+      .sort((a, b) => {
+        if (a.year !== b.year) return b.year - a.year;
+        // Numbered lists in order, Final (null) last
+        const getOrder = (num: number | null) => num === null ? 999 : num;
+        return getOrder(a.meritListNumber) - getOrder(b.meritListNumber);
+      });
+  }, [meritHistory, selectedProgram, selectedYear, latestYear]);
+
   const latestCycle = useMemo(() => {
     if (latestYear === null) return null;
     const rows = meritHistory.filter(m => m.year === latestYear);
-    const lists = [...new Set(rows.map(r => r.meritListNumber))];
+    const numbered = rows.map(r => r.meritListNumber).filter((l): l is number => l !== null);
+    // No final list yet means the cycle is still running.
+    const isOngoing = !rows.some(r => r.meritListNumber === null);
+    const newestList = numbered.length ? Math.max(...numbered) : null;
     return {
       year: latestYear,
-      // Only the 1st list so far means the cycle is still running.
-      isOngoing: !lists.includes(null),
+      isOngoing,
       awaitingAggregates: rows.every(r => r.closingAggregate === null),
-      programCount: new Set(rows.map(r => r.programId)).size,
-      listLabel: lists.includes(null)
-        ? 'Final list'
-        : `${Math.min(...(lists.filter((l): l is number => l !== null)))}${getOrdinalSuffix(
-            Math.min(...(lists.filter((l): l is number => l !== null)))
-          )} merit list`,
+      // Scoped to the list being announced, not to everything published so far.
+      programCount: new Set(
+        rows
+          .filter(r => newestList === null || r.meritListNumber === newestList)
+          .map(r => r.programId)
+      ).size,
+      listLabel: !isOngoing || newestList === null ? 'Final list' : `${ordinal(newestList)} merit list`,
     };
   }, [meritHistory, latestYear]);
 
-  // The selected program's row in that newest cycle, plus the same list a year
-  // earlier so the two closing positions can be compared directly.
+  // The selected program's newest row in that cycle, plus whatever it should be
+  // read against. The same list a year earlier is the cleanest comparison, but
+  // a cycle publishes lists the previous year's data never recorded — so it
+  // falls back to the list before it in this cycle rather than showing nothing.
   const latestCycleRow = useMemo(() => {
     if (!selectedProgram || latestYear === null) return null;
     const rows = meritHistory.filter(
       m => m.programId === selectedProgram.id && m.year === latestYear
     );
     if (rows.length === 0) return null;
-    // Newest cycle, earliest list published for it.
+    // Newest cycle, latest list published for it — the one applicants are on.
     const current = [...rows].sort(
-      (a, b) => (a.meritListNumber ?? 999) - (b.meritListNumber ?? 999)
+      (a, b) => (b.meritListNumber ?? 999) - (a.meritListNumber ?? 999)
     )[0];
-    const previous = meritHistory.find(
+
+    const sameListLastYear = meritHistory.find(
       m =>
         m.programId === selectedProgram.id &&
         m.year === latestYear - 1 &&
         m.meritListNumber === current.meritListNumber
     );
-    return { current, previous: previous ?? null };
+    if (sameListLastYear) {
+      return {
+        current,
+        baseline: {
+          entry: sameListLastYear,
+          deltaLabel: `${latestYear - 1}`,
+          tileLabel: `Same list, ${latestYear - 1}`,
+          caption: `position at the same stage of ${latestYear - 1}`,
+        },
+      };
+    }
+
+    // A Final list (null) sits after every numbered one, hence the Infinity.
+    const currentList = current.meritListNumber ?? Infinity;
+    const previousInCycle = rows
+      .filter(m => m.meritListNumber !== null && m.meritListNumber < currentList)
+      .sort((a, b) => (b.meritListNumber as number) - (a.meritListNumber as number))[0];
+    const previousList = previousInCycle?.meritListNumber ?? null;
+
+    return {
+      current,
+      baseline:
+        previousInCycle && previousList !== null
+          ? {
+              entry: previousInCycle,
+              deltaLabel: `the ${ordinal(previousList)} list`,
+              tileLabel: `${ordinal(previousList)} list, ${latestYear}`,
+              caption: `where the ${ordinal(previousList)} list of this cycle closed`,
+            }
+          : null,
+    };
   }, [meritHistory, selectedProgram, latestYear]);
 
   // Every published list for this program, scoped by the year filter.
@@ -349,9 +393,7 @@ export default function MeritHistoryClient({ programs, meritHistory }: MeritHist
                   </span>
                   <h2 className="text-lg font-semibold text-[var(--text-primary)]">
                     {latestCycleRow.current.meritListNumber
-                      ? `${latestCycleRow.current.meritListNumber}${getOrdinalSuffix(
-                          latestCycleRow.current.meritListNumber
-                        )} merit list`
+                      ? `${ordinal(latestCycleRow.current.meritListNumber)} merit list`
                       : 'Final merit list'}
                   </h2>
                   <span className="text-sm text-[var(--text-muted)]">
@@ -367,11 +409,11 @@ export default function MeritHistoryClient({ programs, meritHistory }: MeritHist
                     </p>
                     <p className="mt-1.5">
                       {latestCycleRow.current.closingMeritPosition !== null &&
-                      latestCycleRow.previous?.closingMeritPosition != null ? (
+                      latestCycleRow.baseline?.entry.closingMeritPosition != null ? (
                         <PositionDelta
                           current={latestCycleRow.current.closingMeritPosition}
-                          previous={latestCycleRow.previous.closingMeritPosition}
-                          previousYear={latestCycleRow.previous.year}
+                          previous={latestCycleRow.baseline.entry.closingMeritPosition}
+                          previousLabel={latestCycleRow.baseline.deltaLabel}
                         />
                       ) : (
                         <span className="text-xs text-[var(--text-muted)]">
@@ -397,15 +439,15 @@ export default function MeritHistoryClient({ programs, meritHistory }: MeritHist
 
                   <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] p-4">
                     <p className="text-xs text-[var(--text-muted)] mb-1">
-                      Same list, {latestCycle.year - 1}
+                      {latestCycleRow.baseline?.tileLabel ?? `Same list, ${latestCycle.year - 1}`}
                     </p>
                     <p className="text-3xl font-semibold font-mono text-[var(--text-secondary)] leading-tight">
-                      {latestCycleRow.previous?.closingMeritPosition?.toLocaleString() ?? '—'}
+                      {latestCycleRow.baseline?.entry.closingMeritPosition?.toLocaleString() ?? '—'}
                     </p>
                     <p className="mt-1.5 text-xs text-[var(--text-muted)]">
-                      {latestCycleRow.previous
-                        ? `position at the same stage of ${latestCycle.year - 1}`
-                        : `no ${latestCycle.year - 1} data for this list`}
+                      {latestCycleRow.baseline
+                        ? latestCycleRow.baseline.caption
+                        : `nothing published to compare this list against`}
                     </p>
                   </div>
                 </div>
@@ -458,7 +500,7 @@ export default function MeritHistoryClient({ programs, meritHistory }: MeritHist
                           </span>
                         </td>
                         <td className="py-3 px-4 text-[var(--text-secondary)]">
-                          {entry.meritListNumber ? `${entry.meritListNumber}${getOrdinalSuffix(entry.meritListNumber)} List` : 'Final'}
+                          {entry.meritListNumber ? `${ordinal(entry.meritListNumber)} List` : 'Final'}
                         </td>
                         <td className="py-3 px-4 text-right">
                           {/* A list can be published before its aggregate is */}
@@ -584,25 +626,26 @@ export default function MeritHistoryClient({ programs, meritHistory }: MeritHist
 }
 
 /**
- * Compares two closing merit positions from the same list stage. A larger
- * number means the list reached further down the merit order, which is the
- * good outcome for an applicant — so "deeper" is styled the same way a falling
- * aggregate cutoff is.
+ * Compares a closing merit position against whatever it is being read against —
+ * the same list a year earlier, or the previous list of the same cycle. A
+ * larger number means the list reached further down the merit order, which is
+ * the good outcome for an applicant, so "deeper" is styled the same way a
+ * falling aggregate cutoff is.
  */
 function PositionDelta({
   current,
   previous,
-  previousYear,
+  previousLabel,
 }: {
   current: number;
   previous: number;
-  previousYear: number;
+  previousLabel: string;
 }) {
   const delta = current - previous;
   if (delta === 0) {
     return (
       <span className="text-xs text-[var(--text-muted)]">
-        exactly where it closed in {previousYear}
+        exactly where it closed in {previousLabel}
       </span>
     );
   }
@@ -614,13 +657,7 @@ function PositionDelta({
       }`}
     >
       {deeper ? '▼' : '▲'} {Math.abs(delta).toLocaleString()}{' '}
-      {deeper ? 'positions deeper than' : 'positions tighter than'} {previousYear}
+      {deeper ? 'positions deeper than' : 'positions tighter than'} {previousLabel}
     </span>
   );
-}
-
-function getOrdinalSuffix(n: number): string {
-  const s = ['th', 'st', 'nd', 'rd'];
-  const v = n % 100;
-  return s[(v - 20) % 10] || s[v] || s[0];
 }

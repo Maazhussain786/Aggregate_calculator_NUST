@@ -33,7 +33,7 @@ function transformData() {
   }));
 
   // Predictions are aggregate-based, so they read from the latest year that has
-  // published aggregates — never from a position-only list such as 2026's 1st.
+  // published aggregates — never from a position-only list, as every 2026 one is.
   const latestMeritData = meritEntriesWithAggregate.reduce((acc, m) => {
     const key = m.programId;
     if (!acc[key] || m.year > acc[key].year ||

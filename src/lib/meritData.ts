@@ -29,6 +29,15 @@ export function latestAggregateYearByProgram(): Record<string, number> {
   return latest;
 }
 
+/** Every numbered list published for a cycle, oldest first. */
+export function publishedListNumbers(year: number): number[] {
+  const lists = new Set<number>();
+  for (const m of sampleData.meritHistory) {
+    if (m.year === year && m.meritListNumber !== null) lists.add(m.meritListNumber);
+  }
+  return [...lists].sort((a, b) => a - b);
+}
+
 // ============================================
 // NET pools
 // ============================================
@@ -119,7 +128,7 @@ const CATEGORY_OVERRIDES: Record<string, MeritListCategory> = {
   'ceme-ce': 'Engineering',
   'mcs-se': 'Engineering',
   'mcs-is': 'Engineering',
-  'sines-bsbi': 'Engineering',
+  'sines-bsbi': 'Computing',
 };
 
 export function meritListCategoryFor(

@@ -7,19 +7,40 @@ import {
   SEPARATELY_NUMBERED_PROGRAMS,
   meritListCategoryFor,
   netPoolFor,
+  publishedListNumbers,
 } from '@/lib/meritData';
-import MeritList2026Client, { type MeritRow } from './MeritList2026Client';
+import { ordinal } from '@/lib/ordinal';
+import MeritList2026Client, { type ListView, type MeritRow } from './MeritList2026Client';
 
 const YEAR = 2026;
-const LIST_NUMBER = 1;
+
+/**
+ * The cycle gains a list every few weeks, so nothing here names one. Everything
+ * — the copy, the metadata, which list opens by default — is derived from
+ * whatever the dataset holds, and publishing the next list is a data-only edit.
+ */
+const LISTS = publishedListNumbers(YEAR);
+const LATEST_LIST = LISTS[LISTS.length - 1];
+const EARLIER_LISTS = LISTS.slice(0, -1);
+
+/** "1st list", "1st and 2nd lists", "1st, 2nd and 3rd lists". */
+function listSeries(numbers: number[]): string {
+  const names = numbers.map(ordinal);
+  const noun = names.length === 1 ? 'list' : 'lists';
+  if (names.length <= 1) return `${names.join('')} ${noun}`;
+  return `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]} ${noun}`;
+}
 
 export const metadata: Metadata = {
-  title: 'NUST Merit List 2026 (1st Merit List) — Closing Positions, All Programs',
+  title: `NUST Merit List 2026 (${ordinal(LATEST_LIST)} Merit List) — Closing Positions, All Programs`,
   description:
-    'The complete NUST 2026 1st merit list: closing merit positions for every program at SEECS, SMME, CEME, NBS, S3H, PNEC, NBC, MCS, CAE and more, with last year\'s position for comparison. Search and filter in one table.',
+    `The complete NUST 2026 ${ordinal(LATEST_LIST)} merit list: closing merit positions for every program at SEECS, ` +
+    'SMME, CEME, NBS, S3H, PNEC, NBC, MCS, CAE and more, with the earlier lists beside it. ' +
+    'Search and filter in one table.',
   keywords: [
     'NUST merit list 2026',
-    'NUST 1st merit list 2026',
+    `NUST ${ordinal(LATEST_LIST)} merit list 2026`,
+    ...LISTS.slice(0, -1).map(n => `NUST ${ordinal(n)} merit list 2026`),
     'NUST closing merit 2026',
     'NUST merit position 2026',
     'NUST SEECS merit 2026',
@@ -31,44 +52,80 @@ export const metadata: Metadata = {
   },
 };
 
-function buildRows(): MeritRow[] {
-  const current = sampleData.meritHistory.filter(
-    m => m.year === YEAR && m.meritListNumber === LIST_NUMBER
-  );
+/**
+ * A list is read against whatever came immediately before it: the previous list
+ * of this cycle once there is one, and otherwise the same list a year earlier.
+ * Both answer "how much further down did it reach", just over different spans.
+ */
+function baselineFor(listNumber: number) {
+  const previousInCycle = LISTS.filter(n => n < listNumber).pop();
+  return previousInCycle !== undefined
+    ? {
+        label: `${ordinal(previousInCycle)} list`,
+        caption: `the ${ordinal(previousInCycle)} list of this cycle`,
+        find: (programId: string) =>
+          sampleData.meritHistory.find(
+            m =>
+              m.programId === programId &&
+              m.year === YEAR &&
+              m.meritListNumber === previousInCycle
+          ),
+      }
+    : {
+        label: `${YEAR - 1} position`,
+        caption: `the same list in ${YEAR - 1}`,
+        find: (programId: string) =>
+          sampleData.meritHistory.find(
+            m =>
+              m.programId === programId &&
+              m.year === YEAR - 1 &&
+              m.meritListNumber === listNumber
+          ),
+      };
+}
 
-  return current.flatMap((entry): MeritRow[] => {
-    const program = sampleData.programs.find(p => p.id === entry.programId);
-    if (!program) return [];
+function buildView(listNumber: number): ListView {
+  const baseline = baselineFor(listNumber);
 
-    const previous = sampleData.meritHistory.find(
-      m =>
-        m.programId === program.id && m.year === YEAR - 1 && m.meritListNumber === LIST_NUMBER
-    );
+  const rows = sampleData.meritHistory
+    .filter(m => m.year === YEAR && m.meritListNumber === listNumber)
+    .flatMap((entry): MeritRow[] => {
+      const program = sampleData.programs.find(p => p.id === entry.programId);
+      if (!program) return [];
 
-    return [
-      {
-        id: program.id,
-        name: program.name,
-        school: program.school,
-        campus: program.campus,
-        category: meritListCategoryFor(program.id, program.disciplineGroup),
-        netPool: NET_POOL_LABEL[netPoolFor(program.disciplineGroup, program.school)],
-        separatelyNumbered: SEPARATELY_NUMBERED_PROGRAMS.has(program.id),
-        position: entry.closingMeritPosition,
-        aggregate: entry.closingAggregate,
-        previousPosition: previous?.closingMeritPosition ?? null,
-      },
-    ];
-  });
+      return [
+        {
+          id: program.id,
+          name: program.name,
+          school: program.school,
+          campus: program.campus,
+          category: meritListCategoryFor(program.id, program.disciplineGroup),
+          netPool: NET_POOL_LABEL[netPoolFor(program.disciplineGroup, program.school)],
+          separatelyNumbered: SEPARATELY_NUMBERED_PROGRAMS.has(program.id),
+          position: entry.closingMeritPosition,
+          aggregate: entry.closingAggregate,
+          baselinePosition: baseline.find(program.id)?.closingMeritPosition ?? null,
+        },
+      ];
+    });
+
+  return {
+    listNumber,
+    label: `${ordinal(listNumber)} list`,
+    baselineLabel: baseline.label,
+    baselineCaption: baseline.caption,
+    rows,
+  };
 }
 
 export default function MeritList2026Page() {
-  const rows = buildRows();
-  const awaitingAggregates = rows.every(r => r.aggregate === null);
+  const views = LISTS.map(buildView);
+  const latest = views[views.length - 1];
+  const awaitingAggregates = latest.rows.every(r => r.aggregate === null);
 
   // Order the category filter the way the published list is ordered, dropping
   // any heading nothing has been published under yet.
-  const categories = MERIT_LIST_CATEGORIES.filter(c => rows.some(r => r.category === c));
+  const categories = MERIT_LIST_CATEGORIES.filter(c => latest.rows.some(r => r.category === c));
 
   return (
     <div className="animate-fade-in">
@@ -76,17 +133,20 @@ export default function MeritList2026Page() {
       <section className="py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <span className="inline-block px-3 py-1 rounded-full bg-[var(--accent-light)] text-[var(--accent-primary)] text-xs font-semibold uppercase tracking-wide mb-4">
-            1st merit list
+            {ordinal(LATEST_LIST)} merit list is out
           </span>
           <h1 className="text-3xl md:text-5xl font-bold text-[var(--text-primary)] mb-4">
             NUST Merit List {YEAR}
           </h1>
           <p className="text-lg text-[var(--text-secondary)] max-w-3xl mx-auto">
-            Closing merit position on the {YEAR} 1st merit list for all {rows.length} programs,
-            with the same list from {YEAR - 1} beside it.
-            {awaitingAggregates
-              ? ' NUST has not published the closing aggregates for this list yet.'
-              : ''}
+            {`Closing merit position on the ${YEAR} ${ordinal(LATEST_LIST)} merit list for all ` +
+              `${latest.rows.length} programs` +
+              (EARLIER_LISTS.length
+                ? `, and how far it moved past the ${listSeries(EARLIER_LISTS)}.`
+                : '.') +
+              (awaitingAggregates
+                ? ' NUST has not published the closing aggregates for this list yet.'
+                : '')}
           </p>
         </div>
       </section>
@@ -94,7 +154,7 @@ export default function MeritList2026Page() {
       {/* The list */}
       <section className="pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <MeritList2026Client rows={rows} categories={[...categories]} year={YEAR} />
+          <MeritList2026Client views={views} categories={[...categories]} year={YEAR} />
         </div>
       </section>
 
@@ -113,8 +173,8 @@ export default function MeritList2026Page() {
                 </h3>
                 <p className="text-sm">
                   The number is the merit position of the last candidate called in that program on
-                  the 1st list. If your position in the merit list is lower than that number, you
-                  were within this list.
+                  that list. If your position in the merit list is lower than that number, you were
+                  within the list.
                 </p>
               </div>
               <div className="p-6 bg-[var(--bg-card)] rounded-xl border border-[var(--border-color)] shadow-sm">
@@ -130,8 +190,9 @@ export default function MeritList2026Page() {
             </div>
 
             <p>
-              Later lists always run deeper than the 1st. A program you missed on this list can
-              still call you on the 2nd, 3rd or a later one, so use the{' '}
+              Every list runs deeper than the one before it. A program that did not call you on the{' '}
+              {ordinal(LATEST_LIST)} list can still call you on the{' '}
+              {ordinal(LATEST_LIST + 1)} or a later one, so use the{' '}
               <Link href="/merit-history" className="text-[var(--accent-primary)] underline">
                 merit history
               </Link>{' '}

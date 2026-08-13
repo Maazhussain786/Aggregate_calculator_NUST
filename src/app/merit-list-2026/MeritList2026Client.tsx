@@ -13,11 +13,24 @@ export interface MeritRow {
   separatelyNumbered: boolean;
   position: number | null;
   aggregate: number | null;
-  previousPosition: number | null;
+  /** Closing position on whatever list this one is being read against. */
+  baselinePosition: number | null;
+}
+
+export interface ListView {
+  listNumber: number;
+  /** "2nd list" */
+  label: string;
+  /** Column heading for the comparison figure — "1st list", "2025 position". */
+  baselineLabel: string;
+  /** The same thing said in prose, for the legend. */
+  baselineCaption: string;
+  rows: MeritRow[];
 }
 
 interface Props {
-  rows: MeritRow[];
+  /** Every list published for the cycle, oldest first. */
+  views: ListView[];
   /** Published categories, in the order NUST lists them. */
   categories: string[];
   year: number;
@@ -43,14 +56,21 @@ function Change({ current, previous }: { current: number; previous: number }) {
   );
 }
 
-export default function MeritList2026Client({ rows, categories, year }: Props) {
+export default function MeritList2026Client({ views, categories, year }: Props) {
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState<string>('');
   const [sort, setSort] = useState<SortKey>('position');
+  // The newest list is what an applicant is checking today.
+  const [listNumber, setListNumber] = useState<number>(views[views.length - 1].listNumber);
+
+  const view = useMemo(
+    () => views.find(v => v.listNumber === listNumber) ?? views[views.length - 1],
+    [views, listNumber]
+  );
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return rows.filter(r => {
+    return view.rows.filter(r => {
       if (category && r.category !== category) return false;
       if (!q) return true;
       return (
@@ -60,7 +80,7 @@ export default function MeritList2026Client({ rows, categories, year }: Props) {
         r.netPool.toLowerCase().includes(q)
       );
     });
-  }, [rows, query, category]);
+  }, [view, query, category]);
 
   // Grouped by published category so positions sit next to the ones they can
   // actually be read against.
@@ -85,6 +105,40 @@ export default function MeritList2026Client({ rows, categories, year }: Props) {
     <div className="space-y-4">
       {/* Controls */}
       <div className="card p-4 md:p-5 space-y-4">
+        {views.length > 1 && (
+          <div
+            role="group"
+            aria-label="Merit list"
+            className="flex flex-wrap items-center gap-2"
+          >
+            <span className="text-sm text-[var(--text-muted)] mr-1">Showing</span>
+            {views.map(v => (
+              <button
+                key={v.listNumber}
+                type="button"
+                onClick={() => setListNumber(v.listNumber)}
+                aria-pressed={v.listNumber === listNumber}
+                className={`px-3.5 py-1.5 text-sm rounded-lg border transition-colors ${
+                  v.listNumber === listNumber
+                    ? 'bg-[var(--accent-primary)] border-[var(--accent-primary)] text-white font-semibold'
+                    : 'bg-[var(--bg-input)] border-[var(--border-color)] text-[var(--text-secondary)] hover:border-[var(--accent-primary)] hover:text-[var(--text-primary)]'
+                }`}
+              >
+                {v.label}
+                {v.listNumber === views[views.length - 1].listNumber && (
+                  <span
+                    className={`ml-1.5 text-[10px] uppercase tracking-wide ${
+                      v.listNumber === listNumber ? 'opacity-90' : 'text-[var(--accent-primary)]'
+                    }`}
+                  >
+                    latest
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
+        )}
+
         <div className="flex flex-col lg:flex-row lg:items-center gap-3">
           <div className="flex-1">
             <label htmlFor="program-search" className="sr-only">
@@ -129,8 +183,8 @@ export default function MeritList2026Client({ rows, categories, year }: Props) {
         </div>
 
         <div className="flex flex-wrap gap-2">
-          {[{ label: `All programs (${rows.length})`, value: '' }, ...categories.map(c => ({
-            label: `${c} (${rows.filter(r => r.category === c).length})`,
+          {[{ label: `All programs (${view.rows.length})`, value: '' }, ...categories.map(c => ({
+            label: `${c} (${view.rows.filter(r => r.category === c).length})`,
             value: c,
           }))].map(option => (
             <button
@@ -170,13 +224,13 @@ export default function MeritList2026Client({ rows, categories, year }: Props) {
                     NET
                   </th>
                   <th className="text-right py-3 px-4 text-[var(--text-secondary)] font-medium text-sm whitespace-nowrap">
-                    {year} position
+                    {view.label} position
                   </th>
                   <th className="text-right py-3 px-4 text-[var(--text-secondary)] font-medium text-sm whitespace-nowrap">
                     {year} aggregate
                   </th>
                   <th className="text-right py-3 px-4 text-[var(--text-secondary)] font-medium text-sm whitespace-nowrap hidden sm:table-cell">
-                    {year - 1} position
+                    {view.baselineLabel}
                   </th>
                   <th className="text-right py-3 px-4 text-[var(--text-secondary)] font-medium text-sm whitespace-nowrap">
                     Change
@@ -235,11 +289,11 @@ export default function MeritList2026Client({ rows, categories, year }: Props) {
                         )}
                       </td>
                       <td className="py-3 px-4 text-right font-mono text-[var(--text-secondary)] hidden sm:table-cell">
-                        {row.previousPosition?.toLocaleString() ?? '—'}
+                        {row.baselinePosition?.toLocaleString() ?? '—'}
                       </td>
                       <td className="py-3 px-4 text-right font-mono text-sm whitespace-nowrap">
-                        {row.position !== null && row.previousPosition !== null ? (
-                          <Change current={row.position} previous={row.previousPosition} />
+                        {row.position !== null && row.baselinePosition !== null ? (
+                          <Change current={row.position} previous={row.baselinePosition} />
                         ) : (
                           <span className="text-[var(--text-muted)]">—</span>
                         )}
@@ -255,9 +309,10 @@ export default function MeritList2026Client({ rows, categories, year }: Props) {
 
       <div className="text-xs text-[var(--text-muted)] space-y-1 px-1">
         <p>
-          <span className="text-[var(--success)]">▼</span> means the list ran deeper than {year - 1}
-          , calling more candidates. <span className="text-[var(--warning)]">▲</span> means it
-          closed earlier. Positions are only comparable within the same NET.
+          <span className="text-[var(--success)]">▼</span> means the {view.label} ran deeper than{' '}
+          {view.baselineCaption}, calling more candidates.{' '}
+          <span className="text-[var(--warning)]">▲</span> means it closed earlier. Positions are
+          only comparable within the same NET.
         </p>
         {hasFootnote && (
           <p>

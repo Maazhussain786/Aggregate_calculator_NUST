@@ -70,7 +70,7 @@ function fitMonotonic(points: PositionDataPoint[]): PositionDataPoint[] {
 // applicants all sit on one curve, Business applicants on another.
 function transformData() {
   // Latest year with published aggregates for each program — a position-only
-  // list (2026's 1st) carries no curve, so it must not shadow 2025.
+  // list (every 2026 one so far) carries no curve, so it must not shadow 2025.
   const latestYear = latestAggregateYearByProgram();
 
   const netTypeByProgram: Record<string, NETType> = {};

@@ -14,6 +14,7 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import { useVizTokens, tooltipStyle, CHART_FONT } from './vizTokens';
+import { ordinal } from '@/lib/ordinal';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend);
 
@@ -36,13 +37,6 @@ interface Props {
 }
 
 type Metric = 'aggregate' | 'position';
-
-/** The three lists NUST data is published for, in the order a cycle runs. */
-const STAGES: { key: number | null; label: string }[] = [
-  { key: 1, label: '1st list' },
-  { key: 3, label: '3rd list' },
-  { key: null, label: 'Final list' },
-];
 
 /**
  * Draws the value beside each line's last point, but only when the endpoints
@@ -106,11 +100,34 @@ export default function MeritProgressionChart({ entries, yearOrder, height = 340
     [entries]
   );
 
+  /**
+   * The x-axis is the stages of a cycle, taken from whatever has actually been
+   * published rather than a fixed 1st/3rd/Final — a running cycle adds a list
+   * at a time, and each one has to appear as it lands. The Final list always
+   * closes the axis.
+   */
+  const stages = useMemo(() => {
+    const numbered = [
+      ...new Set(
+        entries
+          .map((e) => e.meritListNumber)
+          .filter((n): n is number => n !== null)
+      ),
+    ].sort((a, b) => a - b);
+
+    return [
+      ...numbered.map((key) => ({ key: key as number | null, label: `${ordinal(key)} list` })),
+      ...(entries.some((e) => e.meritListNumber === null)
+        ? [{ key: null as number | null, label: 'Final list' }]
+        : []),
+    ];
+  }, [entries]);
+
   const chartData = useMemo(() => {
     const datasets = years.flatMap((year) => {
       const slot = Math.max(0, yearOrder.indexOf(year));
       const colour = t.series[slot % t.series.length];
-      const data = STAGES.map(({ key }) => {
+      const data = stages.map(({ key }) => {
         const hit = entries.find((e) => e.year === year && e.meritListNumber === key);
         if (!hit) return null;
         return metric === 'aggregate' ? hit.closingAggregate : hit.closingMeritPosition;
@@ -137,8 +154,8 @@ export default function MeritProgressionChart({ entries, yearOrder, height = 340
       }];
     });
 
-    return { labels: STAGES.map((s) => s.label), datasets };
-  }, [entries, years, yearOrder, metric, t]);
+    return { labels: stages.map((s) => s.label), datasets };
+  }, [entries, years, stages, yearOrder, metric, t]);
 
   const seriesCount = chartData.datasets.length;
 
