@@ -3839,6 +3839,62 @@
       "closingMeritPosition": 144,
       "closingAggregate": null,
       "sourceName": "NUST Official"
+    },
+    {
+      "programId": "asab-bsbio",
+      "year": 2026,
+      "meritListNumber": 3,
+      "closingMeritPosition": 128,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "asab-bsfs",
+      "year": 2026,
+      "meritListNumber": 3,
+      "closingMeritPosition": 467,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "asab-bsag",
+      "year": 2026,
+      "meritListNumber": 3,
+      "closingMeritPosition": 467,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "iese-envsc",
+      "year": 2026,
+      "meritListNumber": 3,
+      "closingMeritPosition": 278,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "sns-bsmath",
+      "year": 2026,
+      "meritListNumber": 3,
+      "closingMeritPosition": 1001,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "sns-bsphy",
+      "year": 2026,
+      "meritListNumber": 3,
+      "closingMeritPosition": 950,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "sns-bschem",
+      "year": 2026,
+      "meritListNumber": 3,
+      "closingMeritPosition": 784,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
     }
   ],
   "meritListThresholds": {
