@@ -44,8 +44,8 @@ export async function POST(request: Request) {
     // Note: ACF (nbs-bsaf), BBA (nbs-bba), and Tourism (nbs-bsth) share the same Business NET.
     // Their aggregate-to-position curve is the same, but closing positions differ per program.
     // ACF aggregate data has been corrected to match BBA's curve.
-    // Position-only lists (2026's 1st) are skipped — the prediction is driven by
-    // closing aggregates, so it uses the newest year that publishes them.
+    // Position-only lists (every 2026 one) are skipped — the prediction is driven
+    // by closing aggregates, so it uses the newest year that publishes them.
     const programMeritHistory = meritEntriesWithAggregate.filter(m => m.programId === programId);
     const latestYear = Math.max(...programMeritHistory.map(m => m.year));
     const latestYearHistory = programMeritHistory

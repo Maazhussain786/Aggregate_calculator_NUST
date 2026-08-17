@@ -4,15 +4,24 @@ import path from 'path';
 import MeritHistoryClient from './MeritHistoryClient';
 import MeritPdfDownload from '@/components/MeritPdfDownload';
 import sampleData from '@/data/sampleMeritData.json';
+import { publishedListNumbers } from '@/lib/meritData';
+import { listSeries, ordinal } from '@/lib/ordinal';
 import type { MeritListPage } from '@/lib/meritPdfGenerator';
 
+// Named from the dataset rather than spelled out, so the metadata stops
+// advertising a stale list the moment the next one is published.
+const CYCLE_YEAR = 2026;
+const CYCLE_LISTS = publishedListNumbers(CYCLE_YEAR);
+
 export const metadata: Metadata = {
-  title: 'NUST Merit List 2026 & Merit History | All Programs',
-  description: 'NUST 2026 1st and 2nd merit list closing positions for every program, plus historical closing aggregates and merit positions from 2024 and 2025. SEECS, SMME, NBS, CEME, PNEC and more.',
+  title: `NUST Merit List ${CYCLE_YEAR} & Merit History | All Programs`,
+  description:
+    `NUST ${CYCLE_YEAR} closing positions from the ${listSeries(CYCLE_LISTS, 'merit list')} ` +
+    'for every program, plus historical closing aggregates and merit positions ' +
+    'from 2024 and 2025. SEECS, SMME, NBS, CEME, PNEC and more.',
   keywords: [
-    'NUST merit list 2026',
-    'NUST 2nd merit list 2026',
-    'NUST 1st merit list 2026',
+    `NUST merit list ${CYCLE_YEAR}`,
+    ...[...CYCLE_LISTS].reverse().map(n => `NUST ${ordinal(n)} merit list ${CYCLE_YEAR}`),
     'NUST merit history',
     'NUST closing merit',
     'NUST cutoff',

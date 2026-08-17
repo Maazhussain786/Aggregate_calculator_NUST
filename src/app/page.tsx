@@ -2,6 +2,17 @@ import Link from 'next/link';
 import Image from 'next/image';
 import type { Metadata } from 'next';
 import HorizonPromo from '@/components/HorizonPromo';
+import { publishedListNumbers } from '@/lib/meritData';
+import { listSeries, ordinal } from '@/lib/ordinal';
+
+/**
+ * The running cycle gains a list every few weeks. Nothing here names one:
+ * both the feature card and the banner below read whatever the dataset
+ * holds, so publishing the next list stays a data-only edit.
+ */
+const CYCLE_YEAR = 2026;
+const CYCLE_LISTS = publishedListNumbers(CYCLE_YEAR);
+const LATEST_LIST = CYCLE_LISTS[CYCLE_LISTS.length - 1];
 
 export const metadata: Metadata = {
   title: 'NUST Aggregate Calculator | Free Merit & Admission Predictor',
@@ -23,8 +34,8 @@ const features = [
     ),
   },
   {
-    title: 'Merit List 2026',
-    description: 'The full 2026 2nd merit list — closing merit position for every program, in one searchable table.',
+    title: `Merit List ${CYCLE_YEAR}`,
+    description: `The full ${CYCLE_YEAR} ${ordinal(LATEST_LIST)} merit list — closing merit position for every program, in one searchable table.`,
     href: '/merit-list-2026',
     icon: (
       <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -329,12 +340,14 @@ export default function HomePage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="card p-6 md:p-8 border-l-4 border-l-[var(--accent-primary)]">
             <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">
-              Updated for 2026 Admissions
+              Updated for {CYCLE_YEAR} Admissions
             </h3>
             <p className="text-[var(--text-secondary)] text-sm leading-relaxed">
-              This calculator uses the official NUST aggregate formula, and the 2026 1st and 2nd merit
-              lists are already in. Historical merit data is available for reference. Always verify
-              information with official NUST sources before making decisions.
+              {`This calculator uses the official NUST aggregate formula, and the ${CYCLE_YEAR} ` +
+                `${listSeries(CYCLE_LISTS, 'merit list')} ` +
+                `${CYCLE_LISTS.length === 1 ? 'is' : 'are'} already in. `}
+              Historical merit data is available for reference. Always verify information with
+              official NUST sources before making decisions.
             </p>
           </div>
         </div>

@@ -61,8 +61,8 @@ function Tile({
 export default function MeritStatTiles({ entries, nustRank, nustTotal }: Props) {
   const stats = useMemo(() => {
     // Anchor on the newest cycle that has actually finished. A cycle still in
-    // progress (2026, where only the 1st list is out) has no final cutoff to
-    // report, and reading it as "latest" would blank out every tile.
+    // progress (2026, several lists in but with no final one) has no final
+    // cutoff to report, and reading it as "latest" would blank out every tile.
     const years = [
       ...new Set(entries.filter((e) => e.meritListNumber === null).map((e) => e.year)),
     ].sort((a, b) => b - a);

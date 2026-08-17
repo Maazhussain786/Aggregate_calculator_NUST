@@ -3,7 +3,7 @@
  *
  * NUST publishes a cycle's closing merit positions well before it publishes the
  * aggregates behind them, so the newest year in the dataset can legitimately be
- * position-only (2026's 1st list is). Anything that reasons about closing
+ * position-only (every 2026 list so far is). Anything that reasons about closing
  * aggregates therefore has to work from the newest year that actually carries
  * them — reading "the latest year" literally would quietly empty every
  * prediction the moment a position-only list lands.

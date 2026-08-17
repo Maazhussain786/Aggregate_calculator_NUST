@@ -12,12 +12,12 @@ export function ordinal(n: number): string {
 
 /**
  * Names a run of merit lists in prose: "1st list", "1st and 2nd lists",
- * "1st, 2nd and 3rd lists". Empty gives "", so a caller can interpolate it
- * behind a length check without building the sentence twice.
+ * "1st, 2nd and 3rd merit lists". Empty gives "", so a caller can interpolate
+ * it behind a length check without building the sentence twice.
  */
-export function listSeries(numbers: number[]): string {
+export function listSeries(numbers: number[], noun = 'list'): string {
   const names = numbers.map(ordinal);
   if (names.length === 0) return '';
-  if (names.length === 1) return `${names[0]} list`;
-  return `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]} lists`;
+  if (names.length === 1) return `${names[0]} ${noun}`;
+  return `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]} ${noun}s`;
 }
