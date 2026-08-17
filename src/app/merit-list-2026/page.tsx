@@ -9,7 +9,7 @@ import {
   netPoolFor,
   publishedListNumbers,
 } from '@/lib/meritData';
-import { ordinal } from '@/lib/ordinal';
+import { listSeries, ordinal } from '@/lib/ordinal';
 import MeritList2026Client, { type ListView, type MeritRow } from './MeritList2026Client';
 
 const YEAR = 2026;
@@ -22,14 +22,6 @@ const YEAR = 2026;
 const LISTS = publishedListNumbers(YEAR);
 const LATEST_LIST = LISTS[LISTS.length - 1];
 const EARLIER_LISTS = LISTS.slice(0, -1);
-
-/** "1st list", "1st and 2nd lists", "1st, 2nd and 3rd lists". */
-function listSeries(numbers: number[]): string {
-  const names = numbers.map(ordinal);
-  const noun = names.length === 1 ? 'list' : 'lists';
-  if (names.length <= 1) return `${names.join('')} ${noun}`;
-  return `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]} ${noun}`;
-}
 
 export const metadata: Metadata = {
   title: `NUST Merit List 2026 (${ordinal(LATEST_LIST)} Merit List) — Closing Positions, All Programs`,
