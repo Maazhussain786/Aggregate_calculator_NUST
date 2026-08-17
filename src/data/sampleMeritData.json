@@ -3495,6 +3495,62 @@
       "closingMeritPosition": 706,
       "closingAggregate": null,
       "sourceName": "NUST Official"
+    },
+    {
+      "programId": "seecs-cs",
+      "year": 2026,
+      "meritListNumber": 3,
+      "closingMeritPosition": 543,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "pnec-cs",
+      "year": 2026,
+      "meritListNumber": 3,
+      "closingMeritPosition": 1263,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "nbc-cs",
+      "year": 2026,
+      "meritListNumber": 3,
+      "closingMeritPosition": 2266,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "seecs-ds",
+      "year": 2026,
+      "meritListNumber": 3,
+      "closingMeritPosition": 562,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "seecs-ai",
+      "year": 2026,
+      "meritListNumber": 3,
+      "closingMeritPosition": 410,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "nbc-ai",
+      "year": 2026,
+      "meritListNumber": 3,
+      "closingMeritPosition": 2435,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "sines-bsbi",
+      "year": 2026,
+      "meritListNumber": 3,
+      "closingMeritPosition": 155,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
     }
   ],
   "meritListThresholds": {
