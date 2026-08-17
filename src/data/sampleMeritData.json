@@ -3751,6 +3751,94 @@
       "closingMeritPosition": 3622,
       "closingAggregate": null,
       "sourceName": "NUST Official"
+    },
+    {
+      "programId": "nbs-bba",
+      "year": 2026,
+      "meritListNumber": 3,
+      "closingMeritPosition": 605,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "nbs-bsaf",
+      "year": 2026,
+      "meritListNumber": 3,
+      "closingMeritPosition": 406,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "nbs-bsth",
+      "year": 2026,
+      "meritListNumber": 3,
+      "closingMeritPosition": 1629,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "s3h-bseco",
+      "year": 2026,
+      "meritListNumber": 3,
+      "closingMeritPosition": 715,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "s3h-bspa",
+      "year": 2026,
+      "meritListNumber": 3,
+      "closingMeritPosition": 1484,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "s3h-bsmc",
+      "year": 2026,
+      "meritListNumber": 3,
+      "closingMeritPosition": 1640,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "s3h-bspsy",
+      "year": 2026,
+      "meritListNumber": 3,
+      "closingMeritPosition": 1389,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "nls-llb",
+      "year": 2026,
+      "meritListNumber": 3,
+      "closingMeritPosition": 178,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "s3h-bsla",
+      "year": 2026,
+      "meritListNumber": 3,
+      "closingMeritPosition": 1691,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "sada-bsarch",
+      "year": 2026,
+      "meritListNumber": 3,
+      "closingMeritPosition": 102,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "sada-bsid",
+      "year": 2026,
+      "meritListNumber": 3,
+      "closingMeritPosition": 144,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
     }
   ],
   "meritListThresholds": {
