@@ -89,28 +89,24 @@ export default function MeritHistoryClient({ programs, meritHistory }: MeritHist
     [meritHistory]
   );
 
-  // Finished years are summarised by their 1st, 3rd and Final lists — the
-  // milestones the archive is keyed on. The cycle still running is shown list
-  // by list instead, because each one it publishes is live news.
-  const programMeritHistory = useMemo(() => {
+  // Every list this program has been on, scoped by the year filter, newest
+  // cycle first. The archive used to be summarised down to its 1st, 3rd and
+  // Final lists, which meant the table could only be as right as whoever
+  // picked those three rows — and it wasn't. Applicants read these numbers to
+  // decide whether to wait for the next list, so the whole series is shown
+  // exactly as NUST published it.
+  const programEntries = useMemo(() => {
     if (!selectedProgram) return [];
     return meritHistory
       .filter(m => m.programId === selectedProgram.id)
       .filter(m => !selectedYear || m.year === parseInt(selectedYear))
-      .filter(
-        m =>
-          m.year === latestYear ||
-          m.meritListNumber === 1 ||
-          m.meritListNumber === 3 ||
-          m.meritListNumber === null
-      )
       .sort((a, b) => {
         if (a.year !== b.year) return b.year - a.year;
         // Numbered lists in order, Final (null) last
         const getOrder = (num: number | null) => num === null ? 999 : num;
         return getOrder(a.meritListNumber) - getOrder(b.meritListNumber);
       });
-  }, [meritHistory, selectedProgram, selectedYear, latestYear]);
+  }, [meritHistory, selectedProgram, selectedYear]);
 
   const latestCycle = useMemo(() => {
     if (latestYear === null) return null;
@@ -186,14 +182,6 @@ export default function MeritHistoryClient({ programs, meritHistory }: MeritHist
           : null,
     };
   }, [meritHistory, selectedProgram, latestYear]);
-
-  // Every published list for this program, scoped by the year filter.
-  const programEntries = useMemo(() => {
-    if (!selectedProgram) return [];
-    return meritHistory
-      .filter(m => m.programId === selectedProgram.id)
-      .filter(m => !selectedYear || m.year === parseInt(selectedYear));
-  }, [meritHistory, selectedProgram, selectedYear]);
 
   // The most recent year that has a final list, used for the peer comparison.
   const comparisonYear = useMemo(() => {
@@ -467,7 +455,7 @@ export default function MeritHistoryClient({ programs, meritHistory }: MeritHist
               Historical Data: {selectedProgram.name}
             </h2>
 
-            {programMeritHistory.length === 0 ? (
+            {programEntries.length === 0 ? (
               <div className="text-center py-8 text-[var(--text-muted)]">
                 No merit history data available for this program.
               </div>
@@ -484,7 +472,7 @@ export default function MeritHistoryClient({ programs, meritHistory }: MeritHist
                     </tr>
                   </thead>
                   <tbody>
-                    {programMeritHistory.map((entry, index) => (
+                    {programEntries.map((entry, index) => (
                       <tr
                         key={`${entry.programId}-${entry.year}-${entry.meritListNumber}`}
                         className={`border-b border-[var(--border-color)] ${index % 2 === 0 ? 'bg-[var(--bg-secondary)]' : ''}`}
