@@ -192,21 +192,7 @@ export default function ClickStatsPage() {
               )}
             </div>
 
-            {/* Tip */}
-            <div className="mt-6 p-4 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border-color)]">
-              <p className="text-sm text-[var(--text-secondary)]">
-                💡 <strong>Tip:</strong> For production analytics on Vercel, also check your{' '}
-                <a
-                  href="https://vercel.com/analytics"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline text-[var(--accent-primary)]"
-                >
-                  Vercel Analytics dashboard
-                </a>{' '}
-                → Custom Events → <code className="px-1 py-0.5 rounded bg-[var(--bg-tertiary)]">whatsapp_group_click</code>
-              </p>
-            </div>
+          
           </>
         ) : (
           <div className="card p-10 text-center">

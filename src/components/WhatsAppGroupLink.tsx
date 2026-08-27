@@ -1,7 +1,5 @@
 'use client';
 
-import { track } from '@vercel/analytics';
-
 const WHATSAPP_GROUP_URL =
   'https://chat.whatsapp.com/JCoqwPQyvLoApFGuyYD2sB?mode=gi_t';
 
@@ -17,14 +15,7 @@ export default function WhatsAppGroupLink({
   className,
 }: WhatsAppGroupLinkProps) {
   const handleClick = () => {
-    // Approach A — Vercel Analytics custom event (works on Vercel, zero-infra)
-    try {
-      track('whatsapp_group_click', { source });
-    } catch {
-      // Vercel Analytics not available (local dev) — ignore
-    }
-
-    // Approach B — Database tracking via API route
+    // Database tracking via API route
     fetch('/api/track-click', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
