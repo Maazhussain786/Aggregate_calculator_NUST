@@ -19,9 +19,67 @@ const SOURCE_LABELS: Record<string, string> = {
 };
 
 export default function ClickStatsPage() {
+  const [authenticated, setAuthenticated] = useState(false);
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const [stats, setStats] = useState<ClickStats | null>(null);
   const [days, setDays] = useState(30);
   const [loading, setLoading] = useState(true);
+
+  // Check if already authenticated this session
+  useEffect(() => {
+    if (sessionStorage.getItem('admin_auth') === 'true') {
+      setAuthenticated(true);
+    }
+  }, []);
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password === 'malikat aldirama') {
+      setAuthenticated(true);
+      sessionStorage.setItem('admin_auth', 'true');
+      setError('');
+    } else {
+      setError('Incorrect password');
+    }
+  };
+
+  if (!authenticated) {
+    return (
+      <div className="animate-fade-in py-20">
+        <div className="max-w-sm mx-auto px-4">
+          <div className="card p-8 text-center">
+            <div className="text-4xl mb-4">🔒</div>
+            <h1 className="text-xl font-bold text-[var(--text-primary)] mb-2">
+              Admin Access
+            </h1>
+            <p className="text-sm text-[var(--text-muted)] mb-6">
+              Enter password to view click analytics
+            </p>
+            <form onSubmit={handleLogin}>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter password"
+                className="w-full px-4 py-3 rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] text-[var(--text-primary)] text-sm focus:outline-none focus:border-[var(--accent-primary)] mb-3"
+                autoFocus
+              />
+              {error && (
+                <p className="text-sm text-red-500 mb-3">{error}</p>
+              )}
+              <button
+                type="submit"
+                className="btn btn-primary w-full py-3 text-sm"
+              >
+                Unlock
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const fetchStats = useCallback(async () => {
     setLoading(true);
