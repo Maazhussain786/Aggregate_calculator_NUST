@@ -88,6 +88,19 @@ model UserCrowdData {
 }
 
 // ============================================
+// Link Click Tracking
+// ============================================
+model LinkClick {
+  id        String   @id @default(cuid())
+  linkType  String   // "whatsapp_group", "whatsapp_enroll", etc.
+  source    String   // "homepage", "preparation", "horizon_promo"
+  createdAt DateTime @default(now())
+
+  @@index([linkType])
+  @@index([createdAt])
+}
+
+// ============================================
 // Contact Form Submissions (for later)
 // ============================================
 model ContactSubmission {
