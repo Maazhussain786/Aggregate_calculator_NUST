@@ -58,7 +58,7 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_PK',
     url: '/',
-    siteName: 'NUST Aggregate Calculator',
+    siteName: 'Horizon Preps',
     title: 'NUST Aggregate Calculator | Free NUST Merit Calculator',
     description: 'Free NUST aggregate calculator. Calculate your NUST merit using official formula (NET 75%, FSc 15%, Matric 10%). Check closing merits and predict admission chances.',
     images: [
@@ -99,18 +99,31 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="light" suppressHydrationWarning>
+    <html lang="en" className="dark" suppressHydrationWarning>
       <head>
+        <meta name="application-name" content="Horizon Preps" />
         <link rel="manifest" href="/manifest.json" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'WebSite',
+              name: 'Horizon Preps',
+              alternateName: 'NUST Aggregate Calculator',
+              url: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.nustaggregatecalculator.app',
+            }),
+          }}
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
                 try {
                   var theme = localStorage.getItem('theme');
-                  if (theme === 'dark') {
-                    document.documentElement.classList.remove('light');
-                    document.documentElement.classList.add('dark');
+                  if (theme === 'light') {
+                    document.documentElement.classList.remove('dark');
+                    document.documentElement.classList.add('light');
                   }
                 } catch (e) {}
               })();
