@@ -10499,6 +10499,806 @@
       "closingMeritPosition": 151,
       "closingAggregate": null,
       "sourceName": "NUST Official"
+    },
+    {
+      "programId": "seecs-cs",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 618,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "pnec-cs",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 2577,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "nbc-cs",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 5477,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "seecs-ds",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 687,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "seecs-ai",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 410,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "nbc-ai",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 5873,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "sines-bsbi",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 260,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "asab-bsbio",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 159,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "asab-bsfs",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 765,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "asab-bsag",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 1062,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "iese-envsc",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 455,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "sns-bsmath",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 1687,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "sns-bsphy",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 1655,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "sns-bschem",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 1562,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "smme-me",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 1417,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "ceme-me",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 3200,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "pnec-me",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 5622,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "seecs-ee",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 1124,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "ceme-ee",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 2997,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "mcs-ee",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 4655,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "pnec-ee",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 6169,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "scme-che",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 3466,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "ceme-mct",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 2675,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "nice-civil",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 3599,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "nbc-civil",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 8950,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "mce-civil",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 6925,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "cae-av",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 2819,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "scme-mat",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 4290,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "smme-ae",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 1538,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "cae-ae",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 1810,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "seecs-se",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 782,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "mcs-se",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 2863,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "pnec-na",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 7733,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "igis-geo",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 3916,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "seecs-ce",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 828,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "ceme-ce",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 2160,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "iese-env",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 4286,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "mcs-is",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 3191,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "uspcase-energy",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 3928,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "nbs-bba",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 643,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "nbs-bsaf",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 459,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "nbs-bsth",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 2161,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "s3h-bseco",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 786,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "s3h-bspa",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 1719,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "s3h-bsmc",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 2008,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "s3h-bspsy",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 1581,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "nls-llb",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 210,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "s3h-bsla",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 2233,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "sada-bsarch",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 105,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "sada-bsid",
+      "year": 2026,
+      "meritListNumber": 7,
+      "closingMeritPosition": 151,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "seecs-cs",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 619,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "pnec-cs",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 2623,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "nbc-cs",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 6335,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "seecs-ds",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 701,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "seecs-ai",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 410,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "nbc-ai",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 6586,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "sines-bsbi",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 260,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "asab-bsbio",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 159,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "asab-bsfs",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 766,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "asab-bsag",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 1110,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "iese-envsc",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 489,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "sns-bsmath",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 1727,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "sns-bsphy",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 1728,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "sns-bschem",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 1721,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "smme-me",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 1423,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "ceme-me",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 3200,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "pnec-me",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 5787,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "seecs-ee",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 1124,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "ceme-ee",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 2997,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "mcs-ee",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 4799,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "pnec-ee",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 6251,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "scme-che",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 3575,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "ceme-mct",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 2675,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "nice-civil",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 3628,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "nbc-civil",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 9581,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "mce-civil",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 6925,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "cae-av",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 2872,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "scme-mat",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 4456,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "smme-ae",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 1543,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "cae-ae",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 1810,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "seecs-se",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 784,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "mcs-se",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 2985,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "pnec-na",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 7824,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "igis-geo",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 4035,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "seecs-ce",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 832,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "ceme-ce",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 2160,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "iese-env",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 4361,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "mcs-is",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 3447,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "uspcase-energy",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 3992,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "nbs-bba",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 651,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "nbs-bsaf",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 459,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "nbs-bsth",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 2189,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "s3h-bseco",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 791,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "s3h-bspa",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 1719,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "s3h-bsmc",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 2011,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "s3h-bspsy",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 1590,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "nls-llb",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 211,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "s3h-bsla",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 2243,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "sada-bsarch",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 105,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
+    },
+    {
+      "programId": "sada-bsid",
+      "year": 2026,
+      "meritListNumber": 8,
+      "closingMeritPosition": 151,
+      "closingAggregate": null,
+      "sourceName": "NUST Official"
     }
   ],
   "meritListThresholds": {
